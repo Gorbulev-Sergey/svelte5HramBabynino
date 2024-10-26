@@ -1,0 +1,106 @@
+<script lang="ts">
+	import PageTitle from '$lib/components/PageTitle.svelte';
+	import { Role } from '$lib/models/admin/Role';
+	import { db } from '$lib/scripts/firebase';
+	import { alerts } from '$lib/scripts/writableData';
+	import { onValue, push, ref, remove, set, update } from 'firebase/database';
+	import { onMount } from 'svelte';
+
+	let roles: [string, Role][] = [];
+	let newRole = new Role();
+	let isRoleEdit = false;
+	let editedRoleUID = '';
+
+	onMount(async () => {
+		onValue(ref(db, '/roles'), s => {
+			if (s.exists()) roles = Object.entries(s.val()) as [string, Role][];
+		});
+	});
+</script>
+
+<PageTitle title="Роли пользователей">
+	<div slot="navigation">
+		<div class="input-group">
+			<div class="bg-light text-dark py-2 px-3 rounded-start border">{!isRoleEdit ? 'Новая' : 'Редактировать'} роль:</div>
+
+			<input class="form-control text-dark" bind:value={newRole.name} />
+			{#if newRole.name.length > 0}
+				<button
+					class="btn btn-light text-dark border {newRole.name.length > 0 ? '' : ''}"
+					on:click={() => {
+						newRole.name = '';
+					}}>
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+			{/if}
+
+			{#if !isRoleEdit}
+				<button
+					class="btn btn-dark text-light"
+					on:click={async () => {
+						if (roles.filter(v => v[1].name == newRole.name).length == 0 && newRole.name.trim().length > 0) {
+							push(ref(db, '/roles'), newRole).then(r => {
+								$alerts = [...$alerts, `Роль '${newRole.name}' добавлена!`];
+								newRole = new Role();
+							});
+						}
+					}}>Создать</button>
+			{:else}
+				<button
+					class="btn btn-light text-dark border"
+					on:click={async () => {
+						newRole = new Role();
+						isRoleEdit = false;
+						editedRoleUID = '';
+					}}>Отмена</button>
+				<button
+					class="btn btn-dark text-light"
+					on:click={async () => {
+						if (newRole.name.trim().length > 0) {
+							update(ref(db, `/roles/${editedRoleUID}`), newRole).then(r => {
+								$alerts = [...$alerts, `Роль '${newRole.name}' обновлена!`];
+								newRole = new Role();
+								isRoleEdit = false;
+								editedRoleUID = '';
+							});
+						}
+					}}>Сохранить</button>
+			{/if}
+		</div>
+	</div>
+</PageTitle>
+
+<div class="p-1 d-flex flex-column gap-0">
+	{#each roles as [uid, role], i}
+		<div class="d-flex align-items-center justify-content-between hover px-2 py-1 {i < roles.length - 1 ? 'border-bottom' : ''} ">
+			<div>
+				<span class="badge bg-dark text-light me-3">{i + 1}</span>
+				<span class="badge bg-light text-dark me-1">название:</span>{role.name}
+			</div>
+			<div class="d-flex align-items-center gap-1">
+				<button
+					class="btn btn-sm btn-light text-dark"
+					on:click={() => {
+						newRole = role;
+						isRoleEdit = true;
+						editedRoleUID = uid;
+					}}>
+					<i class="fa-solid fa-pencil" />
+				</button>
+				<button
+					class="btn btn-sm btn-light"
+					title="Удалить роль {role.name}"
+					on:click={async () => remove(ref(db, `/roles/${uid}`)).then(v => ($alerts = [...$alerts, `Роль '${role.name}' удалена!`]))}>
+					<i class="fa-solid fa-trash text-danger" />
+				</button>
+			</div>
+		</div>
+	{/each}
+</div>
+
+<style>
+	.hover:hover {
+		background-color: var(--bs-light);
+		cursor: normal;
+	}
+</style>

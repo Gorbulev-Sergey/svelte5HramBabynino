@@ -1,0 +1,15 @@
+﻿User-agent: *
+
+Allow: /
+Allow: /posts/*
+
+Disallow: /posts
+Disallow: /posts/details
+Disallow: /guest
+Disallow: /admin
+Disallow: /auth
+Disallow: /android
+Disallow: /fullscreen
+
+Host: https://www.hram-babynino.ru
+Sitemap: https://www.hram-babynino.ru/sitemap.xml
