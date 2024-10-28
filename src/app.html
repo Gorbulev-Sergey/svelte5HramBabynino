@@ -1,51 +1,57 @@
 <!doctype html>
 <html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		%sveltekit.head%
+		<link id="theme" href="/bootstrap.light.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="%sveltekit.assets%/print.css" />
 
-<head>
-	<meta charset="utf-8" />
-	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-	<meta name="viewport" content="width=device-width" />
-	%sveltekit.head%
-	<link rel="stylesheet" href="%sveltekit.assets%/print.css" />
+		<!-- Yandex.Metrika counter -->
+		<script type="text/javascript">
+			(function (m, e, t, r, i, k, a) {
+				m[i] =
+					m[i] ||
+					function () {
+						(m[i].a = m[i].a || []).push(arguments);
+					};
+				m[i].l = 1 * new Date();
+				for (var j = 0; j < document.scripts.length; j++) {
+					if (document.scripts[j].src === r) {
+						return;
+					}
+				}
+				(k = e.createElement(t)),
+					(a = e.getElementsByTagName(t)[0]),
+					(k.async = 1),
+					(k.src = r),
+					a.parentNode.insertBefore(k, a);
+			})(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
 
-	<!-- Yandex.Metrika counter -->
-	<script type="text/javascript">
-		(function (m, e, t, r, i, k, a) {
-			m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
-			m[i].l = 1 * new Date();
-			for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
-			k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-		})
-			(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+			ym(95179755, 'init', {
+				clickmap: true,
+				trackLinks: true,
+				accurateTrackBounce: true
+			});
+		</script>
+		<noscript>
+			<div>
+				<img
+					src="https://mc.yandex.ru/watch/95179755"
+					style="position: absolute; left: -9999px"
+					alt="" />
+			</div>
+		</noscript>
+		<!-- /Yandex.Metrika counter -->
 
-		ym(95179755, "init", {
-			clickmap: true,
-			trackLinks: true,
-			accurateTrackBounce: true
-		});
-	</script>
-	<noscript>
-		<div><img src="https://mc.yandex.ru/watch/95179755" style="position:absolute; left:-9999px;" alt="" /></div>
-	</noscript>
-	<!-- /Yandex.Metrika counter -->
+		<meta name="yandex-verification" content="054454fde25167cc" />
+		<meta name="google-site-verification" content="3qSOaxePANZmRXAjxDFnn8eLvMADtfjLEABv1lwiKN8" />
+	</head>
 
-	<meta name="yandex-verification" content="054454fde25167cc" />
-	<meta name="google-site-verification" content="3qSOaxePANZmRXAjxDFnn8eLvMADtfjLEABv1lwiKN8" />
-</head>
+	<body class="bg-light" data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
 
-<body class="bg-light" data-sveltekit-preload-data="hover">
-	<div style="display: contents">%sveltekit.body%</div>
-
-	<script>
-		// Ставим opacity для body 0 (потом изменим на 1),
-		// это нужно для того, чтобы в тёмной теме изначально не отображался контент без применённых
-		// стилей bootstrap, т.к. в тёмной теме свойства ещё не прочитаны из localStorage, и файл bootstrap ущё не загружен
-		document.querySelector('body').style.opacity = 0;
-		// Добавляем в локальное хранилище метку "тема как в системе = false", если там этой метки нет
-		!localStorage.getItem('isSystemTheme') ? localStorage.setItem('isSystemTheme', 'true') : '';
-	</script>
-
-	<script src="%sveltekit.assets%/bootstrap.bundle.min.js"></script>
-</body>
-
+		<script src="%sveltekit.assets%/bootstrap.bundle.min.js"></script>
+	</body>
 </html>

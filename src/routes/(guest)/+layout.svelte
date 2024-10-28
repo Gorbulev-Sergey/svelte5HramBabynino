@@ -3,6 +3,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
 
+	let { children } = $props();
 	let routesLeft = [
 		{
 			url: '/posts',
@@ -43,9 +44,12 @@
 </script>
 
 {#if browser}
-	<Navigation title="<span class='text-danger'>Храм</span> <span class='text-uppercase'>Вознесения Господня</span>" {routesLeft} {routesRight} />
+	<Navigation
+		title="<span class='text-danger'>Храм</span> <span class='text-uppercase'>Вознесения Господня</span>"
+		{routesLeft}
+		{routesRight} />
 	<div class="container-lg mt-0 py-1 overflow-hidden" style="min-height:90vh; margin-bottom:2.7em">
-		<slot />
+		{@render children?.()}
 	</div>
 
 	<Footer />
