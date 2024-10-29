@@ -1,17 +1,19 @@
-<script>
+<script lang="ts">
 	import { Tag } from '$lib/models/Tag';
 
 	export let title = 'тег:';
-	export let tags = new Array();
+	export let tags: Tag[] = [];
 	export let selected = new Tag('главное', 'Главное');
-	export let onSelect = (/** @type {any} */ v) => v;
+	export let onSelect = (v: Tag) => v;
 	export let _class = '';
 </script>
 
 <div class="btn-group {_class}">
 	<div class="btn btn-sm bg-dark text-light">{title}</div>
 	<div class="dropdown">
-		<button class="btn btn-sm btn-light text-dark dropdown-toggle rounded-0 rounded-end" data-bs-toggle="dropdown">
+		<button
+			class="btn btn-sm btn-light text-dark dropdown-toggle rounded-0 rounded-end"
+			data-bs-toggle="dropdown">
 			{selected.name}
 		</button>
 		<ul class="dropdown-menu bg-light border-0">
