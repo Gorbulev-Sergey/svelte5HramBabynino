@@ -52,13 +52,19 @@
 			title: 'Сайт'
 		}
 	];
-	let isCurrentUserAdmin = false;
+	let { children } = $props();
+	let isCurrentUserAdmin = $state(false);
 
 	onMount(async () => {
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				onValue(ref(db, '/users'), s => {
-					if (s.exists() && (Object.values(s.val()) as User[]).find(u => u.uid == user.uid && u.role.name == 'админ')) {
+					if (
+						s.exists() &&
+						(Object.values(s.val()) as User[]).find(
+							u => u.uid == user.uid && u.role.name == 'админ'
+						)
+					) {
 						isCurrentUserAdmin = true;
 					}
 				});
@@ -68,10 +74,13 @@
 </script>
 
 <IsAuth>
-	<Navigation title="Панель управления" routesLeft={isCurrentUserAdmin ? [...routesLeft, ...routesOnlyForAdmins] : routesLeft} {routesRight} />
+	<Navigation
+		title="Панель управления"
+		routesLeft={isCurrentUserAdmin ? [...routesLeft, ...routesOnlyForAdmins] : routesLeft}
+		{routesRight} />
 	<div class="container mt-1 mb-4" style="min-height:90vh;">
 		<Container>
-			<slot />
+			{@render children?.()}
 		</Container>
 	</div>
 	<Footer />
