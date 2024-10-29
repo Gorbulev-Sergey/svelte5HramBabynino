@@ -36,16 +36,37 @@
 <div class="rounded p-3 {!post.inverted ? 'bg-white text-dark' : 'bg-dark text-light'}">
 	<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
 		<div class="nav nav-pills">
-			<a class="btn btn-light text-dark border-0 me-1 active" data-bs-toggle="pill" href="#cover">Обложка</a>
-			<a class="btn btn-light text-dark border-0" data-bs-toggle="pill" href="#content">Содержимое</a>
+			<a class="btn btn-light text-dark border-0 me-1 active" data-bs-toggle="pill" href="#cover"
+				>Обложка</a>
+			<a class="btn btn-light text-dark border-0" data-bs-toggle="pill" href="#content"
+				>Содержимое</a>
 		</div>
 		<div class="d-flex flex-wrap">
-			<Pin classFontAwesome="fa-regular fa-eye" text="опубликовать" _class="me-4" bind:checked={post.published} />
-			<Pin classFontAwesome="fa-solid fa-thumbtack" text="закрепить наверху" _class="me-4" bind:checked={post.pinned} />
-			<Pin classFontAwesome="fa-solid fa-arrows-up-down" text="ширина публикации 100%" _class="me-4" bind:checked={post.isHeightAuto} />
-			<Pin classFontAwesome="fa-solid fa-brush" text="инвертировать цвета" _class="me-4" bind:checked={post.inverted} />
+			<Pin
+				classFontAwesome="fa-regular fa-eye"
+				text="опубликовать"
+				_class="me-4"
+				bind:checked={post.published} />
+			<Pin
+				classFontAwesome="fa-solid fa-thumbtack"
+				text="закрепить наверху"
+				_class="me-4"
+				bind:checked={post.pinned} />
+			<Pin
+				classFontAwesome="fa-solid fa-arrows-up-down"
+				text="ширина публикации 100%"
+				_class="me-4"
+				bind:checked={post.isHeightAuto} />
+			<Pin
+				classFontAwesome="fa-solid fa-brush"
+				text="инвертировать цвета"
+				_class="me-4"
+				bind:checked={post.inverted} />
 			{#if post.pinned}
-				<Pin classFontAwesome="fa-solid fa-ruler-horizontal" text="горизонтально" bind:checked={post.isHorisontal} />
+				<Pin
+					classFontAwesome="fa-solid fa-ruler-horizontal"
+					text="горизонтально"
+					bind:checked={post.isHorisontal} />
 			{/if}
 		</div>
 	</div>
@@ -74,7 +95,11 @@
 				<div class="col-md-4">
 					<div class="form-group mb-3">
 						{#if post.cover.image}
-							<Pin classFontAwesome="fa-solid fa-arrows-up-down" text="не обрезать ширину фотографии" _class="mb-1" bind:checked={post.isImageHeightFull} />
+							<Pin
+								classFontAwesome="fa-solid fa-arrows-up-down"
+								text="не обрезать ширину фотографии"
+								_class="mb-1"
+								bind:checked={post.isImageHeightFull} />
 						{/if}
 						<input
 							class="form-control mb-3
@@ -102,7 +127,10 @@
 										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 										allowfullscreen
 										class="embed-responsive-item"
-										src={post.cover.video.replace('https://youtu.be', 'https://youtube.com/embed')} />
+										src={post.cover.video.replace(
+											'https://youtu.be',
+											'https://youtube.com/embed'
+										)} />
 								{:else if post.cover.video.includes('https://vk.com/video')}
 									<iframe
 										class="embed-responsive-item"
@@ -118,7 +146,10 @@
 										allow="clipboard-write; autoplay"
 										allowFullScreen
 										class="embed-responsive-item"
-										src={post.cover.video.replace('https://rutube.ru/video/', 'https://rutube.ru/play/embed/')} />
+										src={post.cover.video.replace(
+											'https://rutube.ru/video/',
+											'https://rutube.ru/play/embed/'
+										)} />
 								{/if}
 							</div>
 						{/if}
