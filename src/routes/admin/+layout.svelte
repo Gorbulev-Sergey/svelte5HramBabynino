@@ -8,7 +8,7 @@
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
 	let routesLeft = [
 		{
@@ -52,7 +52,7 @@
 			title: 'Сайт'
 		}
 	];
-	let { children } = $props();
+	let { children, subPanel }: { children: Snippet<[]>; subPanel?: Snippet<[]> } = $props();
 	let isCurrentUserAdmin = $state(false);
 
 	onMount(async () => {
@@ -77,7 +77,9 @@
 	<Navigation
 		title="Панель управления"
 		routesLeft={isCurrentUserAdmin ? [...routesLeft, ...routesOnlyForAdmins] : routesLeft}
-		{routesRight} />
+		{routesRight}>
+		{@render subPanel?.()}
+	</Navigation>
 	<div class="container mt-1 mb-4" style="min-height:90vh;">
 		<Container>
 			{@render children?.()}

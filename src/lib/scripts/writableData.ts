@@ -3,6 +3,7 @@ import { Month } from '$lib/models/schedule/Month';
 import { writable } from 'svelte/store';
 import { get, onValue, ref } from 'firebase/database';
 import { db } from './firebase';
+import type { Snippet } from 'svelte';
 
 // Для сохранения темы оформления (светлой или тёмной)
 export let theme = writable('');
@@ -46,5 +47,5 @@ export let isNewAlbumsFirst = writable(true);
 // Пользователь, который вошёл в систему
 export let userSigned = writable({});
 
-// 
+//
 export let alerts = writable([]);

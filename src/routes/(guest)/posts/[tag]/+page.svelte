@@ -6,7 +6,7 @@
 	import Post from '$lib/components/posts/Post.svelte';
 	import type { Post as _Post } from '$lib/models/Post.js';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { showedPostsLength, showedPostsStep } from '$lib/scripts/writableData.js';
+	import { showedPostsLength, showedPostsStep } from '$lib/scripts/writableData.ts';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 	import type { Tag } from '$lib/models/Tag.js';
 	import { onMount } from 'svelte';
@@ -16,7 +16,9 @@
 	export let data;
 	$: tags = data.tags as Tag[];
 	$: posts = data.posts.filter(([k, v]) => v.published);
-	$: postsByTag = posts.filter(([k, v]) => v.tags?.some(t => t.name === $page.params.tag)).sort(([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime());
+	$: postsByTag = posts
+		.filter(([k, v]) => v.tags?.some(t => t.name === $page.params.tag))
+		.sort(([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime());
 	$: pinnedPosts = postsByTag.filter(([k, v]) => v.pinned);
 	$: notPinnedPosts = postsByTag.filter(([k, v]) => !v.pinned);
 	$: notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
@@ -31,7 +33,9 @@
 			<div class="btn-group btn-group-sm scroll overflow-scroll bg-light pe-1">
 				{#each tags as item, i}
 					<button
-						class="btn text-nowrap {item.name == $page.params.tag ? 'btn-dark text-light' : 'btn-light text-dark'} 
+						class="btn text-nowrap {item.name == $page.params.tag
+							? 'btn-dark text-light'
+							: 'btn-light text-dark'} 
 						{tags.length == i + 1 ? 'rounded-end-0' : ''}"
 						on:click={async () => {
 							goto(`/posts/${item.name}`);
@@ -45,7 +49,10 @@
 				<div class="dropdown-menu bg-light py-1 border-light shadow-sm rounded-1">
 					{#each tags as item}
 						<button
-							class="btn btn-sm text-nowrap w-100 rounded-0 text-start ps-2 {item.name == $page.params.tag ? 'btn-dark text-light' : 'btn-light text-dark'}"
+							class="btn btn-sm text-nowrap w-100 rounded-0 text-start ps-2 {item.name ==
+							$page.params.tag
+								? 'btn-dark text-light'
+								: 'btn-light text-dark'}"
 							on:click={async () => {
 								goto(`/posts/${item.name}`);
 							}}>{item.name}</button>
@@ -81,7 +88,10 @@
 		<button
 			class="btn btn-light text-dark mt-3 w-100"
 			on:click={() => {
-				$showedPostsLength.set($page.params.tag, $showedPostsLength.get($page.params.tag) + showedPostsStep);
+				$showedPostsLength.set(
+					$page.params.tag,
+					$showedPostsLength.get($page.params.tag) + showedPostsStep
+				);
 				notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
 			}}>Загрузить ещё...</button>
 	{/if}

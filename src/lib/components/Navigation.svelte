@@ -5,15 +5,16 @@
 	import Large from '$lib/components/Breakpoint/Large.svelte';
 	import Smalle from '$lib/components/Breakpoint/Small.svelte';
 	import IsAuth from '$lib/components/IsAuth.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
 	interface Props {
 		title: String;
 		routesLeft: { url: string; title: string }[];
 		routesRight: { url: string; title: string }[];
+		children?: Snippet<[]>;
 	}
 
-	let { title = 'Название', routesLeft = [], routesRight = [] }: Props = $props();
+	let { title = 'Название', routesLeft = [], routesRight = [], children }: Props = $props();
 	let color = $state('rgba(255,50,60,0)');
 
 	let changeTheme = (th: string, isSystemTheme1: boolean) => {
@@ -128,57 +129,61 @@
 		</div>
 	</Smalle>
 	<Large>
-		<div class="container-fluid d-flex justify-content-between align-items-center">
-			<div class="flex-grow-1 d-flex flex-wrap justify-content-between align-items-center">
-				<button
-					class="btn btn-light text-dark border-0 text-uppercase text-start me-3 rounded-1"
-					style="background-color: {color}"
-					onclick={() => goto(routesLeft[0].url)}><b class="text-nowrap">{@html title}</b></button>
-				<div>
-					{#each routesLeft as item}
-						<a
-							class="btn btn-light bg-light text-dark bg-transparent border-0 me-1 {decodeURI(
-								$page.url.pathname
-							).indexOf(item.url) >= 0
-								? 'fw-bold'
-								: ''}"
-							href={item.url}
-							>{item.title}
-						</a>
-					{/each}
+		<div class="d-flex flex-column">
+			<div class="container-fluid d-flex justify-content-between align-items-center">
+				<div class="flex-grow-1 d-flex flex-wrap justify-content-between align-items-center">
+					<button
+						class="btn btn-light text-dark border-0 text-uppercase text-start me-3 rounded-1"
+						style="background-color: {color}"
+						onclick={() => goto(routesLeft[0].url)}
+						><b class="text-nowrap">{@html title}</b></button>
+					<div>
+						{#each routesLeft as item}
+							<a
+								class="btn btn-light bg-light text-dark bg-transparent border-0 me-1 {decodeURI(
+									$page.url.pathname
+								).indexOf(item.url) >= 0
+									? 'fw-bold'
+									: ''}"
+								href={item.url}
+								>{item.title}
+							</a>
+						{/each}
+					</div>
+				</div>
+				<IsAuth>
+					<div>
+						{#each routesRight as item}
+							<a class="btn btn-dark text-light border-0 me-1" href={item.url}>{item.title}</a>
+						{/each}
+					</div>
+				</IsAuth>
+				<div class="dropdown-center rounded">
+					<!-- svelte-ignore a11y_consider_explicit_label -->
+					<button
+						class="btn btn-light bg-light text-dark bg-transparent border-0"
+						data-bs-toggle="dropdown"
+						title="тема оформления"><i class="fa-regular fa-sun"></i></button>
+					<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
+						<button
+							class="btn btn-light {!$isSystemTheme && $theme == 'light'
+								? 'text-danger'
+								: ' text-dark'} w-100 text-start rounded-0 ps-3"
+							onclick={async () => changeTheme('light', false)}>Светлая тема</button>
+						<button
+							class="btn btn-light {!$isSystemTheme && $theme == 'dark'
+								? 'text-danger'
+								: ' text-dark'} w-100 text-start rounded-0 ps-3"
+							onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
+						<button
+							class="btn btn-light {$isSystemTheme
+								? 'text-danger'
+								: ' text-dark'} w-100 text-start rounded-0 ps-3"
+							onclick={async () => changeTheme('', true)}>Как в системе</button>
+					</ul>
 				</div>
 			</div>
-			<IsAuth>
-				<div>
-					{#each routesRight as item}
-						<a class="btn btn-dark text-light border-0 me-1" href={item.url}>{item.title}</a>
-					{/each}
-				</div>
-			</IsAuth>
-			<div class="dropdown-center rounded">
-				<!-- svelte-ignore a11y_consider_explicit_label -->
-				<button
-					class="btn btn-light bg-light text-dark bg-transparent border-0"
-					data-bs-toggle="dropdown"
-					title="тема оформления"><i class="fa-regular fa-sun" /></button>
-				<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
-					<button
-						class="btn btn-light {!$isSystemTheme && $theme == 'light'
-							? 'text-danger'
-							: ' text-dark'} w-100 text-start rounded-0 ps-3"
-						onclick={async () => changeTheme('light', false)}>Светлая тема</button>
-					<button
-						class="btn btn-light {!$isSystemTheme && $theme == 'dark'
-							? 'text-danger'
-							: ' text-dark'} w-100 text-start rounded-0 ps-3"
-						onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
-					<button
-						class="btn btn-light {$isSystemTheme
-							? 'text-danger'
-							: ' text-dark'} w-100 text-start rounded-0 ps-3"
-						onclick={async () => changeTheme('', true)}>Как в системе</button>
-				</ul>
-			</div>
+			{@render children?.()}
 		</div>
 	</Large>
 </nav>
