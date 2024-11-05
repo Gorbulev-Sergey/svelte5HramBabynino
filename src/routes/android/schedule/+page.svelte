@@ -12,7 +12,7 @@
 	import Small from '$lib/components/Breakpoint/Small.svelte';
 
 	let m = '';
-	$: changeTheme = () => {
+	let changeTheme = () => {
 		$theme = $theme == 'light' ? 'dark' : 'light';
 		localStorage.setItem('theme', $theme);
 	};
@@ -32,11 +32,17 @@
 
 <div class="no-print container">
 	<PageTitleWrap title="">
-		<div slot="navigation" class="d-flex flex-wrap justify-content-between align-items-center gap-2" style="margin-top:-1.4em">
+		<div
+			slot="navigation"
+			class="d-flex flex-wrap justify-content-between align-items-center gap-2"
+			style="margin-top:-1.4em">
 			<div class="d-flex w-100 align-items-center justify-content-between">
 				<h4 class="text-dark mb-0">Расписание богослужений</h4>
-				<button class="btn btn-light bg-transparent text-dark border-0" on:click={async () => changeTheme()}>
-					<i class="fa-regular fa-sun" />
+				<button
+					class="btn btn-light bg-transparent text-dark border-0"
+					on:click={async () => changeTheme()}
+					aria-label="смена темы">
+					<i class="fa-regular fa-sun"></i>
 				</button>
 			</div>
 			<div class="input-group">
