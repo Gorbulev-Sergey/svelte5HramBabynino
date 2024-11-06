@@ -6,12 +6,9 @@
 	import Post from '$lib/components/posts/Post.svelte';
 	import type { Post as _Post } from '$lib/models/Post.js';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { showedPostsLength, showedPostsStep } from '$lib/scripts/writableData.ts';
+	import { showedPostsLength, showedPostsStep } from '$lib/scripts/writableData';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 	import type { Tag } from '$lib/models/Tag.js';
-	import { onMount } from 'svelte';
-	import { onValue, ref } from 'firebase/database';
-	import { db } from '$lib/scripts/firebase.js';
 
 	export let data;
 	$: tags = data.tags as Tag[];
@@ -62,38 +59,42 @@
 		</div>
 	</PageTitle>
 
-	<div class="mb-4">
-		<!--Для закреплённых-->
-		<div>
-			{#each pinnedPosts.filter(p => p[1].isHorisontal) as [uid, post], i}
-				<PostHorizontal {uid} {post} />
-			{/each}
+	{#if data.posts}
+		<div class="mb-4">
+			<!--Для закреплённых-->
+			<div>
+				{#each pinnedPosts.filter(p => p[1].isHorisontal) as [uid, post], i}
+					<PostHorizontal {uid} {post} />
+				{/each}
+			</div>
+			<!--Для закреплённых-->
+			<div class="row row-cols-1 row-cols-md-3 g-4 flex-row-reverse">
+				{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
+					<Post {uid} {post} />
+				{/each}
+			</div>
 		</div>
-		<!--Для закреплённых-->
-		<div class="row row-cols-1 row-cols-md-3 g-4 flex-row-reverse">
-			{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
+
+		<!--Для не закреплённых-->
+		<div class="row row-cols-1 row-cols-md-3 g-4">
+			{#each notPinnedPostsForShow as [uid, post], i}
 				<Post {uid} {post} />
 			{/each}
 		</div>
-	</div>
 
-	<!--Для не закреплённых-->
-	<div class="row row-cols-1 row-cols-md-3 g-4">
-		{#each notPinnedPostsForShow as [uid, post], i}
-			<Post {uid} {post} />
-		{/each}
-	</div>
-
-	{#if notPinnedPosts.length > notPinnedPostsForShow.length}
-		<button
-			class="btn btn-light text-dark mt-3 w-100"
-			on:click={() => {
-				$showedPostsLength.set(
-					$page.params.tag,
-					$showedPostsLength.get($page.params.tag) + showedPostsStep
-				);
-				notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
-			}}>Загрузить ещё...</button>
+		{#if notPinnedPosts.length > notPinnedPostsForShow.length}
+			<button
+				class="btn btn-light text-dark mt-3 w-100"
+				on:click={() => {
+					$showedPostsLength.set(
+						$page.params.tag,
+						$showedPostsLength.get($page.params.tag) + showedPostsStep
+					);
+					notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
+				}}>Загрузить ещё...</button>
+		{/if}
+	{:else}
+		<Spinner />
 	{/if}
 </Container>
 

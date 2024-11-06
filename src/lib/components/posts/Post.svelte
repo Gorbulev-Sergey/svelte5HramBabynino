@@ -4,9 +4,9 @@
 	import { Post } from '$lib/models/Post';
 
 	interface Props {
-		uid: string;
-		post: Post;
-		_class: string;
+		uid?: string;
+		post?: Post;
+		_class?: string;
 	}
 	let { uid = '', post = new Post(), _class = '' }: Props = $props();
 	let showContent = $state(false);
