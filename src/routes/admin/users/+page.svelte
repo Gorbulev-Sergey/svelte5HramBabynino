@@ -1,18 +1,24 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/PageTitle.svelte';
-	import { User } from '$lib/models/admin/User';
+	import type { IUser } from '$lib/models/admin/User';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/writableData';
 	import { onValue, ref, remove, set } from 'firebase/database';
 	import { onMount } from 'svelte';
 
-	let users: [String, User][] = [];
-	let newUser = new User();
+	let users = $state<[String, IUser][]>([]);
+	let newUser = $state<IUser>({
+		uid: '',
+		email: '',
+		role: {
+			name: ''
+		}
+	});
 
 	onMount(async () => {
 		onValue(ref(db, '/users'), s => {
 			if (s.exists()) {
-				users = Object.entries(s.val()) as [string, User][];
+				users = Object.entries(s.val()) as [string, IUser][];
 			}
 		});
 	});
@@ -27,9 +33,15 @@
 			<input class="form-control" bind:value={newUser.role.name} placeholder="название роли" />
 			<button
 				class="btn btn-dark text-light"
-				on:click={async () => {
+				onclick={async () => {
 					set(ref(db, `users/${newUser.uid}`), newUser);
-					newUser = new User();
+					newUser = {
+						uid: '',
+						email: '',
+						role: {
+							name: ''
+						}
+					};
 				}}>Сохранить</button>
 		</div>
 	</div>
@@ -37,7 +49,10 @@
 
 <div class="p-1 d-flex flex-column gap-0">
 	{#each users as [uid, user], i}
-		<div class="d-flex align-items-center justify-content-between hover px-2 py-1 {i < users.length - 1 ? 'border-bottom' : ''} ">
+		<div
+			class="d-flex align-items-center justify-content-between hover px-2 py-1 {i < users.length - 1
+				? 'border-bottom'
+				: ''} ">
 			<div>
 				<span class="badge bg-dark text-light me-2">{i + 1}</span>
 				<span class="text-dark">
@@ -47,16 +62,22 @@
 				</span>
 			</div>
 			<div class="d-flex align-items-center gap-1">
-				<button class="btn btn-sm btn-light text-dark" title="Редактировать пользователя" on:click={() => {}}>
-					<i class="fa-solid fa-pencil" />
+				<button
+					aria-label=""
+					class="btn btn-sm btn-light text-dark"
+					title="Редактировать пользователя">
+					<i class="fa-solid fa-pencil"></i>
 				</button>
 				<button
+					aria-label=""
 					class="btn btn-sm btn-light"
 					title="Удалить пользователя"
-					on:click={async () => {
-						remove(ref(db, `/users/${uid}`)).then(r => ($alerts = [...$alerts, `Пользователь с email ${user.email} удалён!`]));
+					onclick={async () => {
+						remove(ref(db, `/users/${uid}`)).then(
+							r => ($alerts = [...$alerts, `Пользователь с email ${user.email} удалён!`])
+						);
 					}}>
-					<i class="fa-solid fa-trash text-danger" />
+					<i class="fa-solid fa-trash text-danger"></i>
 				</button>
 			</div>
 		</div>

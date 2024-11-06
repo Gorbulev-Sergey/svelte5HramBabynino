@@ -132,7 +132,8 @@
 					</div>
 					<button
 						class="btn btn-sm {selectedFolder == i ? 'btn-dark' : 'btn-light'} text-danger"
-						onclick={() => {
+						onclick={e => {
+							e.stopPropagation();
 							listAll(ref(storage, `/${item.fullPath}`)).then(s => {
 								if (s.items.filter(p => p.name != 'empty').length == 0) {
 									deleteObject(ref(storage, `${item.fullPath}/empty`)).then(() => {

@@ -1,19 +1,21 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/PageTitle.svelte';
-	import { Role } from '$lib/models/admin/Role';
+	import type { IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/writableData';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
 	import { onMount } from 'svelte';
 
-	let roles: [string, Role][] = $state([]);
-	let newRole = $state(new Role());
+	let roles = $state<[string, IRole][]>([]);
+	let newRole = $state<IRole>({
+		name: ''
+	});
 	let isRoleEdit = $state(false);
 	let editedRoleUID = $state('');
 
 	onMount(async () => {
 		onValue(ref(db, '/roles'), s => {
-			if (s.exists()) roles = Object.entries(s.val()) as [string, Role][];
+			if (s.exists()) roles = Object.entries(s.val()) as [string, IRole][];
 		});
 	});
 </script>
@@ -47,7 +49,7 @@
 						) {
 							push(ref(db, '/roles'), newRole).then(r => {
 								$alerts = [...$alerts, `Роль '${newRole.name}' добавлена!`];
-								newRole = new Role();
+								newRole = { name: '' };
 							});
 						}
 					}}>Создать</button>
@@ -55,7 +57,7 @@
 				<button
 					class="btn btn-light text-dark border"
 					onclick={async () => {
-						newRole = new Role();
+						newRole = { name: '' };
 						isRoleEdit = false;
 						editedRoleUID = '';
 					}}>Отмена</button>
@@ -65,7 +67,7 @@
 						if (newRole.name.trim().length > 0) {
 							update(ref(db, `/roles/${editedRoleUID}`), newRole).then(r => {
 								$alerts = [...$alerts, `Роль '${newRole.name}' обновлена!`];
-								newRole = new Role();
+								newRole = { name: '' };
 								isRoleEdit = false;
 								editedRoleUID = '';
 							});
