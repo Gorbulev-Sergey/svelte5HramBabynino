@@ -12,7 +12,7 @@
 	} from 'firebase/storage';
 	import { onMount } from 'svelte';
 
-	const tabs = $state({ selectedTab: 0, tab: ['Хранилище фотографий', 'Хранилище документов'] });
+	let tabs = $state({ selectedTab: 0, tab: ['Хранилище фотографий', 'Хранилище документов'] });
 	let folders: StorageReference[] = $state([]);
 	let photos: StorageReference[] = $state([]);
 	let photosForUpload: FileList | undefined = $state();
@@ -20,15 +20,15 @@
 	let documentsForUpload: FileList | undefined = $state();
 
 	// Корневая папка для фотографий
-	const albumsFolder = '/Photos';
+	let albumsFolder = '/Photos';
 	let albumsRef: StorageReference = $derived(ref(storage, `${albumsFolder}`));
 	let newFolderName = $state('');
 	let selectedFolder = $state(0);
 	let labelFakeForUploadButton = $state('Загрузить новые');
 
 	// Корневая папка для документов
-	const documentsFolder = '/Documents';
-	let documentsRef: StorageReference = ref(storage, `${documentsFolder}`);
+	let documentsFolder = '/Documents';
+	let documentsRef: StorageReference = $derived(ref(storage, `${documentsFolder}`));
 
 	let getFolders = () => listAll(albumsRef).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
@@ -116,11 +116,13 @@
 		</PageTitleWrap>
 		<div class="d-flex flex-wrap justify-content-start align-items-start gap-2 mb-5">
 			{#each folders as item, i}
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<div
 					class="d-flex align-items-center {selectedFolder == i
 						? 'bg-dark text-light'
 						: 'bg-light'}  px-2 rounded-1"
-					style=" cursor:pointer"
+					style="cursor:pointer"
 					onclick={() => {
 						selectedFolder = i;
 						getPhotos();
