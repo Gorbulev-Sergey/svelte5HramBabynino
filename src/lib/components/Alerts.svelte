@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { alerts } from '$lib/scripts/writableData';
 
-	setInterval(() => {
-		$alerts.splice(0, 1);
-		$alerts = $alerts;
-	}, 3000);
+	$effect(() => {
+		const interval = setInterval(() => {
+			$alerts.splice(0, 1);
+		}, 3000);
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <div class="position-fixed w-100 bottom-0">
@@ -16,10 +20,10 @@
 					<div>{item}</div>
 				</div>
 				<button
+					aria-label=""
 					class="btn btn-sm bg-transparent text-primary-emphasis sticky-top"
-					on:click={() => {
+					onclick={() => {
 						$alerts.splice(i, 1);
-						$alerts = $alerts;
 					}}>
 					<i class="fa-solid fa-xmark"></i>
 				</button>
