@@ -1,6 +1,6 @@
 import { Tag } from '$lib/models/Tag';
 import { Month } from '$lib/models/schedule/Month';
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import { get, onValue, ref } from 'firebase/database';
 import { db } from './firebase';
 import type { Snippet } from 'svelte';
@@ -48,4 +48,4 @@ export let isNewAlbumsFirst = writable(true);
 export let userSigned = writable({});
 
 //
-export let alerts = writable([]);
+export let alerts: Writable<String[]> = writable([]);
