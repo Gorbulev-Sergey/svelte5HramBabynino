@@ -13,28 +13,27 @@
 	import { onMount } from 'svelte';
 
 	let tabs = { selectedTab: 0, tab: ['Хранилище фотографий', 'Хранилище документов'] };
-	let folders: any[] = [];
-	let photos: any[] = [];
+	let folders: StorageReference[] = [];
+	let photos: StorageReference[] = [];
 	let photosForUpload: FileList;
-	let documents: any[] = [];
+	let documents: StorageReference[] = [];
 	let documentsForUpload: FileList;
 
 	// Корневая папка для фотографий
-	let albumsFolder = '/Photos';
+	const albumsFolder = '/Photos';
 	let albumsRef: StorageReference = ref(storage, `${albumsFolder}`);
 	let newFolderName = '';
 	let selectedFolder = 0;
 	let labelFakeForUploadButton = 'Загрузить новые';
 
 	// Корневая папка для документов
-	let documentsFolder = '/Documents';
+	const documentsFolder = '/Documents';
 	let documentsRef: StorageReference = ref(storage, `${documentsFolder}`);
 
-	let getFolders = () =>
-		listAll(ref(storage, albumsRef)).then(result => (folders = result.prefixes));
+	let getFolders = () => listAll(albumsRef).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
 		if (folders.length > 0) {
-			listAll(ref(storage, ref(storage, folders[selectedFolder].fullPath))).then(s => {
+			listAll(ref(storage, folders[selectedFolder].fullPath)).then(s => {
 				photos = s.items.filter(p => p.name != 'empty');
 			});
 		}
