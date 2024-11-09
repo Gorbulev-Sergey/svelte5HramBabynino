@@ -11,7 +11,7 @@
 	import type { Tag } from '$lib/models/Tag.js';
 
 	export let data;
-	$: tags = data.tags as Tag[];
+	$: tags = data.tags;
 	$: posts = data.posts.filter(([k, v]) => v.published);
 	$: postsByTag = posts
 		.filter(([k, v]) => v.tags?.some(t => t.name === $page.params.tag))

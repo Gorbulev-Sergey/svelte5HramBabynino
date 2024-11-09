@@ -47,5 +47,8 @@ export let isNewAlbumsFirst = writable(true);
 // Пользователь, который вошёл в систему
 export let userSigned = writable({});
 
-//
+// Для работы с всплывающими сообщениями
 export let alerts: Writable<String[]> = writable([]);
+
+// Дополнительная панель в макете
+export let subPanel: Writable<Snippet> | undefined = writable();

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { subPanel } from '$lib/scripts/writableData';
 	import Alerts from '$lib/components/Alerts.svelte';
 	import Container from '$lib/components/Container.svelte';
 	import Footer from '$lib/components/Footer.svelte';
@@ -52,7 +53,7 @@
 			title: 'Сайт'
 		}
 	];
-	let { children, subPanel }: { children: Snippet<[]>; subPanel?: Snippet<[]> } = $props();
+	let { children }: { children: Snippet } = $props();
 	let isCurrentUserAdmin = $state(false);
 
 	onMount(async () => {
@@ -78,7 +79,7 @@
 		title="Панель управления"
 		routesLeft={isCurrentUserAdmin ? [...routesLeft, ...routesOnlyForAdmins] : routesLeft}
 		{routesRight}>
-		{@render subPanel?.()}
+		{@render $subPanel?.()}
 	</Navigation>
 	<div class="container mt-1 mb-4" style="min-height:90vh;">
 		<Container>
