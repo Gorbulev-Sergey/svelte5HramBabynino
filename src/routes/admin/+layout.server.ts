@@ -1,8 +1,8 @@
 import type { Tag } from '$lib/models/Tag.js';
 
 export async function load({ fetch }) {
-	let tags: Tag[] = await (await fetch('/api/tags')).json();
+	let tags = async (): Promise<Tag[]> => await fetch('/api/tags').then(v => v.json());
 	return {
-		tags: tags
+		tags: await tags()
 	};
 }
