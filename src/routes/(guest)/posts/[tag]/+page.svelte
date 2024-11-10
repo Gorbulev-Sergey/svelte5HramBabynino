@@ -6,21 +6,24 @@
 	import Post from '$lib/components/posts/Post.svelte';
 	import type { Post as _Post } from '$lib/models/Post.js';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store.js';
+	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 
-	export let data;
-	$: tags = data.tags;
-	$: posts = data.posts.filter(([k, v]) => v.published);
-	$: postsByTag = posts
-		.filter(([k, v]) => v.tags?.some(t => t.name === $page.params.tag))
-		.sort(([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime());
-	$: pinnedPosts = postsByTag.filter(([k, v]) => v.pinned);
-	$: notPinnedPosts = postsByTag.filter(([k, v]) => !v.pinned);
-	$: notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
+	let { data } = $props();
+	let tags = $derived(data.tags);
+	let posts = $derived(data.posts.filter(([k, v]) => v.published));
+	let postsByTag = $derived(
+		posts
+			.filter(([k, v]) => v.tags?.some(t => t.name == $page.params.tag))
+			.sort(([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime())
+	);
+	let pinnedPosts = $derived(postsByTag.filter(([k, v]) => v.pinned));
+	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
-	$: description = $page.params.tag[0].toUpperCase() + $page.params.tag.slice(1);
-	$: keywords = `бабынино, храм, храм бабынино, ${description}`;
+	let _showedPostsLength = $state(showedPostsStep);
+	let notPinnedPostsForShow = $derived(notPinnedPosts.slice(0, _showedPostsLength));
+	let description = $page.params.tag[0].toUpperCase() + $page.params.tag.slice(1);
+	let keywords = `бабынино, храм, храм бабынино, ${description}`;
 </script>
 
 <Container>
@@ -33,13 +36,16 @@
 							? 'btn-dark text-light'
 							: 'btn-light text-dark'} 
 						{tags.length == i + 1 ? 'rounded-end-0' : ''}"
-						on:click={async () => {
+						onclick={async () => {
 							goto(`/posts/${item.name}`);
 						}}>{item.name}</button>
 				{/each}
 			</div>
 			<div class="dropdown position-absolute end-0" style="z-index:1000">
-				<button class="btn btn-sm btn-light text-dark rounded-start-0" data-bs-toggle="dropdown">
+				<button
+					aria-label=""
+					class="btn btn-sm btn-light text-dark rounded-start-0"
+					data-bs-toggle="dropdown">
 					<i class="fa-solid fa-ellipsis-vertical"></i>
 				</button>
 				<div class="dropdown-menu bg-light py-1 border-light shadow-sm rounded-1">
@@ -49,7 +55,7 @@
 							$page.params.tag
 								? 'btn-dark text-light'
 								: 'btn-light text-dark'}"
-							on:click={async () => {
+							onclick={async () => {
 								goto(`/posts/${item.name}`);
 							}}>{item.name}</button>
 					{/each}
@@ -84,12 +90,12 @@
 		{#if notPinnedPosts.length > notPinnedPostsForShow.length}
 			<button
 				class="btn btn-light text-dark mt-3 w-100"
-				on:click={() => {
+				onclick={() => {
+					_showedPostsLength += showedPostsStep;
 					$showedPostsLength.set(
 						$page.params.tag,
-						$showedPostsLength.get($page.params.tag) + showedPostsStep
+						$showedPostsLength.get($page.params.tag) ?? showedPostsStep + showedPostsStep
 					);
-					notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
 				}}>Загрузить ещё...</button>
 		{/if}
 	{:else}
