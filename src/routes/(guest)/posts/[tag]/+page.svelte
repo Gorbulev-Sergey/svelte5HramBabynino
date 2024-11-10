@@ -8,7 +8,6 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/writableData';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
-	import type { Tag } from '$lib/models/Tag.js';
 
 	export let data;
 	$: tags = data.tags;
@@ -20,7 +19,7 @@
 	$: notPinnedPosts = postsByTag.filter(([k, v]) => !v.pinned);
 	$: notPinnedPostsForShow = notPinnedPosts.slice(0, $showedPostsLength.get($page.params.tag));
 
-	$: description = data.description;
+	$: description = $page.params.tag[0].toUpperCase() + $page.params.tag.slice(1);
 	$: keywords = `бабынино, храм, храм бабынино, ${description}`;
 </script>
 
