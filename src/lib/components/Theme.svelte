@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { theme } from '$lib/scripts/writableData';
+	import { theme } from '$lib/scripts/store';
 
 	$effect.pre(() => {
 		$theme = localStorage.getItem('theme') || 'light';

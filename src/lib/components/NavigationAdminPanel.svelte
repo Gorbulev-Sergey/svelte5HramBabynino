@@ -2,7 +2,7 @@
 	// @ts-nocheck
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { theme } from '$lib/scripts/writableData';
+	import { theme } from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 
 	export let routesLeft = new Array();
@@ -18,7 +18,9 @@
 		{#each routesLeft as item}
 			<div class="bg-light text-dark">
 				<a
-					class="btn btn-light text-dark w-100 text-start rounded-0 ps-3 {decodeURI($page.url.pathname).indexOf(item.url) >= 0
+					class="btn btn-light text-dark w-100 text-start rounded-0 ps-3 {decodeURI(
+						$page.url.pathname
+					).indexOf(item.url) >= 0
 						? 'fw-bold'
 						: ''}"
 					href={item.url}>{item.title}</a>

@@ -2,7 +2,7 @@
 	import Month from '$lib/components/schedule/Month.svelte';
 	import { onMount } from 'svelte';
 	import { Month as _Month } from '$lib/models/schedule/Month';
-	import { scheduleMonth as month } from '$lib/scripts/writableData';
+	import { scheduleMonth as month } from '$lib/scripts/store';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import Container from '$lib/components/Container.svelte';

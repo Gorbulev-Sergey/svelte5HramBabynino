@@ -2,7 +2,7 @@
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import type { IUser } from '$lib/models/admin/User';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts } from '$lib/scripts/writableData';
+	import { alerts } from '$lib/scripts/store';
 	import { onValue, ref, remove, set } from 'firebase/database';
 	import { onMount } from 'svelte';
 

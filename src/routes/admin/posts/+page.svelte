@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { adminPostsFilters } from '$lib/scripts/writableData.ts';
+	import { adminPostsFilters, isPostUpdated } from '$lib/scripts/store.js';
 	import FilterTags from '$lib/components/posts/FilterTags.svelte';
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
@@ -49,6 +49,10 @@
 	};
 
 	onMount(async () => {
+		if ($isPostUpdated) {
+			$isPostUpdated = false;
+			invalidateAll();
+		}
 		tags.push(new Tag('все вместе', 'Все вместе'));
 		tags.push(new Tag('без тега', 'Без тега'));
 		document.addEventListener('visibilitychange', function () {

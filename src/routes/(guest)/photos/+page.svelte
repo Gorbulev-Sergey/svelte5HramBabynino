@@ -8,7 +8,7 @@
 		countPagesForShow,
 		searchAlbumsString as search,
 		isNewAlbumsFirst
-	} from '$lib/scripts/writableData';
+	} from '$lib/scripts/store.js';
 	import Container from '$lib/components/Container.svelte';
 
 	export let data;

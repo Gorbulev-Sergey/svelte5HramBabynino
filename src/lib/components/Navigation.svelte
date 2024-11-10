@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { isSystemTheme, subPanel, theme } from '$lib/scripts/writableData';
+	import { isSystemTheme, subPanel, theme } from '$lib/scripts/store';
 	import Large from '$lib/components/Breakpoint/Large.svelte';
 	import Smalle from '$lib/components/Breakpoint/Small.svelte';
 	import IsAuth from '$lib/components/IsAuth.svelte';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { alerts } from '$lib/scripts/writableData';
+	import { alerts } from '$lib/scripts/store';
 
 	$effect(() => {
 		const interval = setInterval(() => {

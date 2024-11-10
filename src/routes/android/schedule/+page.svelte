@@ -4,10 +4,10 @@
 	import Month from '$lib/components/schedule/Month.svelte';
 	import { onMount } from 'svelte';
 	import { Month as _Month } from '$lib/models/schedule/Month';
-	import { scheduleMonth as month } from '$lib/scripts/writableData';
+	import { scheduleMonth as month } from '$lib/scripts/store';
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { theme } from '$lib/scripts/writableData';
+	import { theme } from '$lib/scripts/store';
 	import Large from '$lib/components/Breakpoint/Large.svelte';
 	import Small from '$lib/components/Breakpoint/Small.svelte';
 

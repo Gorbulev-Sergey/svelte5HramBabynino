@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { subPanel } from '$lib/scripts/writableData';
+	import { subPanel } from '$lib/scripts/store';
 	import Alerts from '$lib/components/Alerts.svelte';
 	import Container from '$lib/components/Container.svelte';
 	import Footer from '$lib/components/Footer.svelte';

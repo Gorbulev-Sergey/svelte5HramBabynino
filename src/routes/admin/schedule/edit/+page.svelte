@@ -5,7 +5,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Month } from '$lib/models/schedule/Month';
 	import MonthEdit from '$lib/components/schedule/MonthEdit.svelte';
-	import { scheduleMonth as month, subPanel } from '$lib/scripts/writableData';
+	import { scheduleMonth as month, subPanel } from '$lib/scripts/store';
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 
 	let m = $state('');

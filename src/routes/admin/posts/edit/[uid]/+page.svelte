@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isPostUpdated } from '../../../../../lib/scripts/store.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pin from '$lib/components/Pin.svelte';
@@ -24,6 +25,7 @@
 			onclick={async () => {
 				if (post.title != '') {
 					update(ref(db, `/posts/${$page.params.uid}`), post);
+					$isPostUpdated = true;
 					goto('/admin/posts');
 				}
 			}}>Сохранить</button>

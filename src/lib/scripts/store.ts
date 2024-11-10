@@ -52,3 +52,6 @@ export let alerts: Writable<String[]> = writable([]);
 
 // Дополнительная панель в макете
 export let subPanel: Writable<Snippet> | undefined = writable();
+
+// Для того, чтобы при обновлении поста в админпанели происходил перерендеринг всех постов
+export let isPostUpdated = writable<boolean>(false);

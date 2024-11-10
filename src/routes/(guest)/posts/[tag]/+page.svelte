@@ -6,7 +6,7 @@
 	import Post from '$lib/components/posts/Post.svelte';
 	import type { Post as _Post } from '$lib/models/Post.js';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { showedPostsLength, showedPostsStep } from '$lib/scripts/writableData';
+	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store.js';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 
 	export let data;

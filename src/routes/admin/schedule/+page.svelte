@@ -4,7 +4,7 @@
 	import { Month as _Month } from '$lib/models/schedule/Month';
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import { goto } from '$app/navigation';
-	import { scheduleMonth as month } from '$lib/scripts/writableData';
+	import { scheduleMonth as month } from '$lib/scripts/store';
 
 	let m = '';
 
@@ -45,7 +45,8 @@
 		<button class="btn btn-dark text-light text-nowrap" on:click={() => window.print()}>
 			<i class="fa-solid fa-print" /> Печать
 		</button>
-		<button class="btn btn-dark" on:click={() => goto('/admin/schedule/edit')}>Редактировать</button>
+		<button class="btn btn-dark" on:click={() => goto('/admin/schedule/edit')}
+			>Редактировать</button>
 	</div>
 </PageTitleWrap>
 

@@ -2,8 +2,14 @@
 	// @ts-nocheck
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/scripts/firebase';
-	import { userSigned } from '$lib/scripts/writableData';
-	import { GoogleAuthProvider, getRedirectResult, signInWithPopup, signInWithRedirect, signOut } from 'firebase/auth';
+	import { userSigned } from '$lib/scripts/store';
+	import {
+		GoogleAuthProvider,
+		getRedirectResult,
+		signInWithPopup,
+		signInWithRedirect,
+		signOut
+	} from 'firebase/auth';
 	import { onMount } from 'svelte';
 </script>
 
