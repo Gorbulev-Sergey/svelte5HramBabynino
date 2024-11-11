@@ -6,19 +6,23 @@
 	import { Tag } from '$lib/models/Tag';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onValue, push, ref } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Editor from '$lib/components/posts/Editor.svelte';
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import { Header } from '$lib/scripts/store.js';
 
 	export let data;
 	$: tags = data.tags;
 	let post = new Post();
 	let selectedTag = new Tag();
 	let showCode = false;
+
+	$Header = header;
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Создать публикацию">
-	<div slot="navigation">
+{#snippet header()}
+	<PageTitle title="Создать публикацию">
 		<button class="btn btn-light" on:click={() => goto(`/admin/posts`)}>Отмена</button>
 		<button
 			class="btn btn-dark bg-opacity-10"
@@ -30,8 +34,8 @@
 					goto('/admin/posts');
 				}
 			}}>Сохранить</button>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 <div class="rounded p-3 {!post.inverted ? 'bg-white text-dark' : 'bg-dark text-light'}">
 	<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">

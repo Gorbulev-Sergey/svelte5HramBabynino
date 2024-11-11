@@ -1,12 +1,13 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
 	import { goto } from '$app/navigation';
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { db } from '$lib/scripts/firebase';
+	import { Header } from '$lib/scripts/store';
 	import { onValue, ref, set } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
-	let contacts;
+	let { contacts } = $props();
+	$Header = header;
 	onMount(() => {
 		onValue(ref(db, '/contacts'), s => {
 			if (s.exists()) {
@@ -14,19 +15,20 @@
 			}
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Редактировать контакты">
-	<div slot="navigation">
-		<button class="btn btn-light" on:click={() => goto('/admin/contacts')}>Отмена</button>
+{#snippet header()}
+	<PageTitle title="Редактировать контакты">
+		<button class="btn btn-light" onclick={() => goto('/admin/contacts')}>Отмена</button>
 		<button
 			class="btn btn-dark"
-			on:click={async () => {
+			onclick={async () => {
 				set(ref(db, '/contacts'), contacts);
 				goto('/admin/contacts');
 			}}>Сохранить</button>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 {#if contacts}
 	<div class="row row-cols-1 row-cols-md-3 g-3">
@@ -36,10 +38,11 @@
 				<div class="d-flex justify-content-between align-items-center mb-2">
 					<h5>Расписание работы храма:</h5>
 					<button
+						aria-label=""
 						class="btn btn-dark ms-1"
-						on:click={async () => {
+						onclick={async () => {
 							contacts.scheduleOfWork = [...contacts.scheduleOfWork, { day: '', time: '' }];
-						}}>Добавить <i class="fa-solid fa-circle-plus" /></button>
+						}}>Добавить <i class="fa-solid fa-circle-plus"></i></button>
 				</div>
 				{#each contacts.scheduleOfWork as item}
 					<div class="row g-2 mb-1">
@@ -56,10 +59,11 @@
 									<input class="form-control" bind:value={item.time} placeholder="время" />
 								</div>
 								<button
+									aria-label=""
 									class="btn btn-dark"
-									on:click={async () => {
+									onclick={async () => {
 										contacts.scheduleOfWork = contacts.scheduleOfWork.filter(i => i != item);
-									}}><i class="fa-solid fa-trash" /></button>
+									}}><i class="fa-solid fa-trash"></i></button>
 							</div>
 						</div>
 					</div>
@@ -70,10 +74,11 @@
 				<div class="d-flex justify-content-between align-items-center mb-2">
 					<h5>Контактные телефоны:</h5>
 					<button
+						aria-label=""
 						class="btn btn-dark ms-2"
-						on:click={async () => {
+						onclick={async () => {
 							contacts.phones = [...contacts.phones, { title: '', phone: '' }];
-						}}>Добавить <i class="fa-solid fa-circle-plus" /></button>
+						}}>Добавить <i class="fa-solid fa-circle-plus"></i></button>
 				</div>
 				{#each contacts.phones as item}
 					<div class="row g-2 mb-1">
@@ -87,13 +92,17 @@
 							<div class="d-flex align-items-center">
 								<div class="input-group me-2">
 									<span class="input-group-text">телефон:</span>
-									<input class="form-control" bind:value={item.phone} placeholder="номер телефона" />
+									<input
+										class="form-control"
+										bind:value={item.phone}
+										placeholder="номер телефона" />
 								</div>
 								<button
+									aria-label=""
 									class="btn btn-dark"
-									on:click={async () => {
+									onclick={async () => {
 										contacts.phones = contacts.phones.filter(i => i != item);
-									}}><i class="fa-solid fa-trash" /></button>
+									}}><i class="fa-solid fa-trash"></i></button>
 							</div>
 						</div>
 					</div>
@@ -105,8 +114,11 @@
 					<h5>Социальные сети:</h5>
 					<button
 						class="btn btn-dark"
-						on:click={async () => {
-							contacts.socialNetworks = [...contacts.socialNetworks, { title: '', url: '', icon: '' }];
+						onclick={async () => {
+							contacts.socialNetworks = [
+								...contacts.socialNetworks,
+								{ title: '', url: '', icon: '' }
+							];
 						}}>Добавить <i class="fa-solid fa-circle-plus" /></button>
 				</div>
 				{#each contacts.socialNetworks as item}
@@ -127,7 +139,10 @@
 							<div class="d-flex align-items-center">
 								<div class="input-group me-2">
 									<span class="input-group-text">иконка:</span>
-									<input class="form-control" bind:value={item.icon} placeholder="иконка (html тег)" />
+									<input
+										class="form-control"
+										bind:value={item.icon}
+										placeholder="иконка (html тег)" />
 									{#if item.icon}
 										<span class="input-group-text" style="font-size: 1.3em;">
 											{@html item.icon}
@@ -135,10 +150,11 @@
 									{/if}
 								</div>
 								<button
+									aria-label=""
 									class="btn btn-dark"
-									on:click={async () => {
+									onclick={async () => {
 										contacts.socialNetworks = contacts.socialNetworks.filter(i => i != item);
-									}}><i class="fa-solid fa-trash" /></button>
+									}}><i class="fa-solid fa-trash"></i></button>
 							</div>
 						</div>
 					</div>
@@ -157,7 +173,10 @@
 				</div>
 				<div class="input-group">
 					<span class="input-group-text">url яндекс карт:</span>
-					<input class="form-control" bind:value={contacts.address.yandexMapsUrl} placeholder="url яндекс карт" />
+					<input
+						class="form-control"
+						bind:value={contacts.address.yandexMapsUrl}
+						placeholder="url яндекс карт" />
 				</div>
 				{#if contacts.address.yandexMapsUrl}
 					<div class="row mt-3">
@@ -166,7 +185,10 @@
 								<div class="rounded w-100" style="overflow:hidden; height:400px">
 									<iframe
 										title="fghjfghj"
-										src={contacts.address.yandexMapsUrl.replace('https://yandex.ru/maps/', 'https://yandex.ru/map-widget/v1/')}
+										src={contacts.address.yandexMapsUrl.replace(
+											'https://yandex.ru/maps/',
+											'https://yandex.ru/map-widget/v1/'
+										)}
 										width="100%"
 										height="100%"
 										frameborder="1"

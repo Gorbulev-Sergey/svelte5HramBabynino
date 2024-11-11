@@ -1,10 +1,10 @@
 <script lang="ts">
-	import PageTitle from '$lib/components/PageTitle.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import type { IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts } from '$lib/scripts/store';
+	import { alerts, Header } from '$lib/scripts/store';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let roles = $state<[string, IRole][]>([]);
 	let newRole = $state<IRole>({
@@ -12,16 +12,18 @@
 	});
 	let isRoleEdit = $state(false);
 	let editedRoleUID = $state('');
+	$Header = header;
 
 	onMount(async () => {
 		onValue(ref(db, '/roles'), s => {
 			if (s.exists()) roles = Object.entries(s.val()) as [string, IRole][];
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitle title="Роли пользователей">
-	<div slot="navigation">
+{#snippet header()}
+	<PageTitle title="Роли пользователей">
 		<div class="input-group">
 			<div class="bg-light text-dark py-2 px-3 rounded-start border">
 				{!isRoleEdit ? 'Новая' : 'Редактировать'} роль:
@@ -75,8 +77,8 @@
 					}}>Сохранить</button>
 			{/if}
 		</div>
-	</div>
-</PageTitle>
+	</PageTitle>
+{/snippet}
 
 <div class="p-1 d-flex flex-column gap-0">
 	{#each roles as [uid, role], i}

@@ -2,14 +2,14 @@
 	import { db } from '$lib/scripts/firebase';
 	import { ref, remove, update } from 'firebase/database';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { adminPostsFilters, isPostUpdated } from '$lib/scripts/store.js';
+	import { adminPostsFilters, Header, isPostUpdated } from '$lib/scripts/store.js';
 	import FilterTags from '$lib/components/posts/FilterTags.svelte';
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Tag } from '$lib/models/Tag';
 
 	export let data;
@@ -48,6 +48,8 @@
 		}
 	};
 
+	$Header = header;
+
 	onMount(async () => {
 		if ($isPostUpdated) {
 			$isPostUpdated = false;
@@ -61,11 +63,12 @@
 			}
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Публикации">
-	<div slot="center">
-		<div class="d-flex justify-content-between align-items-center">
+{#snippet header()}
+	<PageTitle title="Публикации">
+		<div class="flex-grow-1 d-flex align-items-center">
 			<FilterTags
 				title="тип:"
 				{tags}
@@ -83,11 +86,9 @@
 				titleNoPressed="не опубликованные"
 				titlePressed="опубликованные" />
 		</div>
-	</div>
-	<div slot="navigation">
 		<button class="btn btn-dark" on:click={() => goto('/admin/posts/create')}>Создать</button>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 <div>
 	<!-- pinned -->

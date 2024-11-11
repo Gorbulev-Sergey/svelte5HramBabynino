@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isPostUpdated } from '../../../../../lib/scripts/store.js';
+	import { Header, isPostUpdated } from '$lib/scripts/store.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pin from '$lib/components/Pin.svelte';
@@ -8,16 +8,20 @@
 	import { db } from '$lib/scripts/firebase';
 	import { ref, update } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
 	let tags = data.tags;
 	let post = $state(data.post);
 	let selectedTag = $state(new Tag());
+
+	$Header = header;
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Редактировать публикацию">
-	<div slot="navigation">
+{#snippet header()}
+	<PageTitle title="Редактировать публикацию">
 		<button class="btn btn-light" onclick={() => goto(`/admin/posts#${$page.params.uid}`)}
 			>Отмена</button>
 		<button
@@ -29,8 +33,8 @@
 					goto('/admin/posts');
 				}
 			}}>Сохранить</button>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 <div class="rounded p-3 {!post.inverted ? 'bg-white text-dark' : 'bg-dark text-light'}">
 	<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">

@@ -5,20 +5,11 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Month } from '$lib/models/schedule/Month';
 	import MonthEdit from '$lib/components/schedule/MonthEdit.svelte';
-	import { scheduleMonth as month, subPanel } from '$lib/scripts/store';
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import { scheduleMonth as month, Header } from '$lib/scripts/store';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 
 	let m = $state('');
-	$subPanel = subpanel;
-
-	onDestroy(() => {
-		$subPanel = undefined;
-	});
-
-	onMount(async () => {
-		m = `${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`;
-		getSchedule();
-	});
+	$Header = header;
 
 	async function getSchedule() {
 		let response = await fetch('/api/schedule', {
@@ -34,11 +25,19 @@
 		$month.fildsDayNotEmpty = schedule;
 		$month.updateFildsDayAll();
 	}
+
+	onMount(async () => {
+		m = `${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`;
+		getSchedule();
+	});
+	onDestroy(() => {
+		$Header = null;
+	});
 </script>
 
-{#snippet subpanel()}
-	<PageTitleWrap title="Редактировать расписание">
-		<div slot="center" class="input-group me-4">
+{#snippet header()}
+	<PageTitle title="Редактировать расписание">
+		<div class="input-group w-25">
 			<span class="input-group-text bg-dark text-light border-0">Дата:</span>
 			<input
 				class="form-control bg-light text-dark border-0"
@@ -49,7 +48,7 @@
 					getSchedule();
 				}} />
 		</div>
-		<div slot="navigation" class="d-flex flex-nowrap align-items-center">
+		<div class="flex-grow-1 justify-content-end d-flex flex-nowrap align-items-center">
 			<button class="btn btn-light me-1" onclick={() => goto('/admin/schedule')}>Отмена</button>
 			<button
 				class="btn btn-dark"
@@ -71,7 +70,7 @@
 					goto('/admin/schedule');
 				}}>Сохранить</button>
 		</div>
-	</PageTitleWrap>
+	</PageTitle>
 {/snippet}
 
 <MonthEdit bind:month={$month} />

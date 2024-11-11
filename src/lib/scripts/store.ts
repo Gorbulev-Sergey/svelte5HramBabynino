@@ -52,7 +52,7 @@ export let userSigned = writable({});
 export let alerts: Writable<String[]> = writable([]);
 
 // Дополнительная панель в макете
-export let subPanel: Writable<Snippet> | undefined = writable();
+export let Header: Writable<Snippet> | null = writable();
 
 // Для того, чтобы при обновлении поста в админпанели происходил перерендеринг всех постов
 export let isPostUpdated = writable<boolean>(false);

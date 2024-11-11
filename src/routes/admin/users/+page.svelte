@@ -1,10 +1,10 @@
 <script lang="ts">
-	import PageTitle from '$lib/components/PageTitle.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import type { IUser } from '$lib/models/admin/User';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts } from '$lib/scripts/store';
+	import { alerts, Header } from '$lib/scripts/store';
 	import { onValue, ref, remove, set } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let users = $state<[String, IUser][]>([]);
 	let newUser = $state<IUser>({
@@ -14,6 +14,7 @@
 			name: ''
 		}
 	});
+	$Header = header;
 
 	onMount(async () => {
 		onValue(ref(db, '/users'), s => {
@@ -22,10 +23,11 @@
 			}
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitle title="Пользователи">
-	<div slot="navigation">
+{#snippet header()}
+	<PageTitle title="Пользователи">
 		<div class="input-group">
 			<div class="p-2 bg-light rounded-start border">Новый пользователь:</div>
 			<input class="form-control" bind:value={newUser.uid} placeholder="uid" />
@@ -44,8 +46,8 @@
 					};
 				}}>Сохранить</button>
 		</div>
-	</div>
-</PageTitle>
+	</PageTitle>
+{/snippet}
 
 <div class="p-1 d-flex flex-column gap-0">
 	{#each users as [uid, user], i}

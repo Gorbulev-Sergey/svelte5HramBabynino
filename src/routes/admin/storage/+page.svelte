@@ -1,6 +1,7 @@
 <script lang="ts">
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { storage } from '$lib/scripts/firebase';
+	import { Header } from '$lib/scripts/store';
 	import {
 		uploadBytes,
 		ref,
@@ -10,7 +11,7 @@
 		deleteObject,
 		type StorageReference
 	} from 'firebase/storage';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let tabs = $state({ selectedTab: 0, tab: ['Хранилище фотографий', 'Хранилище документов'] });
 	let folders: StorageReference[] = $state([]);
@@ -29,6 +30,8 @@
 	// Корневая папка для документов
 	let documentsFolder = '/Documents';
 	let documentsRef: StorageReference = $derived(ref(storage, `${documentsFolder}`));
+
+	$Header = header;
 
 	let getFolders = () => listAll(albumsRef).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
@@ -65,10 +68,11 @@
 			getDocuments();
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title={tabs.tab[tabs.selectedTab]} _class="text-uppercase mb-4">
-	<div slot="navigation">
+{#snippet header()}
+	<PageTitle title={tabs.tab[tabs.selectedTab]}>
 		<div class="nav d-flex flex-wrap">
 			<a
 				class="flex-grow-1 btn btn-light text-dark border-0 rounded-0 rounded-start py-2 active"
@@ -81,39 +85,37 @@
 				href="#documents"
 				onclick={() => (tabs.selectedTab = 1)}>Документы</a>
 		</div>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 <div class="tab-content">
 	<div id="photos" class="tab-pane fade show active">
-		<PageTitleWrap title="Папки с фотографиями">
-			<div slot="navigation">
-				<div class=" input-group">
-					<div class="input-group-text border-0">Создать папку:</div>
-					<input
-						class="form-control bg-light text-dark border-0"
-						bind:value={newFolderName}
-						placeholder="имя новой папки" />
-					<button
-						class="btn btn-light text-dark"
-						onclick={() => (newFolderName = '')}
-						aria-label="имя новой папки"><i class="fa-solid fa-delete-left"></i></button>
-					<button
-						class="btn btn-dark"
-						onclick={() => {
-							// Пустой объект для создания новой папки
-							const empty = ref(storage, `${albumsFolder}/${newFolderName}/empty`);
-							// Создаём папку и записываем в неё пустой объект
-							uploadString(empty, 'Строка для инициализации папки').then(s => {
-								selectedFolder = 0;
-								newFolderName = '';
-								getFolders();
-								getPhotos();
-							});
-						}}>Создать</button>
-				</div>
+		<PageTitle title="Папки с фотографиями" _class="mb-1">
+			<div class="input-group">
+				<div class="input-group-text border-0">Создать папку:</div>
+				<input
+					class="form-control bg-light text-dark border-0"
+					bind:value={newFolderName}
+					placeholder="имя новой папки" />
+				<button
+					class="btn btn-light text-dark"
+					onclick={() => (newFolderName = '')}
+					aria-label="имя новой папки"><i class="fa-solid fa-delete-left"></i></button>
+				<button
+					class="btn btn-dark"
+					onclick={() => {
+						// Пустой объект для создания новой папки
+						const empty = ref(storage, `${albumsFolder}/${newFolderName}/empty`);
+						// Создаём папку и записываем в неё пустой объект
+						uploadString(empty, 'Строка для инициализации папки').then(s => {
+							selectedFolder = 0;
+							newFolderName = '';
+							getFolders();
+							getPhotos();
+						});
+					}}>Создать</button>
 			</div>
-		</PageTitleWrap>
+		</PageTitle>
 		<div class="d-flex flex-wrap justify-content-start align-items-start gap-2 mb-5">
 			{#each folders as item, i}
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -148,55 +150,53 @@
 				</div>
 			{/each}
 		</div>
-		<PageTitleWrap title={`Фотографии в папке "${folders[selectedFolder]?.name ?? ''}"`}>
-			<div slot="navigation">
-				<div>
-					<button
-						class="btn btn-dark text-light"
-						onclick={() => {
-							document.querySelector('#buttonSelectPhotos')?.click();
-						}}><i class="fa-solid fa-cloud-arrow-up me-1"></i>{labelFakeForUploadButton}</button>
-					<input
-						id="buttonSelectPhotos"
-						hidden
-						type="file"
-						accept="image/*"
-						multiple
-						class="form-control bg-light text-dark border-0"
-						bind:files={photosForUpload}
-						onchange={() => {
-							if (photosForUpload != undefined && photosForUpload.length > 0) {
-								labelFakeForUploadButton = 'Файлы загружаются';
-								Array.from(photosForUpload).forEach((p, i, a) => {
-									uploadBytes(
-										ref(
-											storage,
-											`/${albumsFolder}/${folders[selectedFolder].name}/${p.name.replace('(', '').replace(')', '')}`
-										),
-										p
-									).then(() => {
-										if (i == a.length - 1) {
-											getPhotos();
-											photosForUpload = undefined;
-											labelFakeForUploadButton = 'Загрузка завершена';
-											setTimeout(() => {
-												labelFakeForUploadButton = 'Загрузить новые';
-											}, 1000);
-										}
-									});
+		<PageTitle title={`Фотографии в папке "${folders[selectedFolder]?.name ?? ''}"`} _class="mb-1">
+			<div>
+				<button
+					class="btn btn-dark text-light"
+					onclick={() => {
+						document.querySelector('#buttonSelectPhotos')?.click();
+					}}><i class="fa-solid fa-cloud-arrow-up me-1"></i>{labelFakeForUploadButton}</button>
+				<input
+					id="buttonSelectPhotos"
+					hidden
+					type="file"
+					accept="image/*"
+					multiple
+					class="form-control bg-light text-dark border-0"
+					bind:files={photosForUpload}
+					onchange={() => {
+						if (photosForUpload != undefined && photosForUpload.length > 0) {
+							labelFakeForUploadButton = 'Файлы загружаются';
+							Array.from(photosForUpload).forEach((p, i, a) => {
+								uploadBytes(
+									ref(
+										storage,
+										`/${albumsFolder}/${folders[selectedFolder].name}/${p.name.replace('(', '').replace(')', '')}`
+									),
+									p
+								).then(() => {
+									if (i == a.length - 1) {
+										getPhotos();
+										photosForUpload = undefined;
+										labelFakeForUploadButton = 'Загрузка завершена';
+										setTimeout(() => {
+											labelFakeForUploadButton = 'Загрузить новые';
+										}, 1000);
+									}
 								});
-							}
-						}} />
-				</div>
+							});
+						}
+					}} />
 			</div>
-		</PageTitleWrap>
+		</PageTitle>
 		{#if photos.length > 0}
-			<div class="d-flex flex-wrap gap-2">
+			<div class="d-flex justify-content-between flex-wrap gap-2">
 				{#each photos as photo}
 					{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
 						<div
 							class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-							style="width:31.5%; background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
+							style="min-width: calc(98.5% / 3); background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
 							<button
 								aria-label=""
 								class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
@@ -232,45 +232,43 @@
 		{/if}
 	</div>
 	<div id="documents" class="tab-pane fade">
-		<PageTitleWrap title={'Документы'}>
-			<div slot="navigation">
-				<div>
-					<button
-						class="btn btn-dark text-light"
-						onclick={() => {
-							document.querySelector('#buttonSelectDocuments')?.click();
-						}}><i class="fa-solid fa-cloud-arrow-up me-1" />{labelFakeForUploadButton}</button>
-					<input
-						id="buttonSelectDocuments"
-						hidden
-						type="file"
-						multiple
-						accept="application/pdf,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-						class="form-control bg-light text-dark border-0"
-						bind:files={documentsForUpload}
-						onchange={() => {
-							if (documentsForUpload != undefined && documentsForUpload.length > 0) {
-								labelFakeForUploadButton = 'Файлы загружаются';
-								Array.from(documentsForUpload).forEach((p, i, a) => {
-									uploadBytes(
-										ref(storage, `/${documentsFolder}/${p.name.replace('(', '').replace(')', '')}`),
-										p
-									).then(() => {
-										if (i == a.length - 1) {
-											getDocuments();
-											documentsForUpload = undefined;
-											labelFakeForUploadButton = 'Загрузка завершена';
-											setTimeout(() => {
-												labelFakeForUploadButton = 'Загрузить новые';
-											}, 1000);
-										}
-									});
+		<PageTitle title={'Документы'} _class="mb-1">
+			<div>
+				<button
+					class="btn btn-dark text-light"
+					onclick={() => {
+						document.querySelector('#buttonSelectDocuments')?.click();
+					}}><i class="fa-solid fa-cloud-arrow-up me-1" />{labelFakeForUploadButton}</button>
+				<input
+					id="buttonSelectDocuments"
+					hidden
+					type="file"
+					multiple
+					accept="application/pdf,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+					class="form-control bg-light text-dark border-0"
+					bind:files={documentsForUpload}
+					onchange={() => {
+						if (documentsForUpload != undefined && documentsForUpload.length > 0) {
+							labelFakeForUploadButton = 'Файлы загружаются';
+							Array.from(documentsForUpload).forEach((p, i, a) => {
+								uploadBytes(
+									ref(storage, `/${documentsFolder}/${p.name.replace('(', '').replace(')', '')}`),
+									p
+								).then(() => {
+									if (i == a.length - 1) {
+										getDocuments();
+										documentsForUpload = undefined;
+										labelFakeForUploadButton = 'Загрузка завершена';
+										setTimeout(() => {
+											labelFakeForUploadButton = 'Загрузить новые';
+										}, 1000);
+									}
 								});
-							}
-						}} />
-				</div>
+							});
+						}
+					}} />
 			</div>
-		</PageTitleWrap>
+		</PageTitle>
 		{#if documents.length > 0}
 			<div class="d-flex flex-column align-items-start gap-2">
 				{#each documents as doc}

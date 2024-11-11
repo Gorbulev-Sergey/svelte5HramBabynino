@@ -1,6 +1,5 @@
-<script>
-	// @ts-nocheck
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+<script lang="ts">
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
@@ -9,8 +8,9 @@
 	import { db, storage } from '$lib/scripts/firebase';
 	import { onValue, ref as refDb, update } from 'firebase/database';
 	import { ref, getDownloadURL, listAll } from 'firebase/storage';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Container from '$lib/components/Container.svelte';
+	import { Header } from '$lib/scripts/store';
 
 	let album = new Album();
 
@@ -21,7 +21,8 @@
 	let albumsRef = ref(storage, `${albumsFolder}`);
 	let selectedFolder = 0;
 	let checkedPhotos = [];
-	let getFolders = () => listAll(ref(storage, albumsRef)).then(result => (folders = result.prefixes));
+	let getFolders = () =>
+		listAll(ref(storage, albumsRef)).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
 		if (folders.length > 0) {
 			listAll(ref(storage, ref(storage, folders[selectedFolder].fullPath))).then(s => {
@@ -29,6 +30,7 @@
 			});
 		}
 	};
+	$Header = header;
 
 	onMount(async () => {
 		onValue(refDb(db, `/photos/${$page.params.uid}`), s => {
@@ -42,10 +44,11 @@
 			}
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Редактировать фотоальбом">
-	<div slot="navigation">
+{#snippet header()}
+	<PageTitle title="Редактировать фотоальбом">
 		<button class="btn btn-light" on:click={() => goto(`/admin/photos`)}>Отмена</button>
 		<button
 			class="btn btn-dark bg-opacity-10"
@@ -54,8 +57,8 @@
 				update(refDb(db, `/photos/${$page.params.uid}`), album);
 				goto('/admin/photos');
 			}}>Сохранить</button>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 <div class="rounded p-3 bg-white text-dark">
 	<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
@@ -70,8 +73,14 @@
 		<div id="cover" class="tab-pane active show">
 			<div class="row">
 				<div class="col-md-8">
-					<input class="form-control mb-3 bg-light text-dark" placeholder="заголовок" bind:value={album.title} />
-					<input class="form-control mb-3 bg-light text-dark" placeholder="описание" bind:value={album.description} />
+					<input
+						class="form-control mb-3 bg-light text-dark"
+						placeholder="заголовок"
+						bind:value={album.title} />
+					<input
+						class="form-control mb-3 bg-light text-dark"
+						placeholder="описание"
+						bind:value={album.description} />
 					<div class="input-group mb-3">
 						<span class="input-group-text bg-dark text-light">Дата публикации</span>
 						<input type="date" class="form-control bg-light text-dark" bind:value={album.date} />
@@ -79,7 +88,10 @@
 				</div>
 				<div class="col-md-4">
 					<div class="form-group mb-3">
-						<input class="form-control mb-3 bg-light text-dark" placeholder="обложка (url фото)" bind:value={album.cover} />
+						<input
+							class="form-control mb-3 bg-light text-dark"
+							placeholder="обложка (url фото)"
+							bind:value={album.cover} />
 						{#if album.cover}
 							<img class="card-img rounded" src={album.cover} alt="" />
 						{/if}
@@ -90,7 +102,11 @@
 		<!-- Вкладка содержимое -->
 		<div id="content" class="tab-pane">
 			<div class="d-flex flex-wrap gap-1 mb-3">
-				<button class="btn btn-sm btn-dark me-1" on:click={() => (album.photos = [...album.photos, new _Photo()])}><i class="fa-solid fa-plus" /> 1 фото </button>
+				<button
+					class="btn btn-sm btn-dark me-1"
+					on:click={() => (album.photos = [...album.photos, new _Photo()])}
+					><i class="fa-solid fa-plus" /> 1 фото
+				</button>
 				<button
 					class="btn btn-sm btn-dark me-1"
 					on:click={() => {
@@ -109,7 +125,10 @@
 					}}
 					><i class="fa-solid fa-plus" /> 10 фото
 				</button>
-				<button class="btn btn-sm btn-dark me-1" data-bs-toggle="modal" data-bs-target="#modalStoragePhotos">
+				<button
+					class="btn btn-sm btn-dark me-1"
+					data-bs-toggle="modal"
+					data-bs-target="#modalStoragePhotos">
 					<i class="fa-solid fa-cloud-arrow-down me-1" />из хранилища
 				</button>
 			</div>
@@ -131,12 +150,17 @@
 				{/each}
 			</div>
 			<!-- Фотографии из хранилища (модальное окно) -->
-			<div id="modalStoragePhotos" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div
+				id="modalStoragePhotos"
+				class="modal fade"
+				data-bs-backdrop="static"
+				data-bs-keyboard="false">
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content bg-light text-dark p-3">
 						<div class="d-flex justify-content-between align-items-center">
 							<h5 class="pb-0">Добавить фотографии из хранилища</h5>
-							<button class="btn btn-sm btn-light text-dark" data-bs-dismiss="modal"><i class="fa-solid fa-xmark" /></button>
+							<button class="btn btn-sm btn-light text-dark" data-bs-dismiss="modal"
+								><i class="fa-solid fa-xmark" /></button>
 						</div>
 						<div class="my-3">
 							<!-- Папки -->
@@ -147,13 +171,17 @@
 										<!-- svelte-ignore a11y-click-events-have-key-events -->
 										<!-- svelte-ignore a11y-no-static-element-interactions -->
 										<div
-											class="d-flex align-items-top {selectedFolder == i ? 'bg-dark text-light' : 'bg-light'} px-2 rounded-1"
+											class="d-flex align-items-top {selectedFolder == i
+												? 'bg-dark text-light'
+												: 'bg-light'} px-2 rounded-1"
 											style="cursor:pointer"
 											on:click={() => {
 												selectedFolder = i;
 												getPhotos();
 											}}>
-											<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">{item.name}</div>
+											<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
+												{item.name}
+											</div>
 										</div>
 									{/each}
 								</div>
@@ -171,8 +199,15 @@
 													<div
 														class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
 														style="width:31.5%; background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:6.1em;"
-														on:click={() => (checkedPhotos = !checkedPhotos.includes(s) ? [...checkedPhotos, s] : checkedPhotos.filter(v => v != s))}>
-														<input type="checkbox" class="form-check" value={s} bind:group={checkedPhotos} />
+														on:click={() =>
+															(checkedPhotos = !checkedPhotos.includes(s)
+																? [...checkedPhotos, s]
+																: checkedPhotos.filter(v => v != s))}>
+														<input
+															type="checkbox"
+															class="form-check"
+															value={s}
+															bind:group={checkedPhotos} />
 													</div>
 												{/await}
 											{/each}
@@ -182,7 +217,10 @@
 							</div>
 						</div>
 						<div class="d-flex justify-content-end align-items-center gap-1">
-							<button class="btn btn-light text-dark" data-bs-dismiss="modal" on:click={() => (checkedPhotos = [])}>Отмена</button>
+							<button
+								class="btn btn-light text-dark"
+								data-bs-dismiss="modal"
+								on:click={() => (checkedPhotos = [])}>Отмена</button>
 							<button
 								class="btn btn-dark text-light"
 								data-bs-dismiss="modal"

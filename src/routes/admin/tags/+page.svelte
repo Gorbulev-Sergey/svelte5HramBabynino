@@ -1,8 +1,10 @@
 <script lang="ts">
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Tag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
+	import { Header } from '$lib/scripts/store.js';
 	import { ref, set } from 'firebase/database';
+	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
 	let tags = $state(data.tags);
@@ -10,10 +12,12 @@
 	let saveToDb = async () => {
 		set(ref(db, `/tags`), tags);
 	};
+	$Header = header;
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Теги">
-	<div slot="navigation" class="d-flex align-items-center">
+{#snippet header()}
+	<PageTitle title="Теги">
 		<div class="input-group">
 			<span class="input-group-text"><i class="fa-solid fa-circle-plus"></i></span>
 			<input class="form-control" placeholder="название" bind:value={tag.name} />
@@ -36,8 +40,8 @@
 					}
 				}}>Сохранить</button>
 		</div>
-	</div>
-</PageTitleWrap>
+	</PageTitle>
+{/snippet}
 
 <div class="text-dark rounded p-3">
 	<h5 class="mb-3">Доступные теги</h5>

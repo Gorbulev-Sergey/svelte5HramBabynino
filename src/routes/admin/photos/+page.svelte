@@ -1,24 +1,29 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
-	import PageTitle from '$lib/components/PageTitle.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Album from '$lib/components/photos/Album.svelte';
 	import { db } from '$lib/scripts/firebase';
+	import { Header } from '$lib/scripts/store';
 	import { onValue, ref, remove } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
-	let albums = new Object();
+	let albums = {};
+	$Header = header;
+
 	onMount(async () => {
 		onValue(ref(db, '/photos'), s => {
 			if (s.exists()) albums = s.val();
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitle title="Фотографии">
-	<div slot="navigation">
-		<button class="btn btn-dark text-light" on:click={() => goto(`/admin/photos/create`)}>Создать</button>
-	</div>
-</PageTitle>
+{#snippet header()}
+	<PageTitle title="Фотографии">
+		<button class="btn btn-dark text-light" on:click={() => goto(`/admin/photos/create`)}
+			>Создать</button>
+	</PageTitle>
+{/snippet}
 
 <div class="row row-cols-1 row-cols-md-3 g-3">
 	{#each Object.entries(albums).sort(([k1, v1], [k2, v2]) => new Date(v2.date).getTime() - new Date(v1.date).getTime()) as [uid, album]}
@@ -45,7 +50,10 @@
 								}}>
 								<i class="fa-solid fa-pencil" />
 							</button>
-							<button class="btn btn-sm btn-dark" on:click|stopPropagation={async () => remove(ref(db, `/photos/${uid}`))}><i class="fa-solid fa-trash text-danger" /></button>
+							<button
+								class="btn btn-sm btn-dark"
+								on:click|stopPropagation={async () => remove(ref(db, `/photos/${uid}`))}
+								><i class="fa-solid fa-trash text-danger" /></button>
 						</div>
 					</div>
 				</div>
