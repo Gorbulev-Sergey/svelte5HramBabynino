@@ -3,9 +3,10 @@
 	import FildDateEdit from './FildDateEdit.svelte';
 
 	export let month: Month;
+	export let _class: String;
 </script>
 
-<div class="bg-transparent text-dark rounded w-100 overflow-auto">
+<div class="bg-white text-dark rounded w-100 overflow-auto {_class}">
 	<div class="no-print" style="display: grid; grid-template-columns: .14fr 1fr; min-height: 2.3em">
 		<div class="text-center px-3" style="min-width: 8em;">
 			<span class="badge bg-dark text-light">Дата</span>

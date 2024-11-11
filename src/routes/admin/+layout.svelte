@@ -185,7 +185,7 @@
 				{/if}
 				<!-- <div class="bg-light px-3 pb-2">Разное</div> -->
 			</div>
-			<div class="container my-3 px-3">
+			<div class="container mt-3 mb-5 px-3">
 				{@render children?.()}
 			</div>
 		</div>

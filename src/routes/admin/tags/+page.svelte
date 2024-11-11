@@ -43,13 +43,13 @@
 	</PageTitle>
 {/snippet}
 
-<div class="text-dark rounded p-3">
-	<h5 class="mb-3">Доступные теги</h5>
+<div class="d-flex flex-wrap gap-2 text-dark rounded p-3">
 	{#each tags as item, i}
-		<div class="btn-group btn-group-sm me-2 mb-2">
+		<div class="btn-group btn-group-sm">
 			<div
-				class="d-flex text-dark border pb-1 px-2 rounded-start align-items-center"
+				class="flex-grow-1 d-flex align-items-center gap-1 text-dark border ps-1 pe-2 rounded-start align-items-center"
 				style="cursor:default;">
+				<small class="badge bg-dark text-light" style="font-size: .7em;">{i + 1}</small>
 				{item.name}
 			</div>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->

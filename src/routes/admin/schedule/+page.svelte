@@ -55,7 +55,7 @@
 {/snippet}
 
 {#if $month.fildsDayNotEmpty}
-	<Month month={$month} />
+	<Month month={$month} _class="pt-2" />
 {:else}
 	<div class="text-dark">Расписание на {$month.monthName()} {$month.year} отсутствует!</div>
 {/if}

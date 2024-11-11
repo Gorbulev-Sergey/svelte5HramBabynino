@@ -73,4 +73,4 @@
 	</PageTitle>
 {/snippet}
 
-<MonthEdit bind:month={$month} />
+<MonthEdit bind:month={$month} _class="rounded p-3" />

@@ -9,7 +9,7 @@
 	let { children, title, _class }: IProps = $props();
 </script>
 
-<div class="d-flex flex-wrap align-items-center no-print px-3 py-2 {_class}">
+<div class="d-flex flex-wrap align-items-center no-print px-4 py-2 {_class}">
 	<h5 class="text-dark mb-0 me-3">
 		{title}
 	</h5>
