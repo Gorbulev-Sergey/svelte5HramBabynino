@@ -22,7 +22,7 @@
 			? 'h-100'
 			: ''} {_class}">
 		<div class="flex-grow-1 px-3 pt-2">
-			<div class="d-flex justify-content-between align-items-center mb-2 gap-2">
+			<div class="d-flex justify-content-between align-items-top mb-2 gap-2">
 				<div class="small text-danger text-nowrap">
 					{new Date(post.created).toLocaleDateString('ru-ru', {
 						day: 'numeric',
@@ -30,7 +30,7 @@
 						year: 'numeric'
 					})}
 				</div>
-				<div class="d-flex align-items-center gap-1 flex-wrap">
+				<div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
 					{#if post.tags}
 						{#each post.tags.sort((t1, t2) => t1.name.localeCompare(t2.name)) as tag}
 							<button
