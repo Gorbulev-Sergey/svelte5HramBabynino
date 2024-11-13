@@ -125,16 +125,24 @@
 						<div
 							class="d-flex align-items-center {selectedFolder == i
 								? 'bg-dark text-light'
-								: 'bg-light'} px-2 rounded-1"
+								: 'bg-light'} px-1 rounded-1"
 							style="cursor:pointer"
 							onclick={() => {
 								selectedFolder = i;
 								getPhotos();
 							}}>
-							<div class="p-1 text-wrap {selectedFolder == i ? 'text-light' : 'text-dark'}">
+							<div
+								class="d-flex align-items-baseline gap-1 p-1 text-wrap {selectedFolder == i
+									? 'text-light'
+									: 'text-dark'}">
+								<i
+									class={folders[selectedFolder]?.name == item.name
+										? 'fa-solid fa-folder-open'
+										: 'fa-solid fa-folder'}></i>
 								{item.name}
 							</div>
 							<button
+								aria-label=""
 								class="btn btn-sm {selectedFolder == i ? 'btn-dark' : 'btn-light'} text-danger"
 								onclick={e => {
 									e.stopPropagation();
@@ -147,8 +155,7 @@
 											});
 										}
 									});
-								}}
-								aria-label=""><i class="fa-solid fa-xmark"></i></button>
+								}}><i class="fa-solid fa-xmark"></i></button>
 						</div>
 					{/each}
 				</div>
@@ -167,7 +174,6 @@
 							<span>колонки</span>
 							<span class="badge bg-light text-dark ms-1">{$countPhotoOnAdminPage}</span>
 						</button>
-
 						<button
 							class="btn btn-dark text-light"
 							onclick={() => {
@@ -295,10 +301,13 @@
 			</PageTitle>
 			{#if documents.length > 0}
 				<div class="d-flex flex-column align-items-start gap-2">
-					{#each documents as doc}
+					{#each documents as doc, i}
 						{#await getDownloadURL(ref(storage, doc.fullPath)) then s}
-							<div class="d-flex align-items-center justify-content-end bg-light rounded-1 p-1">
-								<div class="ps-2 pe-3 text-dark">{doc.name}</div>
+							<div class="d-flex align-items-baseline justify-content-end gap-1 bg-light rounded-1">
+								<div class="text-dark">
+									<span class="badge bg-dark text-light ms-1">{i + 1}</span>
+									{doc.name}
+								</div>
 								<a
 									aria-label=""
 									class="btn btn-sm btn-light border-0 text-dark"
