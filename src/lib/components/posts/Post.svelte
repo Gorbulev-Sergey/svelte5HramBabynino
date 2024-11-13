@@ -2,13 +2,15 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Post } from '$lib/models/Post';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		uid?: string;
 		post?: Post;
 		_class?: string;
+		children?: Snippet;
 	}
-	let { uid = '', post = new Post(), _class = '' }: Props = $props();
+	let { uid = '', post = new Post(), _class = '', children }: Props = $props();
 	let showContent = $state(false);
 </script>
 
@@ -45,16 +47,16 @@
 			<div class="d-flex justify-content-between">
 				<h5 class="card-title">{@html post.title}</h5>
 				{#if post.pinned}
-					<i class="fa-solid fa-thumbtack pt-1" />
+					<i class="fa-solid fa-thumbtack pt-1"></i>
 				{/if}
 			</div>
 		</div>
 		{#if post.description}
 			<div class="px-3 {!post.cover || post.content == '' ? 'mb-3' : ''}">
 				{@html post.description}
-				<slot name="admin" />
 			</div>
 		{/if}
+		{@render children?.()}
 		{#if post.cover && post.cover.video}
 			<div class="ratio ratio-21x9" style="min-height:12em;">
 				{#if post.cover.video.includes('https://youtu.be')}
@@ -114,7 +116,7 @@
 					class="btn btn-sm {!post.inverted ? 'btn-dark text-light' : 'btn-light text-dark'}"
 					onclick={() => {
 						if (uid) goto(`/posts/details/${uid}?returnUrl=${$page.url.pathname}`);
-					}}><i class="fa-solid fa-circle-arrow-right me-2" />Смотреть подробности</button>
+					}}><i class="fa-solid fa-circle-arrow-right me-2"></i>Смотреть подробности</button>
 			</div>
 		{/if}
 	</div>

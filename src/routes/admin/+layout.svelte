@@ -61,7 +61,7 @@
 	let routesRight: IRoute[] = [
 		{
 			url: '/posts',
-			title: 'на сайт',
+			title: 'На сайт',
 			icon: 'fa-solid fa-right-from-bracket'
 		}
 	];
@@ -148,6 +148,7 @@
 			<div class="d-flex flex-column">
 				{#each routesLeft as { url, title, icon }}
 					<button
+						{title}
 						class="btn btn-light text-dark rounded-0 text-start px-3"
 						onclick={() => goto(url)}>
 						<div class="d-flex align-items-center gap-2">
@@ -161,6 +162,7 @@
 				{#if isCurrentUserAdmin}
 					{#each routesOnlyForAdmins as { url, title, icon }}
 						<button
+							{title}
 							class="btn btn-light text-dark rounded-0 text-start px-3"
 							onclick={() => goto(url)}>
 							<div class="d-flex align-items-center gap-2">
@@ -174,6 +176,7 @@
 				{/if}
 				{#each routesRight as { url, title, icon }}
 					<button
+						{title}
 						class="btn btn-light text-dark rounded-0 text-start px-3"
 						onclick={() => goto(url)}>
 						<b class="text-uppercase">
@@ -198,7 +201,7 @@
 					<button
 						class="btn btn-light bg-light text-dark bg-transparent border-0 px-3"
 						data-bs-toggle="dropdown"
-						title="тема оформления"><i class="fa-regular fa-sun"></i></button>
+						title="Тема оформления"><i class="fa-regular fa-sun"></i></button>
 					<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
 						<button
 							class="btn btn-light {!$isSystemTheme && $theme == 'light'
@@ -218,6 +221,7 @@
 					</ul>
 				</div>
 				<button
+					title="Вернуться на сайт"
 					aria-label=""
 					class="btn btn-light text-dark rounded-0 text-start px-3"
 					onclick={() => ($isAdminCompactMode = !$isAdminCompactMode)}>
@@ -234,7 +238,7 @@
 				{/if}
 				<!-- <div class="bg-light px-3 pb-2">Разное</div> -->
 			</div>
-			<div class="container mt-3 mb-5 px-3">
+			<div class="mt-3 mb-5 px-4">
 				{@render children?.()}
 			</div>
 		</div>
@@ -243,6 +247,6 @@
 
 <style>
 	.icon-width {
-		width: 1em;
+		width: 1.1em;
 	}
 </style>

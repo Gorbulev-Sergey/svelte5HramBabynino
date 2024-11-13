@@ -11,6 +11,7 @@
 	import Pin from '$lib/components/Pin.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Tag } from '$lib/models/Tag';
+	import Post from '$lib/components/posts/Post.svelte';
 
 	export let data;
 	$: posts = data.posts;
@@ -90,129 +91,137 @@
 	</PageTitle>
 {/snippet}
 
-<div>
-	<!-- pinned -->
-	{#each arrayOfFilteredPosts().filter(([uid, item]) => item.pinned) as [uid, item]}
-		<PostHorizontal {uid} post={item}>
-			<div slot="adminControls" class="card-body">
-				<div class="d-flex justify-content-between align-items-center flex-wrap">
-					<div class="d-flex me-3">
-						<TagManager
-							title="Теги:"
-							tags={tags.filter(t => !item.tags?.find(i => i.name == t.name))}
-							bind:selectedTags={item.tags}
-							onSelect={() => update(ref(db, `/posts/${uid}`), item)}
-							_class={item.inverted ? 'text-dark' : ''} />
-					</div>
-					<div class="d-flex mb-2 flex-wrap">
-						<div class="d-flex me-3">
-							<Pin
-								classFontAwesome="fa-regular fa-eye"
-								text="опубликовать"
-								_class="me-2"
-								bind:checked={item.published}
-								onChange={() => {
-									update(ref(db, `/posts/${uid}`), item);
-								}} />
-							<Pin
-								classFontAwesome="fa-solid fa-thumbtack"
-								text="закрепить"
-								_class="me-2"
-								bind:checked={item.pinned}
-								onChange={() => {
-									update(ref(db, `/posts/${uid}`), item);
-								}} />
-							<Pin
-								classFontAwesome="fa-solid fa-brush"
-								text="инвертировать"
-								bind:checked={item.inverted}
-								onChange={() => {
-									update(ref(db, `/posts/${uid}`), item);
-								}} />
-						</div>
-						<div class="d-flex">
-							<button
-								class="btn btn-sm btn-light me-1"
-								on:click={() => goto(`/admin/posts/edit/${uid}`)}
-								><i class="fa-solid fa-pencil" /></button>
-							<div class="dropdown dropend">
-								<button class="btn btn-sm btn-light" data-bs-toggle="dropdown"
-									><i class="fa-solid fa-trash text-danger" /></button>
-								<div class="dropdown-menu p-2 text-center">
-									<p>Вы действительно хотите удалить эту публикацию?</p>
-									<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">Отмена</button>
+<div class="bg-white rounded p-3">
+	<div class="row row-cols-1 row-cols-md-3 g-3 mb-3">
+		<!-- pinned -->
+		{#each arrayOfFilteredPosts().filter(([uid, item]) => item.pinned) as [uid, item]}
+			<div class="col">
+				<Post {uid} post={item}>
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center flex-wrap">
+							<div class="d-flex me-3">
+								<TagManager
+									title="Теги:"
+									tags={tags.filter(t => !item.tags?.find(i => i.name == t.name))}
+									bind:selectedTags={item.tags}
+									onSelect={() => update(ref(db, `/posts/${uid}`), item)}
+									_class={item.inverted ? 'text-dark' : ''} />
+							</div>
+							<div class="d-flex mb-2 flex-wrap">
+								<div class="d-flex me-3">
+									<Pin
+										classFontAwesome="fa-regular fa-eye"
+										text="опубликовать"
+										_class="me-2"
+										bind:checked={item.published}
+										onChange={() => {
+											update(ref(db, `/posts/${uid}`), item);
+										}} />
+									<Pin
+										classFontAwesome="fa-solid fa-thumbtack"
+										text="закрепить"
+										_class="me-2"
+										bind:checked={item.pinned}
+										onChange={() => {
+											update(ref(db, `/posts/${uid}`), item);
+										}} />
+									<Pin
+										classFontAwesome="fa-solid fa-brush"
+										text="инвертировать"
+										bind:checked={item.inverted}
+										onChange={() => {
+											update(ref(db, `/posts/${uid}`), item);
+										}} />
+								</div>
+								<div class="d-flex">
 									<button
-										class="btn btn-sm btn-light text-danger"
-										data-bs-toggle="dropdown"
-										on:click={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
+										class="btn btn-sm btn-light me-1"
+										on:click={() => goto(`/admin/posts/edit/${uid}`)}
+										><i class="fa-solid fa-pencil"></i></button>
+									<div class="dropdown dropend">
+										<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+											<i class="fa-solid fa-trash text-danger"></i>
+										</button>
+										<div class="dropdown-menu p-2 text-center">
+											<p>Вы действительно хотите удалить эту публикацию?</p>
+											<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">Отмена</button>
+											<button
+												class="btn btn-sm btn-light text-danger"
+												data-bs-toggle="dropdown"
+												on:click={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</Post>
 			</div>
-		</PostHorizontal>
-	{/each}
-	<!-- not pinned -->
-	{#each arrayOfFilteredPosts().filter(([uid, item]) => !item.pinned) as [uid, item]}
-		<PostHorizontal {uid} post={item}>
-			<div slot="adminControls" class="card-body">
-				<div class="d-flex justify-content-between align-items-center flex-wrap">
-					<div class="d-flex me-3">
-						<TagManager
-							title="Теги:"
-							tags={tags.filter(t => !item.tags?.find(i => i.name == t.name))}
-							bind:selectedTags={item.tags}
-							onSelect={() => update(ref(db, `/posts/${uid}`), item)}
-							_class={item.inverted ? 'text-dark' : ''} />
-					</div>
-					<div class="d-flex mb-2 flex-wrap">
-						<div class="d-flex me-3">
-							<Pin
-								classFontAwesome="fa-regular fa-eye"
-								text="опубликовать"
-								_class="me-2"
-								bind:checked={item.published}
-								onChange={() => {
-									update(ref(db, `/posts/${uid}`), item);
-								}} />
-							<Pin
-								classFontAwesome="fa-solid fa-thumbtack"
-								text="закрепить"
-								_class="me-2"
-								bind:checked={item.pinned}
-								onChange={() => {
-									update(ref(db, `/posts/${uid}`), item);
-								}} />
-							<Pin
-								classFontAwesome="fa-solid fa-brush"
-								text="инвертировать"
-								bind:checked={item.inverted}
-								onChange={() => {
-									update(ref(db, `/posts/${uid}`), item);
-								}} />
-						</div>
-						<div class="d-flex">
-							<button
-								class="btn btn-sm btn-light me-1"
-								on:click={() => goto(`/admin/posts/edit/${uid}`)}
-								><i class="fa-solid fa-pencil" /></button>
-							<div class="dropdown dropend">
-								<button class="btn btn-sm btn-light" data-bs-toggle="dropdown"
-									><i class="fa-solid fa-trash text-danger" /></button>
-								<div class="dropdown-menu p-2 text-center">
-									<p>Вы действительно хотите удалить эту публикацию?</p>
-									<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">Отмена</button>
-									<button
-										class="btn btn-sm btn-light text-danger"
-										data-bs-toggle="dropdown"
-										on:click={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
+		{/each}
+	</div>
+
+	<div class="row row-cols-1 row-cols-md-3 g-3">
+		<!-- not pinned -->
+		{#each arrayOfFilteredPosts().filter(([uid, post]) => !post.pinned) as [uid, post]}
+			<div class="col">
+				<Post {uid} {post}>
+					<div class="p-3 bg-dark bg-opacity-10" style="margin-bottom: -1em;">
+						<div class="d-flex flex-column align-items-end flex-wrap gap-2">
+							<div class="d-flex">
+								<TagManager
+									title="Теги:"
+									tags={tags.filter(t => !post.tags?.find(i => i.name == t.name))}
+									bind:selectedTags={post.tags}
+									onSelect={() => update(ref(db, `/posts/${uid}`), post)}
+									_class={post.inverted ? 'text-dark' : ''} />
+							</div>
+							<div class="d-flex">
+								<Pin
+									classFontAwesome="fa-regular fa-eye"
+									text="опубликовать"
+									_class="me-2"
+									bind:checked={post.published}
+									onChange={() => {
+										update(ref(db, `/posts/${uid}`), post);
+									}} />
+								<Pin
+									classFontAwesome="fa-solid fa-thumbtack"
+									text="закрепить"
+									_class="me-2"
+									bind:checked={post.pinned}
+									onChange={() => {
+										update(ref(db, `/posts/${uid}`), post);
+									}} />
+								<Pin
+									classFontAwesome="fa-solid fa-brush"
+									text="инвертировать"
+									bind:checked={post.inverted}
+									onChange={() => {
+										update(ref(db, `/posts/${uid}`), post);
+									}} />
+							</div>
+							<div class="d-flex">
+								<button
+									class="btn btn-sm btn-light me-1"
+									on:click={() => goto(`/admin/posts/edit/${uid}`)}
+									><i class="fa-solid fa-pencil" /></button>
+								<div class="dropdown dropend">
+									<button class="btn btn-sm btn-light" data-bs-toggle="dropdown"
+										><i class="fa-solid fa-trash text-danger" /></button>
+									<div class="dropdown-menu p-2 text-center">
+										<p>Вы действительно хотите удалить эту публикацию?</p>
+										<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">Отмена</button>
+										<button
+											class="btn btn-sm btn-light text-danger"
+											data-bs-toggle="dropdown"
+											on:click={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</Post>
 			</div>
-		</PostHorizontal>
-	{/each}
+		{/each}
+	</div>
 </div>
