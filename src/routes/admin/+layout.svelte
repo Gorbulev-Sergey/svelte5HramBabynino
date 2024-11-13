@@ -67,6 +67,7 @@
 	];
 	let { children }: { children: Snippet } = $props();
 	let isCurrentUserAdmin = $state(false);
+	let activeRoute: IRoute = $state(routesLeft[0]);
 
 	let changeTheme = (th: string, isSystemTheme1: boolean) => {
 		if (!isSystemTheme1) {
@@ -149,8 +150,13 @@
 				{#each routesLeft as { url, title, icon }}
 					<button
 						{title}
-						class="btn btn-light text-dark rounded-0 text-start px-3"
-						onclick={() => goto(url)}>
+						class="btn btn-light text-dark rounded-0 text-start px-3 {activeRoute.url == url
+							? 'active'
+							: ''}"
+						onclick={() => {
+							activeRoute = { url: url, title: title, icon: icon };
+							goto(url);
+						}}>
 						<div class="d-flex align-items-center gap-2">
 							<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
 							{#if !$isAdminCompactMode}
@@ -163,8 +169,13 @@
 					{#each routesOnlyForAdmins as { url, title, icon }}
 						<button
 							{title}
-							class="btn btn-light text-dark rounded-0 text-start px-3"
-							onclick={() => goto(url)}>
+							class="btn btn-light text-dark rounded-0 text-start px-3 {activeRoute.url == url
+								? 'active'
+								: ''}"
+							onclick={() => {
+								activeRoute = { url: url, title: title, icon: icon };
+								goto(url);
+							}}>
 							<div class="d-flex align-items-center gap-2">
 								<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
 								{#if !$isAdminCompactMode}
@@ -236,7 +247,6 @@
 						{@render $Header?.()}
 					</div>
 				{/if}
-				<!-- <div class="bg-light px-3 pb-2">Разное</div> -->
 			</div>
 			<div class="mt-3 mb-5 px-4">
 				{@render children?.()}
