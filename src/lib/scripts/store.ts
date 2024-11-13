@@ -59,3 +59,6 @@ export let isPostUpdated = writable<boolean>(false);
 
 // Для компактного/полного размера админ-панели
 export let isAdminCompactMode = writable(false);
+
+// Количестов постов на админ странице
+export let countPostOnAdminPage = writable(3);

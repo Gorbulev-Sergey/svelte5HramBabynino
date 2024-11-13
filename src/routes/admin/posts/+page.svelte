@@ -5,7 +5,12 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { adminPostsFilters, Header, isPostUpdated } from '$lib/scripts/store.js';
+	import {
+		adminPostsFilters,
+		countPostOnAdminPage,
+		Header,
+		isPostUpdated
+	} from '$lib/scripts/store.js';
 	import FilterTags from '$lib/components/posts/FilterTags.svelte';
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
@@ -86,13 +91,23 @@
 				_class="btn-sm me-1"
 				titleNoPressed="не опубликованные"
 				titlePressed="опубликованные" />
+			<button
+				class="btn btn-sm btn-dark text-light"
+				on:click={() => {
+					if ($countPostOnAdminPage == 5) {
+						$countPostOnAdminPage = 1;
+					} else $countPostOnAdminPage++;
+				}}>
+				<span>колонки</span>
+				<span class="badge bg-light text-dark ms-1">{$countPostOnAdminPage}</span>
+			</button>
 		</div>
 		<button class="btn btn-dark" on:click={() => goto('/admin/posts/create')}>Создать</button>
 	</PageTitle>
 {/snippet}
 
 <div class="bg-white rounded p-3">
-	<div class="row row-cols-1 row-cols-md-3 g-3 mb-3">
+	<div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3 mb-3">
 		<!-- pinned -->
 		{#each arrayOfFilteredPosts().filter(([uid, post]) => post.pinned) as [uid, post]}
 			<Post {uid} {post}>
@@ -100,15 +115,14 @@
 					class="p-3 bg-dark bg-opacity-10"
 					style={post.cover.image || post.cover.video ? 'margin-bottom: -1em;' : ''}>
 					<div class="d-flex flex-column align-items-end flex-wrap gap-2">
-						<div class="d-flex">
-							<TagManager
-								title="Теги:"
-								tags={tags.filter(t => !post.tags?.find(i => i.name == t.name))}
-								bind:selectedTags={post.tags}
-								onSelect={() => update(ref(db, `/posts/${uid}`), post)}
-								_class={post.inverted ? 'text-dark' : ''} />
-						</div>
-						<div class="d-flex">
+						<TagManager
+							title="Теги:"
+							tags={tags.filter(t => !post.tags?.find(i => i.name == t.name))}
+							bind:selectedTags={post.tags}
+							onSelect={() => update(ref(db, `/posts/${uid}`), post)}
+							_class={post.inverted ? 'text-dark' : ''} />
+
+						<div class="d-flex justify-content-end flex-wrap">
 							<Pin
 								classFontAwesome="fa-regular fa-eye"
 								text="опубликовать"
@@ -133,17 +147,14 @@
 									update(ref(db, `/posts/${uid}`), post);
 								}} />
 						</div>
-						<div class="d-flex">
+						<div class="d-flex flex-wrap">
 							<button
-								aria-label=""
 								class="btn btn-sm btn-light me-1"
-								on:click={() => goto(`/admin/posts/edit/${uid}`)}>
-								<i class="fa-solid fa-pencil"></i>
-							</button>
+								on:click={() => goto(`/admin/posts/edit/${uid}`)}
+								><i class="fa-solid fa-pencil" /></button>
 							<div class="dropdown dropend">
-								<button aria-label="" class="btn btn-sm btn-light" data-bs-toggle="dropdown">
-									<i class="fa-solid fa-trash text-danger"></i>
-								</button>
+								<button class="btn btn-sm btn-light" data-bs-toggle="dropdown"
+									><i class="fa-solid fa-trash text-danger" /></button>
 								<div class="dropdown-menu p-2 text-center">
 									<p>Вы действительно хотите удалить эту публикацию?</p>
 									<button class="btn btn-sm btn-light" data-bs-toggle="dropdown">Отмена</button>
@@ -160,7 +171,7 @@
 		{/each}
 	</div>
 
-	<div class="row row-cols-1 row-cols-md-3 g-3">
+	<div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3">
 		<!-- not pinned -->
 		{#each arrayOfFilteredPosts().filter(([uid, post]) => !post.pinned) as [uid, post]}
 			<Post {uid} {post}>
@@ -168,15 +179,14 @@
 					class="p-3 bg-dark bg-opacity-10"
 					style={post.cover.image || post.cover.video ? 'margin-bottom: -1em;' : ''}>
 					<div class="d-flex flex-column align-items-end flex-wrap gap-2">
-						<div class="d-flex">
-							<TagManager
-								title="Теги:"
-								tags={tags.filter(t => !post.tags?.find(i => i.name == t.name))}
-								bind:selectedTags={post.tags}
-								onSelect={() => update(ref(db, `/posts/${uid}`), post)}
-								_class={post.inverted ? 'text-dark' : ''} />
-						</div>
-						<div class="d-flex">
+						<TagManager
+							title="Теги:"
+							tags={tags.filter(t => !post.tags?.find(i => i.name == t.name))}
+							bind:selectedTags={post.tags}
+							onSelect={() => update(ref(db, `/posts/${uid}`), post)}
+							_class={post.inverted ? 'text-dark' : ''} />
+
+						<div class="d-flex justify-content-end flex-wrap">
 							<Pin
 								classFontAwesome="fa-regular fa-eye"
 								text="опубликовать"
@@ -201,7 +211,7 @@
 									update(ref(db, `/posts/${uid}`), post);
 								}} />
 						</div>
-						<div class="d-flex">
+						<div class="d-flex flex-wrap">
 							<button
 								class="btn btn-sm btn-light me-1"
 								on:click={() => goto(`/admin/posts/edit/${uid}`)}
