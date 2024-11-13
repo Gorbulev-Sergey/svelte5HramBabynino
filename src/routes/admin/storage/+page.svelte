@@ -1,5 +1,7 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import ModalPhoto from '$lib/components/ModalPhoto.svelte';
 	import { storage } from '$lib/scripts/firebase';
 	import { countPhotoOnAdminPage, Header } from '$lib/scripts/store';
 	import {
@@ -26,6 +28,8 @@
 	let newFolderName = $state('');
 	let selectedFolder = $state(0);
 	let labelFakeForUploadButton = $state('Добавить новые');
+	let selectedPhoto = $state('');
+	let isSelectedPhotoShow = $state(false);
 
 	// Корневая папка для документов
 	let documentsFolder = '/Documents';
@@ -216,10 +220,18 @@
 					<div class="row row-cols-1 row-cols-md-{$countPhotoOnAdminPage} g-3">
 						{#each photos as photo}
 							{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
-								<div class="col h-100">
+								<!-- svelte-ignore a11y_click_events_have_key_events -->
+								<!-- svelte-ignore a11y_no_static_element_interactions -->
+								<div
+									class="col h-100"
+									aria-label=""
+									onclick={() => {
+										selectedPhoto = s;
+										isSelectedPhotoShow = true;
+									}}>
 									<div
 										class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-										style="min-width: calc(98.5% / 3); background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
+										style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
 										<button
 											aria-label=""
 											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
@@ -341,6 +353,11 @@
 		</div>
 	</div>
 </div>
+
+<ModalPhoto
+	src={selectedPhoto}
+	bind:isShow={isSelectedPhotoShow}
+	onClose={() => (selectedPhoto = '')}></ModalPhoto>
 
 <style>
 	a.active {
