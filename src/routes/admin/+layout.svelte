@@ -8,46 +8,61 @@
 	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
 
-	let routesLeft = [
+	interface IRoute {
+		url: string;
+		title: string;
+		icon?: string;
+	}
+
+	let routesLeft: IRoute[] = [
 		{
 			url: '/admin/posts',
-			title: 'Публикации'
+			title: 'Публикации',
+			icon: 'fa-regular fa-newspaper'
 		},
 		{
 			url: '/admin/schedule',
-			title: 'Расписание'
+			title: 'Расписание',
+			icon: 'fa-regular fa-calendar-days'
 		},
 		{
 			url: '/admin/photos',
-			title: 'Фотографии'
+			title: 'Фотографии',
+			icon: 'fa-regular fa-images'
 		},
 		{
 			url: '/admin/storage',
-			title: 'Хранилище'
+			title: 'Хранилище',
+			icon: 'fa-solid fa-gift'
 		},
 		{
 			url: '/admin/tags',
-			title: 'Теги'
+			title: 'Теги',
+			icon: 'fa-solid fa-tags'
 		},
 		{
 			url: '/admin/contacts',
-			title: 'Контакты'
+			title: 'Контакты',
+			icon: 'fa-regular fa-id-card'
 		}
 	];
-	let routesOnlyForAdmins = [
+	let routesOnlyForAdmins: IRoute[] = [
 		{
 			url: '/admin/users',
-			title: 'Пользователи'
+			title: 'Пользователи',
+			icon: 'fa-solid fa-users'
 		},
 		{
 			url: '/admin/roles',
-			title: 'Роли'
+			title: 'Роли',
+			icon: 'fa-solid fa-list-ol'
 		}
 	];
-	let routesRight = [
+	let routesRight: IRoute[] = [
 		{
 			url: '/posts',
-			title: 'Сайт'
+			title: 'Сайт',
+			icon: 'fa-solid fa-house'
 		}
 	];
 	let { children }: { children: Snippet } = $props();
@@ -127,25 +142,36 @@
 				class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-4 text-uppercase fw-bold text-nowrap"
 				onclick={() => goto('/admin/posts')}>Панель управления</button>
 			<div class="d-flex flex-column">
-				{#each routesLeft as { url, title }}
+				{#each routesLeft as { url, title, icon }}
 					<button
 						class="btn btn-light text-dark rounded-0 text-start px-3"
 						onclick={() => goto(url)}>
-						{title}
+						<div class="d-flex align-items-center gap-2">
+							<i class="{icon} icon-width"></i>
+							{title}
+						</div>
 					</button>
 				{/each}
 				{#if isCurrentUserAdmin}
-					{#each routesOnlyForAdmins as { url, title }}
+					{#each routesOnlyForAdmins as { url, title, icon }}
 						<button
 							class="btn btn-light text-dark rounded-0 text-start px-3"
-							onclick={() => goto(url)}>{title}</button>
+							onclick={() => goto(url)}>
+							<div class="d-flex align-items-center gap-2">
+								<i class="{icon} icon-width"></i>{title}
+							</div>
+						</button>
 					{/each}
 				{/if}
-				{#each routesRight as { url, title }}
+				{#each routesRight as { url, title, icon }}
 					<button
 						class="btn btn-light text-dark rounded-0 text-start px-3"
 						onclick={() => goto(url)}>
-						<b class=" text-uppercase">{title}</b>
+						<b class="text-uppercase">
+							<div class="d-flex align-items-center gap-2">
+								<i class="{icon} icon-width"></i>{title}
+							</div>
+						</b>
 					</button>
 				{/each}
 			</div>
@@ -191,3 +217,9 @@
 		</div>
 	</div>
 </IsAuth>
+
+<style>
+	.icon-width {
+		width: 1em;
+	}
+</style>
