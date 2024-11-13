@@ -97,6 +97,7 @@
 					if ($countPostOnAdminPage == 5) {
 						$countPostOnAdminPage = 1;
 					} else $countPostOnAdminPage++;
+					localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
 				}}>
 				<span>колонки</span>
 				<span class="badge bg-light text-dark ms-1">{$countPostOnAdminPage}</span>

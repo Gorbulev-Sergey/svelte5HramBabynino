@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { Header, isAdminCompactMode, isSystemTheme, theme } from '$lib/scripts/store';
+	import {
+		countPostOnAdminPage,
+		Header,
+		isAdminCompactMode,
+		isSystemTheme,
+		theme
+	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { User } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
@@ -103,6 +109,7 @@
 				});
 			}
 		});
+		// Работаем с темой
 		if (localStorage.getItem('isSystemTheme') == 'true') {
 			$isSystemTheme = true;
 			// Устанавливаем прослушиватель на изменение темы в системе
@@ -117,6 +124,14 @@
 		} else {
 			$isSystemTheme = false;
 		}
+		// Работаем с количеством колонок постов
+		if (!localStorage.getItem('countPostOnAdminPage'))
+			localStorage.setItem('countPostOnAdminPage', String(3));
+		else $countPostOnAdminPage = Number(localStorage.getItem('countPostOnAdminPage'));
+		// Работаем с компактным/полным размером админ-панели
+		if (!localStorage.getItem('isAdminCompactMode'))
+			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
+		else $isAdminCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
 	});
 </script>
 
@@ -232,10 +247,13 @@
 					</ul>
 				</div>
 				<button
-					title="Вернуться на сайт"
-					aria-label=""
+					aria-label="Развернуть/Свернуть"
+					title={$isAdminCompactMode ? 'Развернуть' : 'Свернуть'}
 					class="btn btn-light text-dark rounded-0 text-start px-3"
-					onclick={() => ($isAdminCompactMode = !$isAdminCompactMode)}>
+					onclick={() => {
+						$isAdminCompactMode = !$isAdminCompactMode;
+						localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
+					}}>
 					<i class="fa-solid {$isAdminCompactMode ? 'fa-chevron-right' : 'fa-chevron-left'} "></i>
 				</button>
 			</div>
