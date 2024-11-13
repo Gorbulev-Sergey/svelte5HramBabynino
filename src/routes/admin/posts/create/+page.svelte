@@ -10,6 +10,7 @@
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Header } from '$lib/scripts/store.js';
+	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 
 	export let data;
 	$: tags = data.tags;
@@ -35,46 +36,47 @@
 				}
 			}}>Сохранить</button>
 	</PageTitle>
+	<SubTitle>
+		<div class="d-flex flex-wrap justify-content-between align-items-center">
+			<div class="nav nav-pills">
+				<a class="btn btn-light text-dark border-0 me-1 active" data-bs-toggle="pill" href="#cover"
+					>Обложка</a>
+				<a class="btn btn-light text-dark border-0" data-bs-toggle="pill" href="#content"
+					>Содержимое</a>
+			</div>
+			<div class="d-flex flex-wrap">
+				<Pin
+					classFontAwesome="fa-regular fa-eye"
+					text="опубликовать"
+					_class="me-4"
+					bind:checked={post.published} />
+				<Pin
+					classFontAwesome="fa-solid fa-thumbtack"
+					text="закрепить наверху"
+					_class="me-4"
+					bind:checked={post.pinned} />
+				<Pin
+					classFontAwesome="fa-solid fa-arrows-up-down"
+					text="ширина публикации 100%"
+					_class="me-4"
+					bind:checked={post.isHeightAuto} />
+				<Pin
+					classFontAwesome="fa-solid fa-brush"
+					text="инвертировать цвета"
+					_class="me-4"
+					bind:checked={post.inverted} />
+				{#if post.pinned}
+					<Pin
+						classFontAwesome="fa-solid fa-ruler-horizontal"
+						text="горизонтально"
+						bind:checked={post.isHorisontal} />
+				{/if}
+			</div>
+		</div>
+	</SubTitle>
 {/snippet}
 
 <div class="rounded p-3 {!post.inverted ? 'bg-white text-dark' : 'bg-dark text-light'}">
-	<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-		<div class="nav nav-pills">
-			<a class="btn btn-light text-dark border-0 me-1 active" data-bs-toggle="pill" href="#cover"
-				>Обложка</a>
-			<a class="btn btn-light text-dark border-0" data-bs-toggle="pill" href="#content"
-				>Содержимое</a>
-		</div>
-		<div class="d-flex flex-wrap">
-			<Pin
-				classFontAwesome="fa-regular fa-eye"
-				text="опубликовать"
-				_class="me-4"
-				bind:checked={post.published} />
-			<Pin
-				classFontAwesome="fa-solid fa-thumbtack"
-				text="закрепить наверху"
-				_class="me-4"
-				bind:checked={post.pinned} />
-			<Pin
-				classFontAwesome="fa-solid fa-arrows-up-down"
-				text="ширина публикации 100%"
-				_class="me-4"
-				bind:checked={post.isHeightAuto} />
-			<Pin
-				classFontAwesome="fa-solid fa-brush"
-				text="инвертировать цвета"
-				_class="me-4"
-				bind:checked={post.inverted} />
-			{#if post.pinned}
-				<Pin
-					classFontAwesome="fa-solid fa-ruler-horizontal"
-					text="горизонтально"
-					bind:checked={post.isHorisontal} />
-			{/if}
-		</div>
-	</div>
-
 	<div class="tab-content">
 		<div class="tab-pane active show" id="cover">
 			<div class="row">

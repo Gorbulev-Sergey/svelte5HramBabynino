@@ -11,6 +11,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import Container from '$lib/components/Container.svelte';
 	import { Header } from '$lib/scripts/store';
+	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 
 	let album = new Album();
 
@@ -45,6 +46,8 @@
 		});
 	});
 	onDestroy(() => ($Header = null));
+
+	let isSecondTabActive = false;
 </script>
 
 {#snippet header()}
@@ -58,16 +61,58 @@
 				goto('/admin/photos');
 			}}>Сохранить</button>
 	</PageTitle>
+	<SubTitle _class="pe-3">
+		<div class="d-flex flex-wrap justify-content-between align-items-center">
+			<div class="nav nav-pills">
+				<a
+					class="btn btn-light border-0 me-1 active"
+					data-bs-toggle="pill"
+					href="#cover"
+					on:click={() => (isSecondTabActive = false)}>Обложка</a>
+				<a
+					class="btn btn-light border-0"
+					data-bs-toggle="pill"
+					href="#content"
+					on:click={() => (isSecondTabActive = true)}>Фотографии</a>
+			</div>
+			{#if isSecondTabActive}
+				<div class="d-flex flex-wrap gap-1">
+					<button
+						class="btn btn-sm btn-dark me-1"
+						on:click={() => (album.photos = [...album.photos, new _Photo()])}
+						><i class="fa-solid fa-plus" /> 1 фото
+					</button>
+					<button
+						class="btn btn-sm btn-dark me-1"
+						on:click={() => {
+							for (let i = 0; i < 5; i++) {
+								album.photos = [...album.photos, new _Photo()];
+							}
+						}}
+						><i class="fa-solid fa-plus" /> 5 фото
+					</button>
+					<button
+						class="btn btn-sm btn-dark me-1"
+						on:click={() => {
+							for (let i = 0; i < 10; i++) {
+								album.photos = [...album.photos, new _Photo()];
+							}
+						}}
+						><i class="fa-solid fa-plus" /> 10 фото
+					</button>
+					<button
+						class="btn btn-sm btn-dark me-1"
+						data-bs-toggle="modal"
+						data-bs-target="#modalStoragePhotos">
+						<i class="fa-solid fa-cloud-arrow-down me-1" />из хранилища
+					</button>
+				</div>
+			{/if}
+		</div>
+	</SubTitle>
 {/snippet}
 
 <div class="rounded p-3 bg-white text-dark">
-	<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-		<div class="nav nav-pills">
-			<a class="btn btn-light border-0 me-1 active" data-bs-toggle="pill" href="#cover">Обложка</a>
-			<a class="btn btn-light border-0" data-bs-toggle="pill" href="#content">Фотографии</a>
-		</div>
-	</div>
-
 	<div class="tab-content">
 		<!-- Вкладка обложка -->
 		<div id="cover" class="tab-pane active show">
@@ -101,37 +146,6 @@
 		</div>
 		<!-- Вкладка содержимое -->
 		<div id="content" class="tab-pane">
-			<div class="d-flex flex-wrap gap-1 mb-3">
-				<button
-					class="btn btn-sm btn-dark me-1"
-					on:click={() => (album.photos = [...album.photos, new _Photo()])}
-					><i class="fa-solid fa-plus" /> 1 фото
-				</button>
-				<button
-					class="btn btn-sm btn-dark me-1"
-					on:click={() => {
-						for (let i = 0; i < 5; i++) {
-							album.photos = [...album.photos, new _Photo()];
-						}
-					}}
-					><i class="fa-solid fa-plus" /> 5 фото
-				</button>
-				<button
-					class="btn btn-sm btn-dark me-1"
-					on:click={() => {
-						for (let i = 0; i < 10; i++) {
-							album.photos = [...album.photos, new _Photo()];
-						}
-					}}
-					><i class="fa-solid fa-plus" /> 10 фото
-				</button>
-				<button
-					class="btn btn-sm btn-dark me-1"
-					data-bs-toggle="modal"
-					data-bs-target="#modalStoragePhotos">
-					<i class="fa-solid fa-cloud-arrow-down me-1" />из хранилища
-				</button>
-			</div>
 			<div class="row row-cols-1 row-cols-md-3 g-3">
 				{#each album.photos as photo, i}
 					<div class="col">
