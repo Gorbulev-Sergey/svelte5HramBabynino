@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Header, isSystemTheme, theme } from '$lib/scripts/store';
+	import { Header, isAdminCompactMode, isSystemTheme, theme } from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { User } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
@@ -61,8 +61,8 @@
 	let routesRight: IRoute[] = [
 		{
 			url: '/posts',
-			title: 'Сайт',
-			icon: 'fa-solid fa-house'
+			title: 'на сайт',
+			icon: 'fa-solid fa-right-from-bracket'
 		}
 	];
 	let { children }: { children: Snippet } = $props();
@@ -140,15 +140,21 @@
 		<div class="d-flex flex-column shadow sticky-top bg-light" style="min-height:100vh">
 			<button
 				class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-4 text-uppercase fw-bold text-nowrap"
-				onclick={() => goto('/admin/posts')}>Панель управления</button>
+				onclick={() => goto('/admin/posts')}>
+				{#if !$isAdminCompactMode}
+					Панель управления
+				{/if}
+			</button>
 			<div class="d-flex flex-column">
 				{#each routesLeft as { url, title, icon }}
 					<button
 						class="btn btn-light text-dark rounded-0 text-start px-3"
 						onclick={() => goto(url)}>
 						<div class="d-flex align-items-center gap-2">
-							<i class="{icon} icon-width"></i>
-							{title}
+							<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
+							{#if !$isAdminCompactMode}
+								{title}
+							{/if}
 						</div>
 					</button>
 				{/each}
@@ -158,7 +164,10 @@
 							class="btn btn-light text-dark rounded-0 text-start px-3"
 							onclick={() => goto(url)}>
 							<div class="d-flex align-items-center gap-2">
-								<i class="{icon} icon-width"></i>{title}
+								<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
+								{#if !$isAdminCompactMode}
+									{title}
+								{/if}
 							</div>
 						</button>
 					{/each}
@@ -169,13 +178,21 @@
 						onclick={() => goto(url)}>
 						<b class="text-uppercase">
 							<div class="d-flex align-items-center gap-2">
-								<i class="{icon} icon-width"></i>{title}
+								<i
+									class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''} "
+									style="transform: rotate(-180deg);"></i>
+								{#if !$isAdminCompactMode}
+									{title}
+								{/if}
 							</div>
 						</b>
 					</button>
 				{/each}
 			</div>
-			<div class="flex-grow-1 d-flex align-items-end pb-3">
+			<div
+				class="flex-grow-1 d-flex {$isAdminCompactMode
+					? 'flex-column-reverse'
+					: 'align-items-end justify-content-between'}  pb-3">
 				<div class="dropdown-center rounded">
 					<!-- svelte-ignore a11y_consider_explicit_label -->
 					<button
@@ -200,6 +217,12 @@
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
 					</ul>
 				</div>
+				<button
+					aria-label=""
+					class="btn btn-light text-dark rounded-0 text-start px-3"
+					onclick={() => ($isAdminCompactMode = !$isAdminCompactMode)}>
+					<i class="fa-solid {$isAdminCompactMode ? 'fa-chevron-right' : 'fa-chevron-left'} "></i>
+				</button>
 			</div>
 		</div>
 		<div class="flex-grow-1 d-flex flex-column">

@@ -56,3 +56,6 @@ export let Header: Writable<Snippet> | null = writable();
 
 // Для того, чтобы при обновлении поста в админпанели происходил перерендеринг всех постов
 export let isPostUpdated = writable<boolean>(false);
+
+// Для компактного/полного размера админ-панели
+export let isAdminCompactMode = writable(false);
