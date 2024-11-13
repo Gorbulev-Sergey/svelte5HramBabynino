@@ -62,3 +62,9 @@ export let isAdminCompactMode = writable(false);
 
 // Количестов постов на админ странице
 export let countPostOnAdminPage = writable(3);
+
+// Количестов альбомов на админ странице
+export let countAlbumOnAdminPage = writable(3);
+
+// Количестов фотографий на админ странице хранилища
+export let countPhotoOnAdminPage = writable(3);

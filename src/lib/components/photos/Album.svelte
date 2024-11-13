@@ -11,7 +11,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	id={uid}
-	class="img-fluid rounded d-flex flex-column-reverse"
+	class="img-fluid rounded d-flex flex-column-reverse h-100"
 	style="background-image: url({album.cover});
 				background-repeat: no-repeat; background-position: center; background-size: cover; min-height:16em; cursor:pointer;"
 	onclick={() => {

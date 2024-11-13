@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { storage } from '$lib/scripts/firebase';
-	import { Header } from '$lib/scripts/store';
+	import { countPhotoOnAdminPage, Header } from '$lib/scripts/store';
 	import {
 		uploadBytes,
 		ref,
@@ -92,7 +92,7 @@
 	<div id="photos" class="tab-pane fade show active">
 		<div class="d-flex flex-column gap-3">
 			<div class="bg-white rounded p-3">
-				<PageTitle title="Папки с фотографиями" _class="mb-1">
+				<PageTitle title="Папки с фотографиями" _class="mb-1 px-1">
 					<div class="input-group">
 						<div class="input-group-text border-0">Создать папку:</div>
 						<input
@@ -154,10 +154,20 @@
 				</div>
 			</div>
 			<div class="bg-white rounded p-3">
-				<PageTitle
-					title={`Фотографии в папке "${folders[selectedFolder]?.name ?? ''}"`}
-					_class="mb-1">
-					<div>
+				<PageTitle title={folders[selectedFolder]?.name ?? ''} _class="mb-1 px-1">
+					<div class="flex-grow-1 d-flex align-items-center justify-content-between">
+						<button
+							class="btn btn-sm btn-dark text-light"
+							onclick={() => {
+								if ($countPhotoOnAdminPage == 5) {
+									$countPhotoOnAdminPage = 1;
+								} else $countPhotoOnAdminPage++;
+								localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
+							}}>
+							<span>колонки</span>
+							<span class="badge bg-light text-dark ms-1">{$countPhotoOnAdminPage}</span>
+						</button>
+
 						<button
 							class="btn btn-dark text-light"
 							onclick={() => {
@@ -197,43 +207,45 @@
 					</div>
 				</PageTitle>
 				{#if photos.length > 0}
-					<div class="d-flex justify-content-between flex-wrap gap-2 mb-1">
+					<div class="row row-cols-1 row-cols-md-{$countPhotoOnAdminPage} g-3">
 						{#each photos as photo}
 							{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
-								<div
-									class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-									style="min-width: calc(98.5% / 3); background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
-									<button
-										aria-label=""
-										class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
-										title="Скачать фотографию"
-										onclick={() => downloadImage(s, photo.name)}>
-										<i class="fa-solid fa-cloud-arrow-down"></i>
-									</button>
-									<button
-										aria-label=""
-										class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
-										title="Скопировать url"
-										onclick={() => {
-											navigator.clipboard.writeText(s).then(s => {});
-										}}>
-										<i class="fa-solid fa-copy"></i>
-									</button>
-									<button
-										aria-label=""
-										class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-danger"
-										title="Удалить фото"
-										onclick={() => {
-											deleteObject(
-												ref(
-													storage,
-													`/${albumsFolder}/${folders[selectedFolder].name}/${photo.name}`
-												)
-											);
-											getPhotos();
-										}}>
-										<i class="fa-solid fa-xmark"></i>
-									</button>
+								<div class="col h-100">
+									<div
+										class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
+										style="min-width: calc(98.5% / 3); background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
+										<button
+											aria-label=""
+											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
+											title="Скачать фотографию"
+											onclick={() => downloadImage(s, photo.name)}>
+											<i class="fa-solid fa-cloud-arrow-down"></i>
+										</button>
+										<button
+											aria-label=""
+											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
+											title="Скопировать url"
+											onclick={() => {
+												navigator.clipboard.writeText(s).then(s => {});
+											}}>
+											<i class="fa-solid fa-copy"></i>
+										</button>
+										<button
+											aria-label=""
+											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-danger"
+											title="Удалить фото"
+											onclick={() => {
+												deleteObject(
+													ref(
+														storage,
+														`/${albumsFolder}/${folders[selectedFolder].name}/${photo.name}`
+													)
+												);
+												getPhotos();
+											}}>
+											<i class="fa-solid fa-xmark"></i>
+										</button>
+									</div>
 								</div>
 							{/await}
 						{/each}
@@ -244,7 +256,7 @@
 	</div>
 	<div id="documents" class="tab-pane fade">
 		<div class="bg-white rounded p-3">
-			<PageTitle title={'Документы'} _class="mb-1">
+			<PageTitle title={'Документы'} _class="mb-1 px-1">
 				<div>
 					<button
 						class="btn btn-dark text-light"

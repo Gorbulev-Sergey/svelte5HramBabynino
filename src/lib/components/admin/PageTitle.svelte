@@ -6,10 +6,10 @@
 		title: String;
 		_class?: String;
 	}
-	let { children, title, _class }: IProps = $props();
+	let { children, title, _class = 'px-4' }: IProps = $props();
 </script>
 
-<div class="d-flex flex-wrap align-items-center no-print px-4 pt-3 pb-2 {_class}">
+<div class="d-flex flex-wrap align-items-center no-print pt-3 pb-2 {_class}">
 	<h5 class="text-dark mb-0 me-3">
 		{title}
 	</h5>

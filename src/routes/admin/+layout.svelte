@@ -1,10 +1,12 @@
 <script lang="ts">
 	import {
 		countPostOnAdminPage,
+		countAlbumOnAdminPage,
 		Header,
 		isAdminCompactMode,
 		isSystemTheme,
-		theme
+		theme,
+		countPhotoOnAdminPage
 	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { User } from '$lib/models/admin/User';
@@ -126,8 +128,16 @@
 		}
 		// Работаем с количеством колонок постов
 		if (!localStorage.getItem('countPostOnAdminPage'))
-			localStorage.setItem('countPostOnAdminPage', String(3));
+			localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
 		else $countPostOnAdminPage = Number(localStorage.getItem('countPostOnAdminPage'));
+		// Работаем с количеством колонок альбомов
+		if (!localStorage.getItem('countAlbumOnAdminPage'))
+			localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
+		else $countAlbumOnAdminPage = Number(localStorage.getItem('countAlbumOnAdminPage'));
+		// Работаем с количеством колонок фотографий на странице хранилища
+		if (!localStorage.getItem('countPhotoOnAdminPage'))
+			localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
+		else $countPhotoOnAdminPage = Number(localStorage.getItem('countPhotoOnAdminPage'));
 		// Работаем с компактным/полным размером админ-панели
 		if (!localStorage.getItem('isAdminCompactMode'))
 			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
