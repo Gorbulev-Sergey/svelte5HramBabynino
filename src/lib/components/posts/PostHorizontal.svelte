@@ -3,13 +3,19 @@
 	import { page } from '$app/stores';
 	import { Post } from '$lib/models/Post';
 
-	let { uid = '', post = new Post() }: { uid: string; post: Post } = $props();
+	interface IProps {
+		uid: string;
+		post: Post;
+		_class?: string;
+	}
+
+	let { uid = '', post = new Post(), _class }: IProps = $props();
 	let showContent = $state(false);
 </script>
 
 <div
 	id={uid ? uid : ''}
-	class="card rounded-2 mb-3 p-0 {!post.inverted
+	class="{_class} card rounded-2 mb-3 p-0 {!post.inverted
 		? 'bg-light bg-opacity-50 text-dark'
 		: 'bg-dark text-light'} border-0">
 	<div class="row g-0">

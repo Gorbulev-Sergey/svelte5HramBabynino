@@ -1,12 +1,13 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
 	import { goto } from '$app/navigation';
-	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
+	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { db } from '$lib/scripts/firebase';
+	import { Header } from '$lib/scripts/store';
 	import { onValue, ref } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
-	let contacts;
+	let { contacts } = $props();
+	$Header = header;
 	onMount(() => {
 		onValue(ref(db, '/contacts'), s => {
 			if (s.exists()) {
@@ -14,13 +15,14 @@
 			}
 		});
 	});
+	onDestroy(() => ($Header = null));
 </script>
 
-<PageTitleWrap title="Контакты">
-	<div slot="navigation">
-		<button class="btn btn-dark" on:click={() => goto('/admin/contacts/edit')}>Редактировать</button>
-	</div>
-</PageTitleWrap>
+{#snippet header()}
+	<PageTitle title="Контакты">
+		<button class="btn btn-dark" onclick={() => goto('/admin/contacts/edit')}>Редактировать</button>
+	</PageTitle>
+{/snippet}
 
 {#if contacts}
 	<div class="row row-cols-1 row-cols-md-4 g-3">
@@ -41,7 +43,10 @@
 				{#each contacts.phones as item}
 					<div class="d-flex justify-content-between align-items-center mb-1">
 						{item.title}
-						<a class="badge bg-dark text-light" style="text-decoration: none;" href="tel:{item.phone}">{item.phone}</a>
+						<a
+							class="badge bg-dark text-light"
+							style="text-decoration: none;"
+							href="tel:{item.phone}">{item.phone}</a>
 					</div>
 				{/each}
 			</div>
@@ -50,7 +55,13 @@
 			<div class="text-dark rounded p-3 w-100 h-100">
 				<h5>Соцсети:</h5>
 				{#each contacts.socialNetworks as item}
-					<a class="btn btn-dark rounded-circle me-1 px-1" style="width: 2.5em; height:2.5em" href={item.url} target="_blank" title={item.title} alt={item.title}>{@html item.icon}</a>
+					<a
+						class="btn btn-dark rounded-circle me-1 px-1"
+						style="width: 2.5em; height:2.5em"
+						href={item.url}
+						target="_blank"
+						title={item.title}
+						alt={item.title}>{@html item.icon}</a>
 				{/each}
 			</div>
 		</div>
@@ -61,8 +72,15 @@
 				<h5>Адрес храма:</h5>
 				<p>{contacts.address.title}</p>
 				<div class="rounded w-100" style="overflow:hidden; height:400px">
-					<!-- svelte-ignore a11y-missing-attribute -->
-					<iframe src={contacts.address.yandexMapsUrl.replace('https://yandex.ru/maps/', 'https://yandex.ru/map-widget/v1/')} width="100%" height="100%" frameborder="1" allowfullscreen="true" />
+					<iframe
+						title=""
+						src={contacts.address.yandexMapsUrl.replace(
+							'https://yandex.ru/maps/',
+							'https://yandex.ru/map-widget/v1/'
+						)}
+						width="100%"
+						height="100%"
+						frameborder="1"></iframe>
 				</div>
 			</div>
 		</div>

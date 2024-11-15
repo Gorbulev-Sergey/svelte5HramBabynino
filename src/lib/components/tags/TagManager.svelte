@@ -8,7 +8,7 @@
 	export let tags = new Array();
 	export let selectedTags = new Array();
 	export let onSelect = () => {
-		tags = tags.filter((t) => !selectedTags.includes(t));
+		tags = tags.filter(t => !selectedTags.includes(t));
 	};
 	export let _class = '';
 	let selectedTag = new _Tag();
@@ -18,7 +18,7 @@
 	});
 </script>
 
-<div class={_class} style="display: grid; grid-template-columns: auto 1fr;">
+<div class="d-flex justify-content-end text-end align-items-center flex-wrap gap-1 {_class}">
 	<div class={tags.length == 0 ? 'hide' : ''}>
 		<TagSelector
 			{title}
@@ -28,25 +28,20 @@
 				if (selectedTag.name != '') {
 					if (!selectedTags) selectedTags = new Array();
 					selectedTags = [...selectedTags, selectedTag];
-					tags = tags.filter((t) => t.name != selectedTag.name);
+					tags = tags.filter(t => t.name != selectedTag.name);
 					selectedTag = new _Tag();
 					onSelect();
 				}
-			}}
-			_class="mb-2 me-2"
-		/>
-	</div>
-	<div>
+			}} />
 		{#if selectedTags}
 			{#each selectedTags as item}
 				<Tag
 					{item}
 					onDelete={() => {
 						tags = [...tags, item];
-						selectedTags = selectedTags.filter((t) => t.name != item.name);
+						selectedTags = selectedTags.filter(t => t.name != item.name);
 						onSelect();
-					}}
-				/>
+					}} />
 			{/each}
 		{/if}
 	</div>

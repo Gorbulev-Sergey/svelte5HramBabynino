@@ -52,7 +52,19 @@ export let userSigned = writable({});
 export let alerts: Writable<String[]> = writable([]);
 
 // Дополнительная панель в макете
-export let subPanel: Writable<Snippet> | undefined = writable();
+export let Header: Writable<Snippet> | null = writable();
 
 // Для того, чтобы при обновлении поста в админпанели происходил перерендеринг всех постов
 export let isPostUpdated = writable<boolean>(false);
+
+// Для компактного/полного размера админ-панели
+export let isAdminCompactMode = writable(false);
+
+// Количестов постов на админ странице
+export let countPostOnAdminPage = writable(3);
+
+// Количестов альбомов на админ странице
+export let countAlbumOnAdminPage = writable(3);
+
+// Количестов фотографий на админ странице хранилища
+export let countPhotoOnAdminPage = writable(3);

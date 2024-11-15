@@ -1,4 +1,5 @@
 <script>
+	import { dev } from '$app/environment';
 	import Theme from '$lib/components/Theme.svelte';
 	import '@fortawesome/fontawesome-free/css/all.min.css';
 
