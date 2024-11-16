@@ -8,9 +8,9 @@
 	import 'swiper/css/pagination';
 	import { browser } from '$app/environment';
 
-	export let data;
-	$: album = data.album;
-	let sw: Swiper;
+	let { data } = $props();
+	let album = $derived(data.album);
+	let sw: Swiper | undefined = $state();
 
 	let downloadImage = async (imageSrc: string, i: number) => {
 		fetch(imageSrc)
@@ -29,7 +29,7 @@
 		goto(`/photos#${data.uid}`);
 	};
 
-	onMount(() => {
+	$effect.pre(() => {
 		document.documentElement.requestFullscreen();
 		document.onfullscreenchange = e => {
 			if (!document.fullscreenElement) {
@@ -37,7 +37,9 @@
 				document.onfullscreenchange = r => {};
 			}
 		};
+	});
 
+	onMount(() => {
 		sw = new Swiper('.swiper', {
 			modules: [Navigation, Pagination],
 			slidesPerView: 'auto',
@@ -58,22 +60,33 @@
 {#if browser}
 	<div class="position-relative main" style="height:100svh;">
 		{#if album.title}
-			<div class="position-absolute w-100 d-flex justify-content-between align-items-center p-3" style="z-index:1000; left:0; top:0">
+			<div
+				class="position-absolute w-100 d-flex justify-content-between align-items-center p-3"
+				style="z-index:1000; left:0; top:0">
 				<div class="d-flex gap-2 align-items-center">
-					<button class="btn btn-light text-dark bg-light border-0 bg-opacity-75" title="Скачать фотографию" on:click={() => downloadImage(album.photos[sw.activeIndex].url, sw.activeIndex)}>
-						<i class="fa-solid fa-download" />
+					<button
+						aria-label=""
+						class="btn btn-light text-dark bg-light border-0 bg-opacity-75"
+						title="Скачать фотографию"
+						onclick={() => downloadImage(album.photos[sw.activeIndex].url, sw.activeIndex)}>
+						<i class="fa-solid fa-download"></i>
 					</button>
 					<button
+						aria-label=""
 						class="btn btn-light text-dark bg-light border-0 bg-opacity-75"
 						title="Скопировать url"
-						on:click={() => {
+						onclick={() => {
 							navigator.clipboard.writeText(album.photos[sw.activeIndex].url);
 						}}>
-						<i class="fa-solid fa-copy" />
+						<i class="fa-solid fa-copy"></i>
 					</button>
 				</div>
-				<button class="btn btn-light text-dark bg-light border-0 bg-opacity-75" title="Закрыть" on:click={goBack}>
-					<i class="fa-solid fa-xmark" />
+				<button
+					aria-label=""
+					class="btn btn-light text-dark bg-light border-0 bg-opacity-75"
+					title="Закрыть"
+					onclick={() => goBack()}>
+					<i class="fa-solid fa-xmark"></i>
 				</button>
 			</div>
 
@@ -84,7 +97,8 @@
 							<div
 								class="h-100"
 								style="background-image: url({photo.url});
-							background-repeat: no-repeat; background-position: center; background-size: contain; min-height:100svh;" />
+							background-repeat: no-repeat; background-position: center; background-size: contain; min-height:100svh;">
+							</div>
 							{#if photo.title}
 								<div class="carousel-caption my-text-white text-opacity-75 d-none d-md-block mb-2">
 									{photo.title}
