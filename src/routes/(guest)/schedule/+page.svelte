@@ -1,17 +1,15 @@
 <script>
 	import Month from '$lib/components/schedule/Month.svelte';
-	import { onMount } from 'svelte';
 	import { Month as _Month } from '$lib/models/schedule/Month';
 	import { scheduleMonth as month } from '$lib/scripts/store';
-	import Spinner from '$lib/components/Spinner.svelte';
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import Container from '$lib/components/Container.svelte';
 
-	let m = '';
-	$: title = `Расписание богослужений на ${$month.monthName()?.toUpperCase()} ${$month.year} года`;
-	$: keywords = `бабынино, храм, храм бабынино, расписание богослужений`;
+	let m = $state('');
+	let title = `Расписание богослужений на ${$month.monthName()?.toUpperCase()} ${$month.year} года`;
+	let keywords = `бабынино, храм, храм бабынино, расписание богослужений`;
 
-	onMount(async () => {
+	$effect(() => {
 		m = `${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`;
 		getSchedule();
 	});
@@ -35,10 +33,14 @@
 <Container>
 	<PageTitleWrap title="Расписание богослужений" description={title} {keywords} _class="mb-4">
 		<div slot="navigation" class="d-flex">
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<div class="btn btn-dark text-light text-nowrap me-2" on:click={() => window.print()}>
-				<i class="fa-solid fa-print me-2" />Печать
+			<!-- svelte-ignore a11y_incorrect_aria_attribute_type -->
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				aria-label=""
+				class="btn btn-dark text-light text-nowrap me-2"
+				onclick={() => window.print()}>
+				<i class="fa-solid fa-print me-2"></i>Печать
 			</div>
 			<div class="input-group">
 				<span class="input-group-text bg-dark text-light border-0">Дата:</span>
@@ -46,10 +48,8 @@
 					class="form-control bg-light text-dark border-0"
 					type="month"
 					bind:value={m}
-					on:change={async () => {
-						$month = new _Month(Number(m.split('-')[1]), Number(m.split('-')[0]));
-						getSchedule();
-					}} />
+					onchange={async () =>
+						($month = new _Month(Number(m.split('-')[1]), Number(m.split('-')[0])))} />
 			</div>
 		</div>
 	</PageTitleWrap>
