@@ -11,27 +11,32 @@
 	} from '$lib/scripts/store.js';
 	import Container from '$lib/components/Container.svelte';
 
-	export let data;
-	$: albums = data.albums;
+	let { data } = $props();
+	let albums = $derived(data.albums);
 	let title = 'Фотографии';
 	let description = 'Фотографии храма и событий нашего прихода';
-	$: keywords = `бабынино, храм, храм бабынино, ${title}, ${description}`;
-
-	/*Страниц всего*/
-	$: getPagesCount = () => {
-		return Math.ceil(searchAlbums.length / $countAlbumsOnPage);
-	};
+	let keywords = `бабынино, храм, храм бабынино, ${title}, ${description}`;
 
 	/*1-ый фильтр) Массив альбомов, отфильтрованных по строке поиска*/
-	$: searchAlbums = albums.filter(a => a[1].title.toLowerCase().includes($search.toLowerCase()));
+	let searchAlbums = $derived(
+		albums.filter(a => a[1].title.toLowerCase().includes($search.toLowerCase()))
+	);
 	/*2-ый фильтр) Сортируем альбомы по дате*/
-	$: albumsByDate = $isNewAlbumsFirst
-		? searchAlbums.sort((a1, a2) => new Date(a2[1].date).getTime() - new Date(a1[1].date).getTime())
-		: searchAlbums.sort(
-				(a1, a2) => new Date(a1[1].date).getTime() - new Date(a2[1].date).getTime()
-			);
+	let albumsByDate = $derived(() =>
+		$isNewAlbumsFirst
+			? searchAlbums.sort(
+					(a1, a2) => new Date(a2[1].date).getTime() - new Date(a1[1].date).getTime()
+				)
+			: searchAlbums.sort(
+					(a1, a2) => new Date(a1[1].date).getTime() - new Date(a2[1].date).getTime()
+				)
+	);
 	/*3-ий фильтр) Вывод альбомов в зависимости от переключателя количества альбомов на странице и количества страниц для отображения*/
-	$: albumsByCountOnPage = albumsByDate.slice(0, $countAlbumsOnPage * $countPagesForShow);
+	let albumsByCountOnPage = $derived(
+		albumsByDate().slice(0, $countAlbumsOnPage * $countPagesForShow)
+	);
+	/*Страниц всего*/
+	let getPagesCount = $derived(Math.ceil(searchAlbums.length / $countAlbumsOnPage));
 </script>
 
 <Container>
@@ -45,14 +50,15 @@
 					class="form-control bg-light text-dark border-0"
 					bind:value={$search}
 					placeholder="Поиск фотоальбомов" />
-				<button class="btn btn-light border-0" on:click={() => ($search = '')}
+				<button aria-label="" class="btn btn-light border-0" onclick={() => ($search = '')}
 					><i class="fa-solid fa-xmark"></i></button>
 			</div>
 			<div class="d-flex align-items-center gap-1">
 				<div class="small text-dark">сначала:</div>
 				<button
+					aria-label=""
 					class="btn btn-sm btn-dark"
-					on:click={() => ($isNewAlbumsFirst = !$isNewAlbumsFirst)}
+					onclick={() => ($isNewAlbumsFirst = !$isNewAlbumsFirst)}
 					>{$isNewAlbumsFirst ? 'новые' : 'старые'}</button>
 			</div>
 		</div>
@@ -66,8 +72,8 @@
 				</div>
 			{/each}
 		</div>
-		{#if $countPagesForShow < getPagesCount()}
-			<button class="btn btn-light" on:click={() => $countPagesForShow++}>Загрузить ещё...</button>
+		{#if $countPagesForShow < getPagesCount}
+			<button class="btn btn-light" onclick={() => $countPagesForShow++}>Загрузить ещё...</button>
 		{/if}
 	</div>
 </Container>
