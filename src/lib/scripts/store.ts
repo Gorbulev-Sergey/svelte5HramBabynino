@@ -3,6 +3,9 @@ import { Month } from '$lib/models/schedule/Month';
 import { writable, type Writable } from 'svelte/store';
 import type { Snippet } from 'svelte';
 
+// Дополнительная панель в макете
+export let Header: Writable<Snippet> | null = writable();
+
 // Для сохранения темы оформления (светлой или тёмной)
 export let theme = writable('');
 export let isSystemTheme = writable(true);
@@ -33,6 +36,7 @@ interface IMap {
 	[key: string]: number;
 }
 export let showedPostsLength = writable<IMap>({ главное: showedPostsStep });
+
 /**
  * Для работы фотоальбомов *
  * searchAlbums - строка поиска альбомов
@@ -51,9 +55,6 @@ export let userSigned = writable({});
 
 // Для работы с всплывающими сообщениями
 export let alerts: Writable<String[]> = writable([]);
-
-// Дополнительная панель в макете
-export let Header: Writable<Snippet> | null = writable();
 
 // Для того, чтобы при обновлении поста в админпанели происходил перерендеринг всех постов
 export let isPostUpdated = writable<boolean>(false);
