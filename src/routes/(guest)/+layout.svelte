@@ -46,6 +46,7 @@
 		}
 	];
 
+	// Заполняем переменную $showedPostsLength в хранилище
 	$effect.pre(() => {
 		onValue(ref(db, '/tags'), s =>
 			(s.val() as Tag[]).forEach(t => ($showedPostsLength[t.name] = showedPostsStep))
