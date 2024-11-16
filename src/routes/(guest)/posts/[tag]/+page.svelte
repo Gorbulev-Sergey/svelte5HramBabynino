@@ -68,39 +68,35 @@
 		</div>
 	</PageTitle>
 
-	{#if data.posts}
-		<div class="mb-4">
-			<!--Для закреплённых-->
-			<div>
-				{#each pinnedPosts.filter(p => p[1].isHorisontal) as [uid, post], i}
-					<PostHorizontal {uid} {post} />
-				{/each}
-			</div>
-			<!--Для закреплённых-->
-			<div class="row row-cols-1 row-cols-md-3 g-4 flex-row-reverse">
-				{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
-					<Post {uid} {post} />
-				{/each}
-			</div>
+	<div class="mb-4">
+		<!--Для закреплённых-->
+		<div>
+			{#each pinnedPosts.filter(p => p[1].isHorisontal) as [uid, post], i}
+				<PostHorizontal {uid} {post} />
+			{/each}
 		</div>
-
-		<!--Для не закреплённых-->
-		<div class="row row-cols-1 row-cols-md-3 g-4">
-			{#each notPinnedPostsForShow as [uid, post], i}
+		<!--Для закреплённых-->
+		<div class="row row-cols-1 row-cols-md-3 g-4 flex-row-reverse">
+			{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
 				<Post {uid} {post} />
 			{/each}
 		</div>
+	</div>
 
-		{#if notPinnedPosts.length > notPinnedPostsForShow.length}
-			<button
-				class="btn btn-light text-dark mt-3 w-100"
-				onclick={() => {
-					$showedPostsLength[$page.params.tag] =
-						$showedPostsLength[$page.params.tag] + showedPostsStep;
-				}}>Загрузить ещё...</button>
-		{/if}
-	{:else}
-		<Spinner />
+	<!--Для не закреплённых-->
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+		{#each notPinnedPostsForShow as [uid, post], i}
+			<Post {uid} {post} />
+		{/each}
+	</div>
+
+	{#if notPinnedPosts.length > notPinnedPostsForShow.length}
+		<button
+			class="btn btn-light text-dark mt-3 w-100"
+			onclick={() => {
+				$showedPostsLength[$page.params.tag] =
+					$showedPostsLength[$page.params.tag] + showedPostsStep;
+			}}>Загрузить ещё...</button>
 	{/if}
 </Container>
 
