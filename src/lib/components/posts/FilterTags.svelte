@@ -20,7 +20,7 @@
 			{#each tags as item}
 				<li>
 					<button
-						class="btn btn-light text-dark rounded-0 w-100 text-start"
+						class="btn btn-light text-dark rounded-0 w-100 text-start text-nowrap"
 						on:click={() => {
 							selected = item;
 							onSelect(item);

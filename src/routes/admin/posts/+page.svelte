@@ -7,6 +7,7 @@
 	import {
 		adminPostsFilters,
 		countPostOnAdminPage,
+		EFixedUnfixed,
 		Header,
 		isPostUpdated
 	} from '$lib/scripts/store.js';
@@ -18,11 +19,11 @@
 	import { Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 
-	export let data;
-	$: posts = data.posts;
-	$: tags = data.tags;
-	$: arrayOfFilteredPosts = () => {
-		let p;
+	let { data } = $props();
+	let posts = $derived(data.posts);
+	let tags = $derived(data.tags);
+	let arrayOfFilteredPosts = $derived.by(() => {
+		let p: [string, _Post][];
 		switch ($adminPostsFilters.tag.name) {
 			case 'все вместе':
 				p = posts.filter(([k, v]) => v.published == $adminPostsFilters.published);
@@ -41,22 +42,34 @@
 				);
 				break;
 		}
-
 		switch ($adminPostsFilters.newFirst) {
 			case true:
-				return p.sort(
+				p = p.sort(
 					([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime()
 				);
+				break;
 			case false:
-				return p.sort(
+				p = p.sort(
 					([k1, v1], [k2, v2]) => new Date(v1.created).getTime() - new Date(v2.created).getTime()
 				);
+				break;
 		}
-	};
+		switch ($adminPostsFilters.fixedUnfixed) {
+			case EFixedUnfixed['закреплённые']:
+				p = p.filter(v => v[1].pinned);
+				break;
+			case EFixedUnfixed['незакреплённые']:
+				p = p.filter(v => !v[1].pinned);
+				break;
+			case EFixedUnfixed['закреплённые и незакреплённые']:
+				break;
+		}
+		return p;
+	});
 
 	$Header = header;
 
-	onMount(async () => {
+	$effect.pre(() => {
 		if ($isPostUpdated) {
 			$isPostUpdated = false;
 			invalidateAll();
@@ -76,7 +89,7 @@
 	<PageTitle title="Публикации">
 		<div class="flex-grow-1 d-flex align-items-center">
 			<FilterTags
-				title="тип:"
+				title="тег:"
 				{tags}
 				onSelect={v => ($adminPostsFilters.tag = v)}
 				selected={$adminPostsFilters.tag}
@@ -91,19 +104,38 @@
 				_class="btn-sm me-1"
 				titleNoPressed="не опубликованные"
 				titlePressed="опубликованные" />
-			<button
-				class="btn btn-sm btn-dark text-light"
-				on:click={() => {
-					if ($countPostOnAdminPage == 5) {
-						$countPostOnAdminPage = 1;
-					} else $countPostOnAdminPage++;
-					localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
-				}}>
-				<span>колонки</span>
-				<span class="badge bg-light text-dark ms-1">{$countPostOnAdminPage}</span>
-			</button>
+			<div class="d-flex align-items-center gap-1">
+				<button
+					class="btn btn-sm btn-dark text-light"
+					onclick={() => {
+						switch ($adminPostsFilters.fixedUnfixed) {
+							case EFixedUnfixed['закреплённые']:
+								$adminPostsFilters.fixedUnfixed = EFixedUnfixed['незакреплённые'];
+								break;
+							case EFixedUnfixed['незакреплённые']:
+								$adminPostsFilters.fixedUnfixed = EFixedUnfixed['закреплённые и незакреплённые'];
+								break;
+							case EFixedUnfixed['закреплённые и незакреплённые']:
+								$adminPostsFilters.fixedUnfixed = EFixedUnfixed['закреплённые'];
+								break;
+						}
+					}}>
+					<span>{EFixedUnfixed[$adminPostsFilters.fixedUnfixed]}</span>
+				</button>
+				<button
+					class="btn btn-sm btn-dark text-light"
+					onclick={() => {
+						if ($countPostOnAdminPage == 5) {
+							$countPostOnAdminPage = 1;
+						} else $countPostOnAdminPage++;
+						localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
+					}}>
+					<span>колонки</span>
+					<span class="badge bg-light text-dark ms-1">{$countPostOnAdminPage}</span>
+				</button>
+			</div>
 		</div>
-		<button class="btn btn-dark" on:click={() => goto('/admin/posts/create')}>Создать</button>
+		<button class="btn btn-dark" onclick={() => goto('/admin/posts/create')}>Создать</button>
 	</PageTitle>
 {/snippet}
 
@@ -149,7 +181,7 @@
 					<button
 						aria-label=""
 						class="btn btn-sm btn-light me-1"
-						on:click={() => goto(`/admin/posts/edit/${uid}`)}>
+						onclick={() => goto(`/admin/posts/edit/${uid}`)}>
 						<i class="fa-solid fa-pencil"></i>
 					</button>
 					<div class="dropdown dropend">
@@ -162,7 +194,7 @@
 							<button
 								class="btn btn-sm btn-light text-danger"
 								data-bs-toggle="dropdown"
-								on:click={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
+								onclick={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
 						</div>
 					</div>
 				</div>
@@ -174,14 +206,14 @@
 <div class="bg-white rounded p-3">
 	<div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3 mb-3">
 		<!-- pinned -->
-		{#each arrayOfFilteredPosts().filter(([uid, item]) => item.pinned) as [uid, item]}
+		{#each arrayOfFilteredPosts.filter(([uid, item]) => item.pinned) as [uid, item]}
 			{@render post(uid, item)}
 		{/each}
 	</div>
 
 	<div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3">
 		<!-- not pinned -->
-		{#each arrayOfFilteredPosts().filter(([uid, item]) => !item.pinned) as [uid, item]}
+		{#each arrayOfFilteredPosts.filter(([uid, item]) => !item.pinned) as [uid, item]}
 			{@render post(uid, item)}
 		{/each}
 	</div>

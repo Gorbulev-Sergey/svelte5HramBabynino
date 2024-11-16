@@ -7,12 +7,19 @@ import type { Snippet } from 'svelte';
 export let theme = writable('');
 export let isSystemTheme = writable(true);
 
+export enum EFixedUnfixed {
+	'закреплённые',
+	'незакреплённые',
+	'закреплённые и незакреплённые'
+}
+
 // Для работы фильтра публикаций на странице администрирования
 export let adminPostsFilters = writable({
 	published: true,
 	pinned: false,
 	newFirst: true,
-	tag: new Tag('главное', 'Главное')
+	tag: new Tag('главное', 'Главное'),
+	fixedUnfixed: EFixedUnfixed['закреплённые и незакреплённые']
 });
 
 // Для работы расписания богослужений
