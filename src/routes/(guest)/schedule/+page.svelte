@@ -6,7 +6,9 @@
 	import Container from '$lib/components/Container.svelte';
 
 	let m = $state('');
-	let title = `Расписание богослужений на ${$month.monthName()?.toUpperCase()} ${$month.year} года`;
+	let title = $derived(
+		`Расписание богослужений на ${$month.monthName()?.toUpperCase()} ${$month.year} года`
+	);
 	let keywords = `бабынино, храм, храм бабынино, расписание богослужений`;
 
 	$effect(() => {

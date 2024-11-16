@@ -15,7 +15,7 @@
 	let albums = $derived(data.albums);
 	let title = 'Фотографии';
 	let description = 'Фотографии храма и событий нашего прихода';
-	let keywords = `бабынино, храм, храм бабынино, ${title}, ${description}`;
+	let keywords = $derived(`бабынино, храм, храм бабынино, ${title}, ${description}`);
 
 	/*1-ый фильтр) Массив альбомов, отфильтрованных по строке поиска*/
 	let searchAlbums = $derived(

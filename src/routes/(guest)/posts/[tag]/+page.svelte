@@ -26,8 +26,8 @@
 	let notPinnedPostsForShow = $derived(
 		notPinnedPosts.slice(0, $showedPostsLength[$page.params.tag])
 	);
-	let description = $page.params.tag[0].toUpperCase() + $page.params.tag.slice(1);
-	let keywords = `бабынино, храм, храм бабынино, ${description}`;
+	let description = $derived($page.params.tag[0].toUpperCase() + $page.params.tag.slice(1));
+	let keywords = $derived(`бабынино, храм, храм бабынино, ${description}`);
 </script>
 
 <Container>

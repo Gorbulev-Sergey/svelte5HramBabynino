@@ -3,10 +3,10 @@
 	import PageTitle from '$lib/components/PageTitle.svelte';
 
 	let { data } = $props();
-	let contacts = data.contacts;
+	let contacts = $derived(data.contacts);
 	let title = 'Контакты';
 	let description = 'Контактная информация: телефоны, whatsapp, адрес храма';
-	let keywords = `бабынино, храм, ${title}, храм бабынино`;
+	let keywords = $derived(`бабынино, храм, ${title}, храм бабынино`);
 	let isCanScroollMap = $state(false);
 </script>
 
