@@ -1,13 +1,5 @@
-import type { Post } from '$lib/models/Post.js';
-import { db } from '$lib/scripts/firebase.js';
-import { get, ref } from 'firebase/database';
-
-export async function load({ params }) {
+export async function load({ params, fetch }) {
 	return {
-		post: await new Promise(res => {
-			get(ref(db, `/posts/${params.uid}`)).then(s => {
-				if (s.exists()) res(s.val());
-			});
-		}) as Post
+		post: await fetch(`/api/posts/${params.uid}`).then(v => v.json())
 	};
 }

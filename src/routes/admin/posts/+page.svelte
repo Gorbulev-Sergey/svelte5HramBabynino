@@ -25,16 +25,16 @@
 		let p;
 		switch ($adminPostsFilters.tag.name) {
 			case 'все вместе':
-				p = Object.entries(posts).filter(([k, v]) => v.published == $adminPostsFilters.published);
+				p = posts.filter(([k, v]) => v.published == $adminPostsFilters.published);
 				break;
 			case 'без тега':
-				p = Object.entries(posts).filter(
+				p = posts.filter(
 					([k, v]) =>
 						v.published == $adminPostsFilters.published && (v.tags == null || v.tags.length == 0)
 				);
 				break;
 			default:
-				p = Object.entries(posts).filter(
+				p = posts.filter(
 					([k, v]) =>
 						v.published == $adminPostsFilters.published &&
 						v.tags?.find(t => t.name == $adminPostsFilters.tag.name)
