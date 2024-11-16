@@ -2,6 +2,10 @@
 	import { browser } from '$app/environment';
 	import Footer from '$lib/components/Footer.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
+	import type { Tag } from '$lib/models/Tag';
+	import { db } from '$lib/scripts/firebase';
+	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
+	import { onValue, ref } from 'firebase/database';
 
 	let { children } = $props();
 	let routesLeft = [
@@ -41,6 +45,12 @@
 			title: 'Панель управления'
 		}
 	];
+
+	$effect.pre(() => {
+		onValue(ref(db, '/tags'), s =>
+			(s.val() as Tag[]).forEach(t => ($showedPostsLength[t.name] = showedPostsStep))
+		);
+	});
 </script>
 
 {#if browser}

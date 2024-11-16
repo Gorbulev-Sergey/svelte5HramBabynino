@@ -1,8 +1,6 @@
 import { Tag } from '$lib/models/Tag';
 import { Month } from '$lib/models/schedule/Month';
 import { writable, type Writable } from 'svelte/store';
-import { get, onValue, ref } from 'firebase/database';
-import { db } from './firebase';
 import type { Snippet } from 'svelte';
 
 // Для сохранения темы оформления (светлой или тёмной)
@@ -24,14 +22,10 @@ export let scheduleMonth = writable(new Month(new Date().getMonth() + 1, new Dat
 // по showedPostsStep раз и для каждого тега отдельно
 export let showedPostsStep = 6;
 
-export let showedPostsLength = writable<Map<string, number>>(new Map());
-onValue(ref(db, '/tags'), s => {
-	let _tags = Object.values(s.val());
-	let m = new Map();
-	_tags.forEach(v => m.set(v.name, showedPostsStep));
-	showedPostsLength.set(m);
-});
-
+interface IMap {
+	[key: string]: number;
+}
+export let showedPostsLength = writable<IMap>({ главное: showedPostsStep });
 /**
  * Для работы фотоальбомов *
  * searchAlbums - строка поиска альбомов

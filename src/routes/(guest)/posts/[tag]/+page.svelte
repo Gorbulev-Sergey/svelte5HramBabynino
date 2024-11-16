@@ -8,10 +8,13 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
+	import { onValue, ref } from 'firebase/database';
+	import { db } from '$lib/scripts/firebase.js';
+	import type { Tag } from '$lib/models/Tag.js';
 
 	let { data } = $props();
 	let tags = $derived(data.tags);
-	let posts = $derived(data.posts.filter(([k, v]) => v.published));
+	let posts = $derived(data.posts.filter(v => v[1].published));
 	let postsByTag = $derived(
 		posts
 			.filter(([k, v]) => v.tags?.some(t => t.name == $page.params.tag))
@@ -20,8 +23,9 @@
 	let pinnedPosts = $derived(postsByTag.filter(([k, v]) => v.pinned));
 	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
-	let _showedPostsLength = $state(showedPostsStep);
-	let notPinnedPostsForShow = $derived(notPinnedPosts.slice(0, _showedPostsLength));
+	let notPinnedPostsForShow = $derived(
+		notPinnedPosts.slice(0, $showedPostsLength[$page.params.tag])
+	);
 	let description = $page.params.tag[0].toUpperCase() + $page.params.tag.slice(1);
 	let keywords = `бабынино, храм, храм бабынино, ${description}`;
 </script>
@@ -91,11 +95,8 @@
 			<button
 				class="btn btn-light text-dark mt-3 w-100"
 				onclick={() => {
-					_showedPostsLength += showedPostsStep;
-					$showedPostsLength.set(
-						$page.params.tag,
-						$showedPostsLength.get($page.params.tag) ?? showedPostsStep + showedPostsStep
-					);
+					$showedPostsLength[$page.params.tag] =
+						$showedPostsLength[$page.params.tag] + showedPostsStep;
 				}}>Загрузить ещё...</button>
 		{/if}
 	{:else}
