@@ -2,14 +2,16 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Post } from '$lib/models/Post';
+	import { type Snippet } from 'svelte';
 
 	interface IProps {
 		uid: string;
 		post: Post;
 		_class?: string;
+		children?: Snippet;
 	}
 
-	let { uid = '', post = new Post(), _class }: IProps = $props();
+	let { uid = '', post = new Post(), _class, children }: IProps = $props();
 	let showContent = $state(false);
 </script>
 
@@ -73,7 +75,7 @@
 					{/if}
 				</div>
 			</div>
-			<slot name="adminControls" />
+			{@render children?.()}
 		</div>
 		<div class="{post.cover ? 'col-3' : ''} rounded-end overflow-hidden">
 			{#if post.cover && post.cover.video}
@@ -112,7 +114,7 @@
 				</div>
 			{:else if post.cover && post.cover.image}
 				<div
-					class="img-fluid rounded-end rounded-2 h-100"
+					class="img-fluid rounded-end h-100"
 					style="background-image: url({post.cover.image});
 					 background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
 				</div>
