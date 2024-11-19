@@ -4,16 +4,16 @@
 	import { scheduleMonth as month } from '$lib/scripts/store';
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import Container from '$lib/components/Container.svelte';
+	import { onMount } from 'svelte';
 
-	let m = $state('');
+	let m = $state(`${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`);
 	let title = $derived(
 		`Расписание богослужений на ${$month.monthName()?.toUpperCase()} ${$month.year} года`
 	);
 	let keywords = `бабынино, храм, храм бабынино, расписание богослужений`;
 
-	$effect(() => {
-		m = `${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`;
-		getSchedule();
+	onMount(async () => {
+		await getSchedule();
 	});
 
 	async function getSchedule() {
@@ -50,8 +50,10 @@
 					class="form-control bg-light text-dark border-0"
 					type="month"
 					bind:value={m}
-					onchange={async () =>
-						($month = new _Month(Number(m.split('-')[1]), Number(m.split('-')[0])))} />
+					onchange={async () => {
+						$month = new _Month(Number(m.split('-')[1]), Number(m.split('-')[0]));
+						await getSchedule();
+					}} />
 			</div>
 		</div>
 	</PageTitleWrap>
@@ -61,6 +63,9 @@
 			<Month month={$month} />
 		{/if}
 	{:else}
-		<div class="text-dark">Расписание на {$month.monthName()} {$month.year} отсутствует!</div>
+		<div class="text-dark mx-1">
+			Расписание богослужений на {$month.monthName()}
+			{$month.year} отсутствует!
+		</div>
 	{/if}
 </Container>

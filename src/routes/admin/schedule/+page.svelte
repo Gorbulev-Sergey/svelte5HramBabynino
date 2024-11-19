@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { Header, scheduleMonth as month } from '$lib/scripts/store';
 
-	let m = '';
+	let m = $state(`${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`);
 	$Header = header;
 
 	async function getSchedule() {
@@ -25,7 +25,6 @@
 	}
 
 	onMount(async () => {
-		m = `${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`;
 		getSchedule();
 	});
 	onDestroy(() => ($Header = null));
@@ -39,16 +38,16 @@
 				class="form-control bg-light text-dark border-0"
 				type="month"
 				bind:value={m}
-				on:change={async () => {
+				onchange={async () => {
 					$month = new _Month(Number(m.split('-')[1]), Number(m.split('-')[0]));
-					getSchedule();
+					await getSchedule();
 				}} />
 		</div>
 		<div class="flex-grow-1 justify-content-end d-flex gap-1">
-			<button class="btn btn-dark text-light text-nowrap" on:click={() => window.print()}>
+			<button class="btn btn-dark text-light text-nowrap" onclick={() => window.print()}>
 				<i class="fa-solid fa-print me-1"></i>Печать
 			</button>
-			<button class="btn btn-dark" on:click={() => goto('/admin/schedule/edit')}
+			<button class="btn btn-dark" onclick={() => goto('/admin/schedule/edit')}
 				>Редактировать</button>
 		</div>
 	</PageTitle>
@@ -57,5 +56,8 @@
 {#if $month.fildsDayNotEmpty}
 	<Month month={$month} _class="pt-2" />
 {:else}
-	<div class="text-dark">Расписание на {$month.monthName()} {$month.year} отсутствует!</div>
+	<div class="text-dark">
+		Расписание богослужений на {$month.monthName()}
+		{$month.year} отсутствует!
+	</div>
 {/if}

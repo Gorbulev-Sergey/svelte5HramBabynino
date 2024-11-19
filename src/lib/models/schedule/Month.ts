@@ -9,12 +9,18 @@ export class Month {
 
 	setFildsDayAll = () => {
 		for (let i = 1; i <= this.daysInMonth(); i++) {
-			this.fildsDayAll.push(new FildDate(`${this.year}-${this.month < 10 ? `0${this.month}` : this.month}-${i < 10 ? `0${i}` : i}`));
+			this.fildsDayAll.push(
+				new FildDate(
+					`${this.year}-${this.month < 10 ? `0${this.month}` : this.month}-${i < 10 ? `0${i}` : i}`
+				)
+			);
 		}
 	};
 	updateFildsDayAll = () => {
-		this.fildsDayNotEmpty.forEach(fDay => {
-			this.fildsDayAll[this.fildsDayAll.indexOf(this.fildsDayAll.filter(f => f.date == fDay.date)[0])] = fDay;
+		this.fildsDayNotEmpty?.forEach(fDay => {
+			this.fildsDayAll[
+				this.fildsDayAll.indexOf(this.fildsDayAll.filter(f => f.date == fDay.date)[0])
+			] = fDay;
 		});
 	};
 
