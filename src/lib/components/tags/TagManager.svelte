@@ -1,17 +1,26 @@
-<script>
+<script lang="ts">
 	import Tag from './Tag.svelte';
-	import { Tag as _Tag } from '$lib/models/Tag';
+	import { type Tag as _Tag } from '$lib/models/Tag';
 	import TagSelector from './TagSelector.svelte';
 	import { onMount } from 'svelte';
 
-	export let title = 'Добавить тег:';
-	export let tags = new Array();
-	export let selectedTags = new Array();
-	export let onSelect = () => {
-		tags = tags.filter(t => !selectedTags.includes(t));
-	};
-	export let _class = '';
-	let selectedTag = new _Tag();
+	interface Props {
+		title: string;
+		tags: _Tag[];
+		selectedTags: _Tag[];
+		onSelect: () => void;
+		_class: string;
+	}
+	let {
+		title = 'Добавить тег:',
+		tags = [],
+		selectedTags = [],
+		onSelect = () => {
+			tags = tags.filter(t => !selectedTags.includes(t));
+		},
+		_class = ''
+	}: Props = $props();
+	let selectedTag: _Tag = $state({} as _Tag);
 
 	onMount(async () => {
 		setTimeout(() => onSelect(), 10000);
@@ -29,7 +38,7 @@
 					if (!selectedTags) selectedTags = new Array();
 					selectedTags = [...selectedTags, selectedTag];
 					tags = tags.filter(t => t.name != selectedTag.name);
-					selectedTag = new _Tag();
+					selectedTag = {} as _Tag;
 					onSelect();
 				}
 			}} />

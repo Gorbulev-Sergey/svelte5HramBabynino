@@ -1,13 +1,7 @@
-import { Role } from './Role';
+import { type Role } from './Role';
 
-export interface IUser {
+export interface User {
 	uid: string;
 	email: string;
 	role: Role;
-}
-
-export class User {
-	uid: string = '';
-	email: string = '';
-	role: Role = new Role();
 }

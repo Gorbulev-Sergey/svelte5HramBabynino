@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Post } from '$lib/models/Post';
+	import { type Post } from '$lib/models/Post';
 	import EditorControls from './EditorControls.svelte';
 
-	let { post = new Post() }: { post: Post } = $props();
+	let { post = {} as Post }: { post: Post } = $props();
 	let showCode = $state(false);
 </script>
 

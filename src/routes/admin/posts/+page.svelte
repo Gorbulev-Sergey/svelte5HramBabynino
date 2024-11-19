@@ -15,8 +15,8 @@
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { Tag } from '$lib/models/Tag';
-	import { Post as _Post } from '$lib/models/Post';
+	import { type Tag } from '$lib/models/Tag';
+	import { type Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 
 	let { data } = $props();
@@ -74,8 +74,8 @@
 			$isPostUpdated = false;
 			invalidateAll();
 		}
-		tags.push(new Tag('все вместе', 'Все вместе'));
-		tags.push(new Tag('без тега', 'Без тега'));
+		tags.push({ name: 'все вместе', description: 'Все вместе' });
+		tags.push({ name: 'без тега', description: 'Без тега' });
 		document.addEventListener('visibilitychange', function () {
 			if (!document.hidden) {
 				invalidateAll();
@@ -143,7 +143,7 @@
 	<Post {uid} {post}>
 		<div
 			class="p-3 bg-dark bg-opacity-10"
-			style={post.cover.image || post.cover.video ? 'margin-bottom: -1em;' : ''}>
+			style={post.cover?.image || post.cover?.video ? 'margin-bottom: -1em;' : ''}>
 			<div class="d-flex flex-column align-items-end flex-wrap gap-2">
 				<TagManager
 					title="Теги:"

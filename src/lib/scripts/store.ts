@@ -1,4 +1,4 @@
-import { Tag } from '$lib/models/Tag';
+import { type Tag } from '$lib/models/Tag';
 import { Month } from '$lib/models/schedule/Month';
 import { writable, type Writable } from 'svelte/store';
 import type { Snippet } from 'svelte';
@@ -21,7 +21,7 @@ export let adminPostsFilters = writable({
 	published: true,
 	pinned: false,
 	newFirst: true,
-	tag: new Tag('главное', 'Главное'),
+	tag: { name: 'главное', description: 'Главное' },
 	fixedUnfixed: EFixedUnfixed['закреплённые и незакреплённые']
 });
 

@@ -9,7 +9,7 @@
 		countPhotoOnAdminPage
 	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
-	import { User } from '$lib/models/admin/User';
+	import { type User } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';

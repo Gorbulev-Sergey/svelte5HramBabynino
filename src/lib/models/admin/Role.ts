@@ -1,10 +1,3 @@
-export interface IRole {
+export interface Role {
 	name: string;
-}
-
-export class Role {
-	name: string = '';
-	constructor(name = '') {
-		this.name = name;
-	}
 }

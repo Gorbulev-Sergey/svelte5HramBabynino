@@ -1,4 +1,4 @@
-import { FildDate } from './FildDate';
+import { type FildDate } from './FildDate';
 
 export class Month {
 	month: number = new Date().getMonth();
@@ -9,11 +9,11 @@ export class Month {
 
 	setFildsDayAll = () => {
 		for (let i = 1; i <= this.daysInMonth(); i++) {
-			this.fildsDayAll.push(
-				new FildDate(
-					`${this.year}-${this.month < 10 ? `0${this.month}` : this.month}-${i < 10 ? `0${i}` : i}`
-				)
-			);
+			// this.fildsDayAll.push(
+			// 	FildDate(
+			// 		`${this.year}-${this.month < 10 ? `0${this.month}` : this.month}-${i < 10 ? `0${i}` : i}`
+			// 	)
+			// );
 		}
 	};
 	updateFildsDayAll = () => {

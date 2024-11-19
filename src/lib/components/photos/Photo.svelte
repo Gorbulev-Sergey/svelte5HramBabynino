@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Photo } from '$lib/models/photos/Photo';
+	import { type Photo } from '$lib/models/photos/Photo';
 
 	interface Props {
 		photo: Photo;
@@ -8,7 +8,7 @@
 		onDown: () => {};
 		onDelete: () => {};
 	}
-	let { photo = new Photo(), _class = '', onUp, onDown, onDelete }: Props = $props();
+	let { photo = {} as Photo, _class = '', onUp, onDown, onDelete }: Props = $props();
 </script>
 
 <div
