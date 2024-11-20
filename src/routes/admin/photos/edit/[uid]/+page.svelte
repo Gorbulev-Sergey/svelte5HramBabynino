@@ -3,8 +3,8 @@
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { Photo as _Photo } from '$lib/models/photos/Photo';
-	import { Album } from '$lib/models/photos/Album';
+	import type { Photo as _Photo } from '$lib/models/photos/Photo';
+	import type { Album } from '$lib/models/photos/Album';
 	import { db, storage } from '$lib/scripts/firebase';
 	import { onValue, ref as refDb, update } from 'firebase/database';
 	import { ref, getDownloadURL, listAll } from 'firebase/storage';
@@ -12,8 +12,9 @@
 	import Container from '$lib/components/Container.svelte';
 	import { Header } from '$lib/scripts/store';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
+	import Album from '$lib/components/photos/Album.svelte';
 
-	let album = new Album();
+	let album: Album;
 
 	// Для работы с хранилищем
 	let folders = [];

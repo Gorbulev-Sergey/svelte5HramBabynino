@@ -1,19 +1,13 @@
 <script lang="ts">
-	class Props {
-		text: string = '';
+	interface Props {
+		text: string;
 		classFontAwesome?: string;
-		checked?: boolean | null;
+		checked?: boolean;
 		_class?: string;
-		onChange? = () => {};
+		onChange: () => void;
 	}
 
-	let {
-		text,
-		classFontAwesome,
-		checked = $bindable(),
-		_class,
-		onChange = () => {}
-	}: Props = $props();
+	let { text, classFontAwesome, checked = $bindable(), _class, onChange }: Props = $props();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->

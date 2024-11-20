@@ -9,12 +9,12 @@
 		tags: _Tag[];
 		selectedTags: _Tag[];
 		onSelect: () => void;
-		_class: string;
+		_class?: string;
 	}
 	let {
 		title = 'Добавить тег:',
-		tags = [],
-		selectedTags = [],
+		tags = $bindable([]),
+		selectedTags = $bindable([]),
 		onSelect = () => {
 			tags = tags.filter(t => !selectedTags.includes(t));
 		},
@@ -23,7 +23,7 @@
 	let selectedTag: _Tag = $state({} as _Tag);
 
 	onMount(async () => {
-		setTimeout(() => onSelect(), 10000);
+		//setTimeout(() => onSelect(), 10000);
 	});
 </script>
 

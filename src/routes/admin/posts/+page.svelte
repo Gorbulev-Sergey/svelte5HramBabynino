@@ -15,7 +15,7 @@
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { type Tag } from '$lib/models/Tag';
+	import { type Tag as _Tag } from '$lib/models/Tag';
 	import { type Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 

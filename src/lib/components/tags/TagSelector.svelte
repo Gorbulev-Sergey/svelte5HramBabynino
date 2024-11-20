@@ -10,8 +10,8 @@
 	}
 	let {
 		title = 'Добавить тег:',
-		tags = [],
-		selected = {} as Tag,
+		tags = $bindable([]),
+		selected = $bindable({} as Tag),
 		_class = '',
 		onSelect
 	}: Props = $props();
