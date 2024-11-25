@@ -1,5 +1,13 @@
-export interface FildTime {
+export interface IFildTime {
 	event: string;
 	time: string;
 	prayer: string;
+}
+
+export function FildTime(event = '', time = '', prayer = ''): IFildTime {
+	return {
+		event: event,
+		time: time,
+		prayer: prayer
+	};
 }

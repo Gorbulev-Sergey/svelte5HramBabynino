@@ -1,5 +1,13 @@
-export interface Tag {
+export interface ITag {
 	name: string;
 	description: string;
-	postUID?: string;
+	postUID: string | null;
+}
+
+export function Tag(name = '', description = '', postUID = null): ITag {
+	return {
+		name: name,
+		description: description,
+		postUID: postUID
+	};
 }

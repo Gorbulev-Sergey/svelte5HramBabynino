@@ -1,10 +1,20 @@
-import { type FildDate } from './FildDate';
+import { type IFildDate } from './FildDate';
 
-export class Month {
+export interface IMonth {
+	month: number;
+	year: number;
+	fildsDayAll: IFildDate[];
+	fildsDayNotEmpty: IFildDate[];
+	daysInMonth: number;
+	setFildsDayAll(): void;
+	updateFildsDayAll(): void;
+}
+
+export class CMonth {
 	month: number = new Date().getMonth();
 	year: number = new Date().getFullYear();
-	fildsDayAll: FildDate[] = [];
-	fildsDayNotEmpty: FildDate[] = [];
+	fildsDayAll: IFildDate[] = [];
+	fildsDayNotEmpty: IFildDate[] = [];
 	daysInMonth = () => new Date(this.year, this.month, 0).getDate();
 
 	setFildsDayAll = () => {
@@ -88,4 +98,24 @@ export class Month {
 		this.setFildsDayAll();
 		this.updateFildsDayAll();
 	}
+}
+
+export function Month(
+	month = 1,
+	year = 2024,
+	fildsDayAll = [],
+	fildsDayNotEmpty = [],
+	daysInMonth = 30,
+	setFildsDayAll = () => {},
+	updateFildsDayAll = () => {}
+): IMonth {
+	return {
+		month: month,
+		year: year,
+		fildsDayAll: fildsDayAll,
+		fildsDayNotEmpty: fildsDayNotEmpty,
+		daysInMonth: daysInMonth,
+		setFildsDayAll: setFildsDayAll,
+		updateFildsDayAll: updateFildsDayAll
+	};
 }
