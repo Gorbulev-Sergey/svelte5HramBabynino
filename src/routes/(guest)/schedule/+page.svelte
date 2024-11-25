@@ -8,7 +8,12 @@
 
 	let m = $state(`${$month.year}-${$month.month < 10 ? '0' + $month.month : $month.month}`);
 	let title = $derived(
-		`Расписание богослужений на ${$month.monthName()?.toUpperCase()} ${$month.year} года`
+		`Расписание богослужений на ${new Date(1, $month.month, $month.year)
+			.toLocaleDateString('ru-ru', {
+				month: 'long',
+				year: 'numeric'
+			})
+			.toUpperCase()} года`
 	);
 	let keywords = `бабынино, храм, храм бабынино, расписание богослужений`;
 
@@ -22,7 +27,9 @@
 			body: JSON.stringify({
 				month: {
 					year: $month.year,
-					name: $month.monthName()
+					name: new Date(1, $month.month, $month.year).toLocaleDateString('ru-ru', {
+						month: 'long'
+					})
 				}
 			})
 		});
@@ -51,7 +58,7 @@
 					type="month"
 					bind:value={m}
 					onchange={async () => {
-						$month = new _Month(Number(m.split('-')[1]), Number(m.split('-')[0]));
+						$month = _Month(Number(m.split('-')[1]), Number(m.split('-')[0]));
 						await getSchedule();
 					}} />
 			</div>
@@ -64,7 +71,7 @@
 		{/if}
 	{:else}
 		<div class="text-dark mx-1">
-			Расписание богослужений на {$month.monthName()}
+			<!-- Расписание богослужений на {$month.monthName()} -->
 			{$month.year} отсутствует!
 		</div>
 	{/if}

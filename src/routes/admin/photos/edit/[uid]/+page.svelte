@@ -3,60 +3,57 @@
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import type { Photo as _Photo } from '$lib/models/photos/Photo';
-	import type { Album } from '$lib/models/photos/Album';
+	import { type IPhoto as _IPhoto, Photo as _Photo } from '$lib/models/photos/Photo';
+	import { Album as getAlbum } from '$lib/models/photos/Album';
 	import { db, storage } from '$lib/scripts/firebase';
-	import { onValue, ref as refDb, update } from 'firebase/database';
-	import { ref, getDownloadURL, listAll } from 'firebase/storage';
+	import { onValue, push, ref as refDb, update } from 'firebase/database';
+	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onDestroy, onMount } from 'svelte';
-	import Container from '$lib/components/Container.svelte';
 	import { Header } from '$lib/scripts/store';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import Album from '$lib/components/photos/Album.svelte';
 
-	let album: Album;
+	let album = $state(getAlbum());
 
 	// Для работы с хранилищем
-	let folders = [];
-	let photos = [];
+	let folders = $state<StorageReference[]>([]);
+	let photos = $state<StorageReference[]>([]);
 	let albumsFolder = '/Photos';
-	let albumsRef = ref(storage, `${albumsFolder}`);
-	let selectedFolder = 0;
-	let checkedPhotos = [];
-	let getFolders = () =>
-		listAll(ref(storage, albumsRef)).then(result => (folders = result.prefixes));
-	let getPhotos = () => {
+	let albumsRef = $state(ref(storage, `${albumsFolder}`));
+	let selectedFolder = $state(0);
+	let checkedPhotos = $state<string[]>([]);
+	let getFolders = $derived.by(() =>
+		listAll(albumsRef).then(result => (folders = result.prefixes))
+	);
+	let getPhotos = $derived.by(() => {
 		if (folders.length > 0) {
-			listAll(ref(storage, ref(storage, folders[selectedFolder].fullPath))).then(s => {
+			listAll(ref(storage, folders[selectedFolder].fullPath)).then(s => {
 				photos = s.items.filter(p => p.name != 'empty');
 			});
 		}
-	};
+	});
 	$Header = header;
 
-	onMount(async () => {
+	$effect.pre(() => {
 		onValue(refDb(db, `/photos/${$page.params.uid}`), s => {
 			if (s.exists()) {
 				album = s.val();
-				if (!album.photos) album.photos = new Array();
-
-				getFolders().then(() => {
-					getPhotos();
+				if (!album.photos) album.photos = [];
+				getFolders.then(() => {
+					getPhotos;
 				});
 			}
 		});
 	});
 	onDestroy(() => ($Header = null));
-
-	let isSecondTabActive = false;
+	let isSecondTabActive = $state(false);
 </script>
 
 {#snippet header()}
 	<PageTitle title="Редактировать фотоальбом">
-		<button class="btn btn-light" on:click={() => goto(`/admin/photos`)}>Отмена</button>
+		<button class="btn btn-light" onclick={() => goto(`/admin/photos`)}>Отмена</button>
 		<button
 			class="btn btn-dark bg-opacity-10"
-			on:click={async () => {
+			onclick={async () => {
 				if (!album.cover && album.photos.length > 0) album.cover = album.photos[0].url;
 				update(refDb(db, `/photos/${$page.params.uid}`), album);
 				goto('/admin/photos');
@@ -69,34 +66,34 @@
 					class="btn btn-light border-0 me-1 active"
 					data-bs-toggle="pill"
 					href="#cover"
-					on:click={() => (isSecondTabActive = false)}>Обложка</a>
+					onclick={() => (isSecondTabActive = false)}>Обложка</a>
 				<a
 					class="btn btn-light border-0"
 					data-bs-toggle="pill"
 					href="#content"
-					on:click={() => (isSecondTabActive = true)}>Фотографии</a>
+					onclick={() => (isSecondTabActive = true)}>Фотографии</a>
 			</div>
 			{#if isSecondTabActive}
 				<div class="d-flex flex-wrap gap-1">
 					<button
 						class="btn btn-sm btn-dark me-1"
-						on:click={() => (album.photos = [...album.photos, new _Photo()])}
+						onclick={() => (album.photos = [...album.photos, _Photo()])}
 						><i class="fa-solid fa-plus" /> 1 фото
 					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
-						on:click={() => {
+						onclick={() => {
 							for (let i = 0; i < 5; i++) {
-								album.photos = [...album.photos, new _Photo()];
+								album.photos = [...album.photos, _Photo()];
 							}
 						}}
 						><i class="fa-solid fa-plus" /> 5 фото
 					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
-						on:click={() => {
+						onclick={() => {
 							for (let i = 0; i < 10; i++) {
-								album.photos = [...album.photos, new _Photo()];
+								album.photos = [...album.photos, _Photo()];
 							}
 						}}
 						><i class="fa-solid fa-plus" /> 10 фото
@@ -154,11 +151,9 @@
 							{photo}
 							onUp={() => {
 								album.photos.splice(i - 1, 0, album.photos.splice(i, 1)[0]);
-								album.photos = [...album.photos];
 							}}
 							onDown={() => {
 								album.photos.splice(i + 1, 0, album.photos.splice(i, 1)[0]);
-								album.photos = [...album.photos];
 							}}
 							onDelete={() => (album.photos = album.photos.filter(p => p != photo))} />
 					</div>
@@ -174,8 +169,8 @@
 					<div class="modal-content bg-light text-dark p-3">
 						<div class="d-flex justify-content-between align-items-center">
 							<h5 class="pb-0">Добавить фотографии из хранилища</h5>
-							<button class="btn btn-sm btn-light text-dark" data-bs-dismiss="modal"
-								><i class="fa-solid fa-xmark" /></button>
+							<button aria-label="" class="btn btn-sm btn-light text-dark" data-bs-dismiss="modal"
+								><i class="fa-solid fa-xmark"></i></button>
 						</div>
 						<div class="my-3">
 							<!-- Папки -->
@@ -185,14 +180,18 @@
 									{#each folders as item, i}
 										<!-- svelte-ignore a11y-click-events-have-key-events -->
 										<!-- svelte-ignore a11y-no-static-element-interactions -->
+										<!-- svelte-ignore a11y_incorrect_aria_attribute_type -->
+										<!-- svelte-ignore a11y_click_events_have_key_events -->
+										<!-- svelte-ignore a11y_no_static_element_interactions -->
 										<div
+											aria-label=""
 											class="d-flex align-items-top {selectedFolder == i
 												? 'bg-dark text-light'
 												: 'bg-light'} px-2 rounded-1"
 											style="cursor:pointer"
-											on:click={() => {
+											onclick={() => {
 												selectedFolder = i;
-												getPhotos();
+												getPhotos;
 											}}>
 											<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
 												{item.name}
@@ -211,10 +210,12 @@
 												{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
 													<!-- svelte-ignore a11y-click-events-have-key-events -->
 													<!-- svelte-ignore a11y-no-static-element-interactions -->
+													<!-- svelte-ignore a11y_click_events_have_key_events -->
+													<!-- svelte-ignore a11y_no_static_element_interactions -->
 													<div
 														class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
 														style="width:31.5%; background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:6.1em;"
-														on:click={() =>
+														onclick={() =>
 															(checkedPhotos = !checkedPhotos.includes(s)
 																? [...checkedPhotos, s]
 																: checkedPhotos.filter(v => v != s))}>
@@ -235,14 +236,14 @@
 							<button
 								class="btn btn-light text-dark"
 								data-bs-dismiss="modal"
-								on:click={() => (checkedPhotos = [])}>Отмена</button>
+								onclick={() => (checkedPhotos = [])}>Отмена</button>
 							<button
 								class="btn btn-dark text-light"
 								data-bs-dismiss="modal"
-								on:click={() => {
+								onclick={() => {
 									if (checkedPhotos.length > 0) {
 										checkedPhotos.forEach(v => {
-											album.photos = [...album.photos, new _Photo(null, v)];
+											album.photos.push(_Photo('', v));
 										});
 										checkedPhotos = [];
 									}

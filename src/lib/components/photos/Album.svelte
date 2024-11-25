@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { type Album } from '$lib/models/photos/Album';
+	import { type IAlbum, Album } from '$lib/models/photos/Album';
 
-	let { uid = '', album = {} as Album }: { uid: string; album: Album } = $props();
+	let { uid = '', album = Album() }: { uid: string; album: IAlbum } = $props();
 	let hoverEffect = $state('bg-opacity-25');
 </script>
 

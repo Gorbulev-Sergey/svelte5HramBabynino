@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { type Photo } from '$lib/models/photos/Photo';
+	import { type IPhoto, Photo } from '$lib/models/photos/Photo';
 
-	interface Props {
-		photo: Photo;
-		_class: String;
-		onUp: () => {};
-		onDown: () => {};
-		onDelete: () => {};
+	interface IProps {
+		photo: IPhoto;
+		_class?: String;
+		onUp: () => void;
+		onDown: () => void;
+		onDelete: () => void;
 	}
-	let { photo = {} as Photo, _class = '', onUp, onDown, onDelete }: Props = $props();
+	let { photo = Photo(), _class = '', onUp, onDown, onDelete }: IProps = $props();
 </script>
 
 <div

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { type Tag } from '$lib/models/Tag';
+	import { type ITag, Tag } from '$lib/models/Tag';
 	interface Props {
-		item: Tag;
+		item: ITag;
 		onDelete: () => void;
 	}
 	let { item, onDelete }: Props = $props();

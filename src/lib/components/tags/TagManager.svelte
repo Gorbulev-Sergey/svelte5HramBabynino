@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Tag from './Tag.svelte';
-	import { type Tag as _Tag } from '$lib/models/Tag';
+	import { type ITag as _ITag, Tag as getTag } from '$lib/models/Tag';
 	import TagSelector from './TagSelector.svelte';
 	import { onMount } from 'svelte';
 
-	interface Props {
+	interface IProps {
 		title: string;
-		tags: _Tag[];
-		selectedTags: _Tag[];
+		tags: _ITag[];
+		selectedTags: _ITag[];
 		onSelect: () => void;
 		_class?: string;
 	}
@@ -19,8 +19,8 @@
 			tags = tags.filter(t => !selectedTags.includes(t));
 		},
 		_class = ''
-	}: Props = $props();
-	let selectedTag: _Tag = $state({} as _Tag);
+	}: IProps = $props();
+	let selectedTag: _ITag = $state(getTag());
 
 	onMount(async () => {
 		//setTimeout(() => onSelect(), 10000);
@@ -38,7 +38,7 @@
 					if (!selectedTags) selectedTags = new Array();
 					selectedTags = [...selectedTags, selectedTag];
 					tags = tags.filter(t => t.name != selectedTag.name);
-					selectedTag = {} as _Tag;
+					selectedTag = getTag();
 					onSelect();
 				}
 			}} />

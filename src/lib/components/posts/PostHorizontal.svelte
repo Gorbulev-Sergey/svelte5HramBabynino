@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { type Post } from '$lib/models/Post';
+	import { type IPost, Post } from '$lib/models/Post';
 	import { type Snippet } from 'svelte';
 
 	interface IProps {
 		uid: string;
-		post: Post;
+		post: IPost;
 		_class?: string;
 		children?: Snippet;
 	}
 
-	let { uid = '', post = {} as Post, _class, children }: IProps = $props();
+	let { uid = '', post = Post(), _class, children }: IProps = $props();
 	let showContent = $state(false);
 </script>
 

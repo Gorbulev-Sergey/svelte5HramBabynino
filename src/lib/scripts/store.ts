@@ -1,4 +1,4 @@
-import { type Tag } from '$lib/models/Tag';
+import { type ITag } from '$lib/models/Tag';
 import { Month } from '$lib/models/schedule/Month';
 import { writable, type Writable } from 'svelte/store';
 import type { Snippet } from 'svelte';
@@ -26,7 +26,7 @@ export let adminPostsFilters = writable({
 });
 
 // Для работы расписания богослужений
-export let scheduleMonth = writable(new Month(new Date().getMonth() + 1, new Date().getFullYear()));
+export let scheduleMonth = writable(Month(new Date().getMonth() + 1, new Date().getFullYear()));
 
 // Для работы публикаций, чтобы публикации показывались порционно
 // по showedPostsStep раз и для каждого тега отдельно

@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { type Tag } from '$lib/models/Tag';
+	import { type ITag } from '$lib/models/Tag';
 
 	export let title = 'тег:';
-	export let tags: Tag[] = [];
-	export let selected: Tag = {
+	export let tags: ITag[] = [];
+	export let selected: ITag = {
 		name: 'главное',
-		description: 'Главное'
+		description: 'Главное',
+		postUID: null
 	};
-	export let onSelect = (v: Tag) => v;
+	export let onSelect = (v: ITag) => v;
 	export let _class = '';
 </script>
 

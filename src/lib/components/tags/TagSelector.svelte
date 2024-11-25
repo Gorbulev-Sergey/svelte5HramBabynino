@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { type Tag } from '$lib/models/Tag';
+	import { type ITag, Tag } from '$lib/models/Tag';
 
-	interface Props {
+	interface IProps {
 		title: string;
-		tags: Tag[];
-		selected: Tag;
-		_class: string;
+		tags: ITag[];
+		selected: ITag;
+		_class?: string;
 		onSelect: () => void;
 	}
 	let {
 		title = 'Добавить тег:',
 		tags = $bindable([]),
-		selected = $bindable({} as Tag),
+		selected = $bindable(Tag()),
 		_class = '',
 		onSelect
-	}: Props = $props();
+	}: IProps = $props();
 </script>
 
 <div class="btn-group btn-group-sm small {_class}">
