@@ -1,15 +1,24 @@
 <script lang="ts">
 	import { type ITag } from '$lib/models/Tag';
 
-	export let title = 'тег:';
-	export let tags: ITag[] = [];
-	export let selected: ITag = {
-		name: 'главное',
-		description: 'Главное',
-		postUID: null
-	};
-	export let onSelect = (v: ITag) => v;
-	export let _class = '';
+	// export let title = 'тег:';
+	// export let tags: ITag[] = [];
+	// export let selected: ITag = {
+	// 	name: 'главное',
+	// 	description: 'Главное',
+	// 	postUID: null
+	// };
+	// export let onSelect = (v: ITag) => v;
+	// export let _class = '';
+
+	interface IProps {
+		title: string;
+		tags: ITag[];
+		selected: ITag;
+		onSelect: (v: ITag) => ITag;
+		_class?: string;
+	}
+	let { title = '', tags = [], selected = tags[0], onSelect, _class }: IProps = $props();
 </script>
 
 <div class="btn-group {_class}">
@@ -25,7 +34,7 @@
 				<li>
 					<button
 						class="btn btn-light text-dark rounded-0 w-100 text-start text-nowrap"
-						on:click={() => {
+						onclick={() => {
 							selected = item;
 							onSelect(item);
 						}}>{item.name}</button>

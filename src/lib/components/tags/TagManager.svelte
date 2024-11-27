@@ -1,14 +1,13 @@
 <script lang="ts">
 	import Tag from './Tag.svelte';
-	import { type ITag as _ITag, Tag as getTag } from '$lib/models/Tag';
+	import { type ITag, Tag as getTag } from '$lib/models/Tag';
 	import TagSelector from './TagSelector.svelte';
-	import { onMount } from 'svelte';
 
 	interface IProps {
-		title: string;
-		tags: _ITag[];
-		selectedTags: _ITag[];
-		onSelect: () => void;
+		title?: string;
+		tags: ITag[];
+		selectedTags: ITag[];
+		onSelect?: () => void;
 		_class?: string;
 	}
 	let {
@@ -18,13 +17,9 @@
 		onSelect = () => {
 			tags = tags.filter(t => !selectedTags.includes(t));
 		},
-		_class = ''
+		_class
 	}: IProps = $props();
-	let selectedTag: _ITag = $state(getTag());
-
-	onMount(async () => {
-		//setTimeout(() => onSelect(), 10000);
-	});
+	let selectedTag: ITag = $state(getTag());
 </script>
 
 <div class="d-flex justify-content-end text-end align-items-center flex-wrap gap-1 {_class}">
@@ -43,9 +38,9 @@
 				}
 			}} />
 		{#if selectedTags}
-			{#each selectedTags as item}
+			{#each selectedTags as item, i}
 				<Tag
-					{item}
+					item={selectedTags[i]}
 					onDelete={() => {
 						tags = [...tags, item];
 						selectedTags = selectedTags.filter(t => t.name != item.name);

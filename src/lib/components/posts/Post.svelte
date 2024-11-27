@@ -10,7 +10,7 @@
 		_class?: string;
 		children?: Snippet;
 	}
-	let { uid = '', post = Post(), _class = '', children }: Props = $props();
+	let { uid = '', post = Post(), _class, children }: Props = $props();
 	let showContent = $state(false);
 </script>
 

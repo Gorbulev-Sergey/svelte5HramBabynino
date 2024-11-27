@@ -1,10 +1,11 @@
-import type { Album } from '$lib/models/photos/Album.js';
-import type { Post } from '$lib/models/Post.js';
+import type { IAlbum } from '$lib/models/photos/Album.js';
+import type { IPost } from '$lib/models/Post.js';
+import type { ITag } from '$lib/models/Tag.js';
 
 export async function load({ fetch }) {
-	let posts: { [key: string]: Post } = await fetch('/api/posts').then(v => v.json());
-	let tags = await fetch('/api/tags').then(v => v.json());
-	let albums: { [key: string]: Album } = await fetch('/api/photos').then(v => v.json());
+	let posts: { [key: string]: IPost } = await fetch('/api/posts').then(v => v.json());
+	let tags: ITag[] = await fetch('/api/tags').then(v => v.json());
+	let albums: { [key: string]: IAlbum } = await fetch('/api/photos').then(v => v.json());
 	return {
 		posts: Object.entries(posts),
 		tags: tags,

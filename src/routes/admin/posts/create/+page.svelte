@@ -5,8 +5,8 @@
 	import { Post } from '$lib/models/Post';
 	import { Tag } from '$lib/models/Tag';
 	import { auth, db } from '$lib/scripts/firebase';
-	import { onValue, push, ref } from 'firebase/database';
-	import { onDestroy, onMount } from 'svelte';
+	import { push, ref } from 'firebase/database';
+	import { onDestroy } from 'svelte';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Header, isPostUpdated } from '$lib/scripts/store.js';
@@ -14,8 +14,8 @@
 
 	let { data } = $props();
 	let tags = $derived(data.tags);
-	let post = $state(new Post());
-	let selectedTag = $state(new Tag());
+	let post = $state(Post());
+	let selectedTag = $state(Tag());
 	let showCode = $state(false);
 
 	$Header = header;
@@ -101,7 +101,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="form-group mb-3">
-						{#if post.cover.image}
+						{#if post.cover?.image}
 							<Pin
 								classFontAwesome="fa-solid fa-arrows-up-down"
 								text="не обрезать ширину фотографии"
@@ -110,11 +110,10 @@
 						{/if}
 						<input
 							class="form-control mb-3
-							{!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'}"
+								{!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'}"
 							placeholder="обложка (url фото)"
 							bind:value={post.cover.image} />
-
-						{#if post.cover.image}
+						{#if post.cover?.image}
 							<img class="card-img rounded" src={post.cover.image} alt="" />
 						{/if}
 					</div>
@@ -122,10 +121,10 @@
 					<div class="form-group mb-3">
 						<input
 							class="form-control mb-3
-							{!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'}"
+						{!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'}"
 							placeholder="обложка (url видео)"
 							bind:value={post.cover.video} />
-						{#if post.cover.video}
+						{#if post.cover?.video}
 							<div class="ratio ratio-16x9 rounded overflow-hidden mt-3">
 								<!-- svelte-ignore a11y-missing-attribute -->
 								{#if post.cover.video.includes('https://youtu.be')}

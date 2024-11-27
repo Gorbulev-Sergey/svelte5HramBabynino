@@ -16,14 +16,14 @@
 	import Pin from '$lib/components/Pin.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { type Tag as _Tag } from '$lib/models/Tag';
-	import { type Post as _Post } from '$lib/models/Post';
+	import { type IPost } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 
 	let { data } = $props();
 	let posts = $derived(data.posts);
 	let tags = $derived(data.tags);
 	let arrayOfFilteredPosts = $derived.by(() => {
-		let p: [string, _Post][];
+		let p: [string, IPost][];
 		switch ($adminPostsFilters.tag.name) {
 			case 'все вместе':
 				p = posts.filter(([k, v]) => v.published == $adminPostsFilters.published);
@@ -139,7 +139,7 @@
 	</PageTitle>
 {/snippet}
 
-{#snippet post(uid: string, post: _Post)}
+{#snippet post(uid: string, post: IPost)}
 	<Post {uid} {post}>
 		<div
 			class="p-3 bg-dark bg-opacity-10"

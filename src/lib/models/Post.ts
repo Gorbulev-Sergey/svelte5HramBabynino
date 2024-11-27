@@ -1,11 +1,11 @@
-import { type ICover } from '$lib/models/Cover';
+import { Cover, type ICover } from '$lib/models/Cover';
 import type { ITag } from '$lib/models/Tag';
 import type { IComment } from '$lib/models/Comment';
 
 export interface IPost {
 	title: string;
 	description: string | null;
-	cover: ICover | null;
+	cover: ICover;
 	content: string | null;
 	created: string;
 	published: boolean;
@@ -40,7 +40,7 @@ export class CPost implements IPost {
 export function Post(
 	title = '',
 	description = null,
-	cover = null,
+	cover = Cover(),
 	content = null,
 	created = '',
 	published = true,

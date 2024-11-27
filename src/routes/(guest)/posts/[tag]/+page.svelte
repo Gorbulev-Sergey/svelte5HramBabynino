@@ -5,12 +5,8 @@
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import Post from '$lib/components/posts/Post.svelte';
 	import type { Post as _Post } from '$lib/models/Post.js';
-	import Spinner from '$lib/components/Spinner.svelte';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
-	import { onValue, ref } from 'firebase/database';
-	import { db } from '$lib/scripts/firebase.js';
-	import type { Tag } from '$lib/models/Tag.js';
 
 	let { data } = $props();
 	let tags = $derived(data.tags);
