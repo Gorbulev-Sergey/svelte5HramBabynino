@@ -87,7 +87,7 @@
 
 {#snippet header()}
 	<PageTitle title="Публикации">
-		<div class="flex-grow-1 d-flex align-items-center">
+		<div class="flex-grow-1 d-flex align-items-center flex-wrap gap-1">
 			<FilterTags
 				title="тег:"
 				{tags}
@@ -96,12 +96,12 @@
 				_class="me-1" />
 			<PinButton
 				bind:pressed={$adminPostsFilters.newFirst}
-				_class="btn-sm me-1"
+				_class="btn-sm"
 				titleNoPressed="сначала старые"
 				titlePressed="сначала новые" />
 			<PinButton
 				bind:pressed={$adminPostsFilters.published}
-				_class="btn-sm me-1"
+				_class="btn-sm"
 				titleNoPressed="не опубликованные"
 				titlePressed="опубликованные" />
 			<div class="d-flex align-items-center gap-1">

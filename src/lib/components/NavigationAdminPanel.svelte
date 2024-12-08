@@ -45,8 +45,11 @@
 		</div>
 	</IsAuth>
 	<div class="p-2 fixed-bottom">
-		<button class="btn btn-light text-dark border-0" on:click={async () => changeTheme()}>
-			<i class="fa-regular fa-sun" />
+		<button
+			aria-label=""
+			class="btn btn-light text-dark border-0"
+			on:click={async () => changeTheme()}>
+			<i class="fa-regular fa-sun"></i>
 		</button>
 	</div>
 </nav>
