@@ -147,9 +147,12 @@
 			<div class="d-flex flex-column align-items-end flex-wrap gap-2">
 				<TagManager
 					title="Теги:"
-					tags={tags.filter(t => !post.tags?.find(i => i.name == t.name))}
+					tags={tags.filter((t: Tag) => !post.tags?.find(i => i.name == t.name))}
 					bind:selectedTags={post.tags}
-					onSelect={() => update(ref(db, `/posts/${uid}`), post)}
+					onSelect={() => {
+						update(ref(db, `/posts/${uid}`), post);
+						invalidateAll();
+					}}
 					_class={post.inverted ? 'text-dark' : ''} />
 
 				<div class="d-flex justify-content-end flex-wrap">
@@ -160,6 +163,7 @@
 						bind:checked={post.published}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
+							invalidateAll();
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-thumbtack"
@@ -168,6 +172,7 @@
 						bind:checked={post.pinned}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
+							invalidateAll();
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-brush"
@@ -175,6 +180,7 @@
 						bind:checked={post.inverted}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
+							invalidateAll();
 						}} />
 				</div>
 				<div class="d-flex flex-wrap">
@@ -194,7 +200,10 @@
 							<button
 								class="btn btn-sm btn-light text-danger"
 								data-bs-toggle="dropdown"
-								onclick={() => remove(ref(db, `/posts/${uid}`))}>Удалить</button>
+								onclick={() => {
+									remove(ref(db, `/posts/${uid}`));
+									invalidateAll();
+								}}>Удалить</button>
 						</div>
 					</div>
 				</div>
