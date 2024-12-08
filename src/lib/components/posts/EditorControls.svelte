@@ -1,19 +1,28 @@
 <script lang="ts">
-	export let _class = '';
-	let isCodeShow = false;
-	export let codeOnClick = () => {};
-	export let code = '';
-	export let onCodeFormated = (/** @type {string} */ v) => (v = code);
+	let isCodeShow = $state(false);
 
-	/**
-	 * @param {string} v
-	 */
-	function formatCode(v) {
+	interface IProps {
+		code: string;
+		codeOnClick?: () => void;
+		onCodeFormated: (v: string) => void;
+		_class?: string;
+	}
+
+	let {
+		code = '',
+		codeOnClick = () => {},
+		onCodeFormated = (v: string) => {
+			v = code;
+		},
+		_class
+	}: IProps = $props();
+
+	function formatCode(v: string) {
 		let tab = '\t';
 		let result = '';
 		let indent = '';
 
-		v.split(/>\s*</).forEach((/** @type {string} */ e) => {
+		v.split(/>\s*</).forEach((e: string) => {
 			if (e.match(/^\/\w/)) {
 				indent = indent.substring(tab.length);
 			}
@@ -24,7 +33,6 @@
 		});
 
 		onCodeFormated(result.substring(1, result.length - 3));
-		//return result.substring(1, result.length - 3);
 	}
 </script>
 
@@ -33,13 +41,15 @@
 		<!--Отменить, Повторить-->
 		<div class="btn-group btn-group-sm me-1">
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
 				title="Отменить"
-				on:click={() => document.execCommand('undo')}><i class="fas fa-undo" /></button>
+				onclick={() => document.execCommand('undo')}><i class="fas fa-undo" /></button>
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
 				title="Повторить"
-				on:click={() => document.execCommand('redo')}><i class="fas fa-redo" /></button>
+				onclick={() => document.execCommand('redo')}><i class="fas fa-redo" /></button>
 		</div>
 		<!--Стили-->
 		<div class="btn-group btn-group-sm me-1">
@@ -53,30 +63,30 @@
 				<div class="dropdown-menu">
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'P')}>Обычный</button>
+						onclick={() => document.execCommand('formatBlock', false, 'P')}>Обычный</button>
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'H1')}
+						onclick={() => document.execCommand('formatBlock', false, 'H1')}
 						><h1>Заголовок 1</h1></button>
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'H2')}
+						onclick={() => document.execCommand('formatBlock', false, 'H2')}
 						><h2>Заголовок 2</h2></button>
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'H3')}
+						onclick={() => document.execCommand('formatBlock', false, 'H3')}
 						><h3>Заголовок 3</h3></button>
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'H4')}
+						onclick={() => document.execCommand('formatBlock', false, 'H4')}
 						><h4>Заголовок 4</h4></button>
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'H5')}
+						onclick={() => document.execCommand('formatBlock', false, 'H5')}
 						><h5>Заголовок 5</h5></button>
 					<button
 						class="dropdown-item"
-						on:click={() => document.execCommand('formatBlock', false, 'H6')}
+						onclick={() => document.execCommand('formatBlock', false, 'H6')}
 						><h6>Заголовок 6</h6></button>
 				</div>
 			</div>
@@ -94,23 +104,23 @@
 					<button
 						class="dropdown-item"
 						style="font-family:Arial"
-						on:click={() => document.execCommand('fontName', false, 'Arial')}>Arial</button>
+						onclick={() => document.execCommand('fontName', false, 'Arial')}>Arial</button>
 					<button
 						class="dropdown-item"
 						style="font-family:Consolas"
-						on:click={() => document.execCommand('fontName', false, 'Consolas')}>Consolas</button>
+						onclick={() => document.execCommand('fontName', false, 'Consolas')}>Consolas</button>
 					<button
 						class="dropdown-item"
 						style="font-family:'Roboto'"
-						on:click={() => document.execCommand('fontName', false, 'Roboto')}>Roboto</button>
+						onclick={() => document.execCommand('fontName', false, 'Roboto')}>Roboto</button>
 					<button
 						class="dropdown-item"
 						style="font-family:'Segoe UI'"
-						on:click={() => document.execCommand('fontName', false, 'Segoe UI')}>Segoe UI</button>
+						onclick={() => document.execCommand('fontName', false, 'Segoe UI')}>Segoe UI</button>
 					<button
 						class="dropdown-item"
 						style="font-family:'Times New Roman'"
-						on:click={() => document.execCommand('fontName', false, 'Times New Roman')}
+						onclick={() => document.execCommand('fontName', false, 'Times New Roman')}
 						>Times N.R.</button>
 				</div>
 			</div>
@@ -125,19 +135,19 @@
 					14 pt
 				</button>
 				<div class="dropdown-menu">
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 1)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '1')}
 						>10 pt</button>
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 2)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '2')}
 						>12 pt</button>
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 3)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '3')}
 						>14 pt</button>
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 4)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '4')}
 						>16 pt</button>
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 5)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '5')}
 						>18 pt</button>
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 6)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '6')}
 						>22 pt</button>
-					<button class="dropdown-item" on:click={() => document.execCommand('fontSize', false, 7)}
+					<button class="dropdown-item" onclick={() => document.execCommand('fontSize', false, '7')}
 						>24 pt</button>
 				</div>
 			</div>
@@ -145,17 +155,20 @@
 		<!--Жирный, курсив, подчёркнутый-->
 		<div class="btn-group btn-group-sm me-1">
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
 				title="Жирный"
-				on:click={() => document.execCommand('bold')}><i class="fas fa-bold" /></button>
+				onclick={() => document.execCommand('bold')}><i class="fas fa-bold" /></button>
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
 				title="Курсив"
-				on:click={() => document.execCommand('italic')}><i class="fas fa-italic" /></button>
+				onclick={() => document.execCommand('italic')}><i class="fas fa-italic" /></button>
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
 				title="Подчёркнутый"
-				on:click={() => document.execCommand('underline')}><i class="fas fa-underline" /></button>
+				onclick={() => document.execCommand('underline')}><i class="fas fa-underline" /></button>
 		</div>
 		<!--Выравнивание текста-->
 		<div class="btn-group btn-group-sm me-1" data-bs-toggle="buttons">
@@ -166,7 +179,7 @@
 					id="option1"
 					autocomplete="off"
 					checked
-					on:click={() => document.execCommand('justifyLeft')} />
+					onclick={() => document.execCommand('justifyLeft')} />
 				<i class="fas fa-align-left" />
 			</label>
 			<label class="btn btn-light text-dark" title="По центру">
@@ -175,7 +188,7 @@
 					name="options"
 					id="option2"
 					autocomplete="off"
-					on:click={() => document.execCommand('justifyCenter')} />
+					onclick={() => document.execCommand('justifyCenter')} />
 				<i class="fas fa-align-center" />
 			</label>
 			<label class="btn btn-light text-dark" title="Справа">
@@ -184,7 +197,7 @@
 					name="options"
 					id="option3"
 					autocomplete="off"
-					on:click={() => document.execCommand('justifyRight')} />
+					onclick={() => document.execCommand('justifyRight')} />
 				<i class="fas fa-align-right" />
 			</label>
 			<label class="btn btn-light text-dark" title="По ширине">
@@ -193,19 +206,21 @@
 					name="options"
 					id="option4"
 					autocomplete="off"
-					on:click={() => document.execCommand('justifyFull')} />
+					onclick={() => document.execCommand('justifyFull')} />
 				<i class="fas fa-align-justify" />
 			</label>
 		</div>
 		<!--Списки-->
 		<div class="btn-group btn-group-sm me-1">
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
-				on:click={() => document.execCommand('insertOrderedList')}
+				onclick={() => document.execCommand('insertOrderedList')}
 				><i class="fas fa-list-ol" /></button>
 			<button
+				aria-label=""
 				class="btn btn-light text-dark"
-				on:click={() => document.execCommand('insertUnorderedList')}
+				onclick={() => document.execCommand('insertUnorderedList')}
 				><i class="fas fa-list-ul" /></button>
 		</div>
 	{/if}
@@ -213,7 +228,7 @@
 	<button
 		class="btn btn-sm btn-light text-dark"
 		title={isCodeShow ? 'Скрыть код' : 'Показать код'}
-		on:click={() => {
+		onclick={() => {
 			codeOnClick();
 			isCodeShow = !isCodeShow;
 		}}
@@ -224,7 +239,7 @@
 		{/if}
 	</button>
 	{#if isCodeShow}
-		<button class="btn btn-sm btn-light text-dark" on:click={() => formatCode(code)}
+		<button class="btn btn-sm btn-light text-dark" onclick={() => formatCode(code)}
 			>Форматировать код</button>
 	{/if}
 </div>
