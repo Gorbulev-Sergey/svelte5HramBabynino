@@ -5,19 +5,25 @@
 	import { Tag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
 	import { Header } from '$lib/scripts/store.js';
-	import { ref, set } from 'firebase/database';
+	import { ref, set, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
-	let tags = $state(data.tags);
+	let tags = $derived(data.tags);
 	let tag = $state(new Tag());
+	let indexEditedTag = $state(-1);
 	let modalTitle = $state('Создать тег');
 	let isModalShow = $state(false);
-	let saveToDb = async () => {
-		set(ref(db, `/tags`), tags).then(() => {
+	function saveToDb(ts: Tag[]) {
+		set(ref(db, `/tags`), ts).then(() => {
 			invalidateAll();
 		});
-	};
+	}
+	function saveOneToDb(t: Tag) {
+		set(ref(db, `/tags/${tags.length}`), t).then(() => {
+			invalidateAll();
+		});
+	}
 	$Header = header;
 	onDestroy(() => ($Header = null));
 </script>
@@ -48,7 +54,7 @@
 				class="btn btn-dark text-light"
 				onclick={async () => {
 					tags.splice(i - 1, 0, tags.splice(i, 1)[0]);
-					saveToDb();
+					saveToDb(tags);
 				}}>
 				<i class="fa-solid fa-angle-left"></i>
 			</div>
@@ -58,7 +64,7 @@
 				class="btn btn-dark text-light"
 				onclick={async () => {
 					tags.splice(i + 1, 0, tags.splice(i, 1)[0]);
-					saveToDb();
+					saveToDb(tags);
 				}}>
 				<i class="fa-solid fa-angle-right"></i>
 			</div>
@@ -67,8 +73,9 @@
 			<div
 				class="btn btn-dark text-light"
 				onclick={() => {
-					tag = item;
 					modalTitle = 'Редактировать тег';
+					tag = item;
+					indexEditedTag = i;
 					isModalShow = true;
 				}}>
 				<i class="fa-solid fa-pencil"></i>
@@ -78,8 +85,7 @@
 			<div
 				class="btn btn-dark text-dark"
 				onclick={async () => {
-					tags = tags.filter((t: Tag) => t != item);
-					saveToDb();
+					saveToDb(tags.filter((t: Tag) => t != item));
 				}}>
 				<i class="fa-solid fa-trash text-danger"></i>
 			</div>
@@ -104,16 +110,25 @@
 			class="btn btn-dark text-light"
 			onclick={() => {
 				if (tag.name.trim() != '') {
-					tag.name = tag.name.toLocaleLowerCase();
-					if (!tag.description)
-						tag.description = tag?.name[0].toLocaleUpperCase() + tag?.name.slice(1);
-					else
-						tag.description = tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
-					if (!tags.find((t: Tag) => t.name == tag.name && t.description == tag.description)) {
-						set(ref(db, `/tags/${tags.length}`), tag).then(() => {
+					{
+						tag.name = tag.name.toLocaleLowerCase();
+						if (!tag.description)
+							tag.description = tag?.name[0].toLocaleUpperCase() + tag?.name.slice(1);
+						else
+							tag.description = tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
+					}
+					if (modalTitle == 'Редактировать тег') {
+						// Перезаписываем тег
+						update(ref(db, `tags/${indexEditedTag}`), tag).then(() => {
 							invalidateAll();
+							tag = new Tag();
+							indexEditedTag = -1;
 						});
-					} else saveToDb();
+					} else {
+						// Создаём новый тег
+						saveOneToDb(tag);
+						tag = new Tag();
+					}
 				}
 				tag = new Tag();
 				isModalShow = false;
