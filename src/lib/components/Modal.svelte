@@ -2,29 +2,26 @@
 	import type { Snippet } from 'svelte';
 
 	interface IProps {
-		title?: string;
 		children?: Snippet;
-		isShow: boolean;
-		onClose?: () => {};
+		isModalShow: boolean;
+		onClose?: () => void;
 	}
-	let { title, children, isShow = false, onClose }: IProps = $props();
+	let { children, isModalShow = $bindable(false), onClose = () => {} }: IProps = $props();
 </script>
 
-<div class="modal {isShow ? 'show' : 'fade'}">
+<div class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" tabindex="-1">
 		<div class="modal-content border-0 shadow-sm">
-			<div class="d-flex align-items-center justify-content-between position-relative">
-				{#if title}
-					<h5 class="modal-title">{title}</h5>
-				{/if}
-				<button
-					type="button"
-					class="btn-close {!title ? 'position-absolute z-2 top-0 end-0 p-2' : ''}"
-					data-bs-dismiss="modal"
-					aria-label="Close"
-					onclick={() => onClose}></button>
-			</div>
-			<div class="modal-body p-1">
+			<button
+				aria-label=""
+				class="btn btn-sm bg-transparent border-0 text-dark position-absolute z-2 top-0 end-0"
+				onclick={() => {
+					isModalShow = false;
+					onClose();
+				}}>
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+			<div class="d-flex flex-column gap-2 p-3">
 				{@render children?.()}
 			</div>
 		</div>

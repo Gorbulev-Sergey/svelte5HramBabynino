@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
+	import Modal from '$lib/components/Modal.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Tag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
@@ -9,8 +11,12 @@
 	let { data } = $props();
 	let tags = $state(data.tags);
 	let tag = $state(new Tag());
+	let modalTitle = $state('Создать тег');
+	let isModalShow = $state(false);
 	let saveToDb = async () => {
-		set(ref(db, `/tags`), tags);
+		set(ref(db, `/tags`), tags).then(() => {
+			invalidateAll();
+		});
 	};
 	$Header = header;
 	onDestroy(() => ($Header = null));
@@ -18,28 +24,12 @@
 
 {#snippet header()}
 	<PageTitle title="Теги">
-		<div class="input-group">
-			<span class="input-group-text"><i class="fa-solid fa-circle-plus"></i></span>
-			<input class="form-control" placeholder="название" bind:value={tag.name} />
-			<input class="form-control" placeholder="описание" bind:value={tag.description} />
-			<button class="btn btn-dark text-light" onclick={() => (tag = new Tag())}>Отмена</button>
-			<button
-				class="btn btn-dark text-light"
-				onclick={() => {
-					if (tag.name.trim() != '') {
-						tag.name = tag.name.toLocaleLowerCase();
-						if (!tag.description)
-							tag.description = tag?.name[0].toLocaleUpperCase() + tag?.name.slice(1);
-						else
-							tag.description = tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
-						if (!tags.find(t => t.name == tag.name && t.description == tag.description)) {
-							tags = [...tags, tag];
-						}
-						saveToDb();
-						tag = new Tag();
-					}
-				}}>Сохранить</button>
-		</div>
+		<button
+			class="btn btn-dark text-light"
+			onclick={() => {
+				modalTitle = 'Создать тег';
+				isModalShow = true;
+			}}>Создать</button>
 	</PageTitle>
 {/snippet}
 
@@ -78,6 +68,8 @@
 				class="btn btn-dark text-light"
 				onclick={() => {
 					tag = item;
+					modalTitle = 'Редактировать тег';
+					isModalShow = true;
 				}}>
 				<i class="fa-solid fa-pencil"></i>
 			</div>
@@ -86,7 +78,7 @@
 			<div
 				class="btn btn-dark text-dark"
 				onclick={async () => {
-					tags = tags.filter(t => t != item);
+					tags = tags.filter((t: Tag) => t != item);
 					saveToDb();
 				}}>
 				<i class="fa-solid fa-trash text-danger"></i>
@@ -94,3 +86,37 @@
 		</div>
 	{/each}
 </div>
+
+<Modal bind:isModalShow onClose={() => (tag = new Tag())}>
+	<h5 class="text-dark">{modalTitle}</h5>
+	<div class="d-flex flex-column gap-1">
+		<input class="form-control text-dark" bind:value={tag.name} placeholder="название" />
+		<input class="form-control text-dark" bind:value={tag.description} placeholder="описание" />
+	</div>
+	<div class="d-flex align-items-center justify-content-between">
+		<button
+			class="btn btn-light text-dark"
+			onclick={() => {
+				tag = new Tag();
+				isModalShow = false;
+			}}>Отмена</button>
+		<button
+			class="btn btn-dark text-light"
+			onclick={() => {
+				if (tag.name.trim() != '') {
+					tag.name = tag.name.toLocaleLowerCase();
+					if (!tag.description)
+						tag.description = tag?.name[0].toLocaleUpperCase() + tag?.name.slice(1);
+					else
+						tag.description = tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
+					if (!tags.find((t: Tag) => t.name == tag.name && t.description == tag.description)) {
+						set(ref(db, `/tags/${tags.length}`), tag).then(() => {
+							invalidateAll();
+						});
+					} else saveToDb();
+				}
+				tag = new Tag();
+				isModalShow = false;
+			}}>Сохранить</button>
+	</div>
+</Modal>
