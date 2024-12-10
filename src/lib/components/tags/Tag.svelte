@@ -8,7 +8,9 @@
 	<div class="bg-dark text-light px-2 py-1 rounded-start">{item.name}</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="btn btn-sm btn-dark text-light px-1 py-0 rounded-0 rounded-end" on:click={() => onDelete()}>
+	<div
+		class="btn btn-sm btn-dark text-light px-1 py-0 rounded-0 rounded-end"
+		on:click={() => onDelete()}>
 		<i class="fa-solid fa-delete-left" />
 	</div>
 </div>

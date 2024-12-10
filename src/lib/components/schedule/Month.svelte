@@ -3,7 +3,7 @@
 	import type { Month } from '$lib/models/schedule/Month';
 
 	export let month: Month;
-	export let _class='';
+	export let _class = '';
 </script>
 
 {#if month.fildsDayNotEmpty != null}
@@ -12,7 +12,9 @@
 			<div class="py-2 ps-4 print-title d-none">
 				<b>Расписание на {month.monthName()?.toUpperCase()} {month.year} года</b>
 			</div>
-			<div class="no-print" style="display: grid; grid-template-columns: .12fr 1fr; min-height: 2.3em">
+			<div
+				class="no-print"
+				style="display: grid; grid-template-columns: .12fr 1fr; min-height: 2.3em">
 				<div class="text-center px-3" style="min-width: 8.2em;">
 					<span class="badge bg-dark text-light">Дата</span>
 				</div>

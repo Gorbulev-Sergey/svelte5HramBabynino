@@ -30,7 +30,8 @@
 		if (!credential.email.includes('@') || !credential.email.includes('.'))
 			errorMessage += `email должен содержать символы "@" и "."<br/>`;
 		if (credential.password.trim() == '') errorMessage += `пароль не должен быть пустым<br/>`;
-		if (credential.password.length < 4) errorMessage += `пароль должен состоять минимум из 4 символов<br/>`;
+		if (credential.password.length < 4)
+			errorMessage += `пароль должен состоять минимум из 4 символов<br/>`;
 	}
 </script>
 
@@ -45,7 +46,11 @@
 				<input class="form-control" placeholder="email" bind:value={credential.email} />
 			</div>
 			<div class="input-group mb-4">
-				<input class="form-control" type="password" placeholder="пароль" bind:value={credential.password} />
+				<input
+					class="form-control"
+					type="password"
+					placeholder="пароль"
+					bind:value={credential.password} />
 			</div>
 			<div class="d-flex gap-1 justify-content-between align-items-center">
 				<button class="btn btn-dark text-light" on:click={() => login()}>Войти</button>

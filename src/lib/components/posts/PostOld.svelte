@@ -11,8 +11,12 @@
 </script>
 
 <div id={uid ? uid : ''} class="col">
-	<div class="card {!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'} border-0 h-100 border {_class}">
-		<div class="card-header {!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'} border-0">
+	<div
+		class="card {!post.inverted
+			? 'bg-light text-dark'
+			: 'bg-dark text-light'} border-0 h-100 border {_class}">
+		<div
+			class="card-header {!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'} border-0">
 			<div class="d-flex justify-content-between">
 				<h5 class="card-title my-1">{post.title}</h5>
 				{#if post.pinned}
@@ -21,13 +25,19 @@
 			</div>
 			<div class="d-flex justify-content-between align-items-center mb-1">
 				<div class="small text-danger">
-					{new Date(post.created).toLocaleDateString('ru-ru', { day: 'numeric', month: 'long', year: 'numeric' })}
+					{new Date(post.created).toLocaleDateString('ru-ru', {
+						day: 'numeric',
+						month: 'long',
+						year: 'numeric'
+					})}
 				</div>
 				<div>
 					{#if post.tags}
 						{#each post.tags as tag}
 							<button
-								class="badge {!post.inverted ? 'bg-dark text-light' : 'bg-secondary text-light'} text-decoration-none p-1 ms-1 border-0"
+								class="badge {!post.inverted
+									? 'bg-dark text-light'
+									: 'bg-secondary text-light'} text-decoration-none p-1 ms-1 border-0"
 								on:click={() => {
 									goto(`/${$page.url.pathname.split('/')[1]}/posts/${tag.name}`);
 								}}>{tag.name}</button>
@@ -39,7 +49,14 @@
 		{#if post.cover && post.cover.video}
 			<div class="ratio ratio-21x9">
 				<!-- svelte-ignore a11y-missing-attribute -->
-				<iframe class="embed-responsive-item" src="{String(post.cover.video).replace('https://youtu.be', 'https://youtube.com/embed/')}?rel=0" frameborder="0" allowfullscreen />
+				<iframe
+					class="embed-responsive-item"
+					src="{String(post.cover.video).replace(
+						'https://youtu.be',
+						'https://youtube.com/embed/'
+					)}?rel=0"
+					frameborder="0"
+					allowfullscreen />
 			</div>
 		{:else if post.cover && post.cover.image}
 			<div
@@ -79,7 +96,12 @@
 		<div class="d-flex align-items-center justify-content-between">
 			{#if post.comments}
 				<div>
-					<button class="btn btn-sm btn-light text-dark" data-toggle="collapse" data-target="#comments" title="Комментарии" on:click={() => {}}>
+					<button
+						class="btn btn-sm btn-light text-dark"
+						data-toggle="collapse"
+						data-target="#comments"
+						title="Комментарии"
+						on:click={() => {}}>
 						<i class="far fa-comment-alt" />
 						{#if post.comments?.length > 0}
 							<span class="ml-2">{post.comments.length}</span>

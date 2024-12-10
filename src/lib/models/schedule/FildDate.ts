@@ -23,7 +23,10 @@ export class FildDate {
 		}
 	}
 
-	constructor(date = new Date().toISOString().slice(0, 10), fildsTime: FildTime[] = [new FildTime()]) {
+	constructor(
+		date = new Date().toISOString().slice(0, 10),
+		fildsTime: FildTime[] = [new FildTime()]
+	) {
 		this.date = date;
 		this.fildsTime = fildsTime;
 	}
