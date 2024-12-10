@@ -11,6 +11,7 @@
 	export let _class = '';
 </script>
 
+<!-- Привет, как дела -->
 <svelte:head>
 	<title>{titleSpecial == '' ? title : titleSpecial}</title>
 	<meta name="description" content={description} />
