@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Container from '$lib/components/admin/Container.svelte';
 	import {
 		countPostOnAdminPage,
 		countAlbumOnAdminPage,
@@ -145,22 +146,6 @@
 	});
 </script>
 
-<!-- <IsAuth>
-	<Navigation
-		title="Панель управления"
-		routesLeft={isCurrentUserAdmin ? [...routesLeft, ...routesOnlyForAdmins] : routesLeft}
-		{routesRight}>
-		{@render $Header?.()}
-	</Navigation>
-	<div class="container mt-1 mb-4" style="min-height:90vh;">
-		<Container>
-			{@render children?.()}
-		</Container>
-	</div>
-	<Footer />
-	<Alerts />
-</IsAuth> -->
-
 <IsAuth>
 	<div class="d-flex align-items-start">
 		<div class="d-flex flex-column shadow sticky-top bg-light" style="height:100vh">
@@ -276,9 +261,9 @@
 					</div>
 				{/if}
 			</div>
-			<div class="mt-3 mb-5 px-4">
+			<Container>
 				{@render children?.()}
-			</div>
+			</Container>
 		</div>
 	</div>
 </IsAuth>

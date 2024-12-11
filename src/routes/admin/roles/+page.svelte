@@ -80,7 +80,7 @@
 	</PageTitle>
 {/snippet}
 
-<div class="p-1 d-flex flex-column gap-0">
+<div class="d-flex flex-column gap-0">
 	{#each roles as [uid, role], i}
 		<div
 			class="d-flex align-items-center justify-content-between hover px-2 py-1 {i < roles.length - 1

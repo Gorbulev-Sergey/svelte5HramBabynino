@@ -95,214 +95,116 @@
 <div class="tab-content">
 	<div id="photos" class="tab-pane fade show active">
 		<div class="d-flex flex-column gap-3">
-			<div class="bg-white rounded p-3">
-				<PageTitle title="Папки с фотографиями" _class="mb-1 px-1">
-					<div class="input-group">
-						<div class="input-group-text border-0">Создать папку:</div>
-						<input
-							class="form-control bg-light text-dark border-0"
-							bind:value={newFolderName}
-							placeholder="имя новой папки" />
-						<button
-							class="btn btn-light text-dark"
-							onclick={() => (newFolderName = '')}
-							aria-label="имя новой папки"><i class="fa-solid fa-delete-left"></i></button>
-						<button
-							class="btn btn-dark"
-							onclick={() => {
-								// Пустой объект для создания новой папки
-								const empty = ref(storage, `${albumsFolder}/${newFolderName}/empty`);
-								// Создаём папку и записываем в неё пустой объект
-								uploadString(empty, 'Строка для инициализации папки').then(s => {
-									selectedFolder = 0;
-									newFolderName = '';
-									getFolders();
-									getPhotos();
-								});
-							}}>Создать</button>
-					</div>
-				</PageTitle>
-				<div class="d-flex flex-wrap justify-content-start align-items-start gap-2 mb-1">
-					{#each folders as item, i}
-						<!-- svelte-ignore a11y_click_events_have_key_events -->
-						<!-- svelte-ignore a11y_no_static_element_interactions -->
-						<div
-							class="d-flex align-items-center {selectedFolder == i
-								? 'bg-dark text-light'
-								: 'bg-light'} px-1 rounded-1"
-							style="cursor:pointer"
-							onclick={() => {
-								selectedFolder = i;
+			<PageTitle title="Папки с фотографиями" _class="mb-1 px-1">
+				<div class="input-group">
+					<div class="input-group-text border-0">Создать папку:</div>
+					<input
+						class="form-control bg-light text-dark border-0"
+						bind:value={newFolderName}
+						placeholder="имя новой папки" />
+					<button
+						class="btn btn-light text-dark"
+						onclick={() => (newFolderName = '')}
+						aria-label="имя новой папки"><i class="fa-solid fa-delete-left"></i></button>
+					<button
+						class="btn btn-dark"
+						onclick={() => {
+							// Пустой объект для создания новой папки
+							const empty = ref(storage, `${albumsFolder}/${newFolderName}/empty`);
+							// Создаём папку и записываем в неё пустой объект
+							uploadString(empty, 'Строка для инициализации папки').then(s => {
+								selectedFolder = 0;
+								newFolderName = '';
+								getFolders();
 								getPhotos();
-							}}>
-							<div
-								class="d-flex align-items-baseline gap-1 p-1 text-wrap {selectedFolder == i
-									? 'text-light'
-									: 'text-dark'}">
-								<i
-									class={folders[selectedFolder]?.name == item.name
-										? 'fa-solid fa-folder-open'
-										: 'fa-solid fa-folder'}></i>
-								{item.name}
-							</div>
-							<button
-								aria-label=""
-								class="btn btn-sm {selectedFolder == i ? 'btn-dark' : 'btn-light'} text-danger"
-								onclick={e => {
-									e.stopPropagation();
-									listAll(ref(storage, `/${item.fullPath}`)).then(s => {
-										if (s.items.filter(p => p.name != 'empty').length == 0) {
-											deleteObject(ref(storage, `${item.fullPath}/empty`)).then(() => {
-												selectedFolder = 0;
-												getFolders();
-												getPhotos();
-											});
-										}
-									});
-								}}><i class="fa-solid fa-xmark"></i></button>
-						</div>
-					{/each}
+							});
+						}}>Создать</button>
 				</div>
-			</div>
-			<div class="bg-white rounded p-3">
-				<PageTitle title={folders[selectedFolder]?.name ?? ''} _class="mb-1 px-1">
-					<div class="flex-grow-1 d-flex align-items-center justify-content-between">
+			</PageTitle>
+			<div class="d-flex flex-wrap justify-content-start align-items-start gap-2 mb-1">
+				{#each folders as item, i}
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<div
+						class="d-flex align-items-center {selectedFolder == i
+							? 'bg-dark text-light'
+							: 'bg-light'} px-1 rounded-1"
+						style="cursor:pointer"
+						onclick={() => {
+							selectedFolder = i;
+							getPhotos();
+						}}>
+						<div
+							class="d-flex align-items-baseline gap-1 p-1 text-wrap {selectedFolder == i
+								? 'text-light'
+								: 'text-dark'}">
+							<i
+								class={folders[selectedFolder]?.name == item.name
+									? 'fa-solid fa-folder-open'
+									: 'fa-solid fa-folder'}></i>
+							{item.name}
+						</div>
 						<button
-							class="btn btn-sm btn-dark text-light"
-							onclick={() => {
-								if ($countPhotoOnAdminPage == 5) {
-									$countPhotoOnAdminPage = 1;
-								} else $countPhotoOnAdminPage++;
-								localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
-							}}>
-							<span>колонки</span>
-							<span class="badge bg-light text-dark ms-1">{$countPhotoOnAdminPage}</span>
-						</button>
-						<button
-							class="btn btn-dark text-light"
-							onclick={() => {
-								document.querySelector('#buttonSelectPhotos')?.click();
-							}}><i class="fa-solid fa-cloud-arrow-up me-1"></i>{labelFakeForUploadButton}</button>
-						<input
-							id="buttonSelectPhotos"
-							hidden
-							type="file"
-							accept="image/*"
-							multiple
-							class="form-control bg-light text-dark border-0"
-							bind:files={photosForUpload}
-							onchange={() => {
-								if (photosForUpload != undefined && photosForUpload.length > 0) {
-									labelFakeForUploadButton = 'Файлы загружаются';
-									Array.from(photosForUpload).forEach((p, i, a) => {
-										uploadBytes(
-											ref(
-												storage,
-												`/${albumsFolder}/${folders[selectedFolder].name}/${p.name.replace('(', '').replace(')', '')}`
-											),
-											p
-										).then(() => {
-											if (i == a.length - 1) {
-												getPhotos();
-												photosForUpload = undefined;
-												labelFakeForUploadButton = 'Загрузка завершена';
-												setTimeout(() => {
-													labelFakeForUploadButton = 'Добавить новые';
-												}, 1000);
-											}
+							aria-label=""
+							class="btn btn-sm {selectedFolder == i ? 'btn-dark' : 'btn-light'} text-danger"
+							onclick={e => {
+								e.stopPropagation();
+								listAll(ref(storage, `/${item.fullPath}`)).then(s => {
+									if (s.items.filter(p => p.name != 'empty').length == 0) {
+										deleteObject(ref(storage, `${item.fullPath}/empty`)).then(() => {
+											selectedFolder = 0;
+											getFolders();
+											getPhotos();
 										});
-									});
-								}
-							}} />
+									}
+								});
+							}}><i class="fa-solid fa-xmark"></i></button>
 					</div>
-				</PageTitle>
-				{#if photos.length > 0}
-					<div class="row row-cols-1 row-cols-md-{$countPhotoOnAdminPage} g-3">
-						{#each photos as photo}
-							{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
-								<!-- svelte-ignore a11y_click_events_have_key_events -->
-								<!-- svelte-ignore a11y_no_static_element_interactions -->
-								<div
-									class="col h-100"
-									aria-label=""
-									onclick={() => {
-										selectedPhoto = s;
-										isSelectedPhotoShow = true;
-									}}>
-									<div
-										class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-										style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
-										<button
-											aria-label=""
-											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
-											title="Скачать фотографию"
-											onclick={() => downloadImage(s, photo.name)}>
-											<i class="fa-solid fa-cloud-arrow-down"></i>
-										</button>
-										<button
-											aria-label=""
-											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
-											title="Скопировать url"
-											onclick={() => {
-												navigator.clipboard.writeText(s).then(s => {});
-											}}>
-											<i class="fa-solid fa-copy"></i>
-										</button>
-										<button
-											aria-label=""
-											class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-danger"
-											title="Удалить фото"
-											onclick={() => {
-												deleteObject(
-													ref(
-														storage,
-														`/${albumsFolder}/${folders[selectedFolder].name}/${photo.name}`
-													)
-												);
-												getPhotos();
-											}}>
-											<i class="fa-solid fa-xmark"></i>
-										</button>
-									</div>
-								</div>
-							{/await}
-						{/each}
-					</div>
-				{/if}
+				{/each}
 			</div>
-		</div>
-	</div>
-	<div id="documents" class="tab-pane fade">
-		<div class="bg-white rounded p-3">
-			<PageTitle title={'Документы'} _class="mb-1 px-1">
-				<div>
+			<PageTitle title={folders[selectedFolder]?.name ?? ''} _class="mb-1 px-1">
+				<div class="flex-grow-1 d-flex align-items-center justify-content-between">
+					<button
+						class="btn btn-sm btn-dark text-light"
+						onclick={() => {
+							if ($countPhotoOnAdminPage == 5) {
+								$countPhotoOnAdminPage = 1;
+							} else $countPhotoOnAdminPage++;
+							localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
+						}}>
+						<span>колонки</span>
+						<span class="badge bg-light text-dark ms-1">{$countPhotoOnAdminPage}</span>
+					</button>
 					<button
 						class="btn btn-dark text-light"
 						onclick={() => {
-							document.querySelector('#buttonSelectDocuments')?.click();
+							document.querySelector('#buttonSelectPhotos')?.click();
 						}}><i class="fa-solid fa-cloud-arrow-up me-1"></i>{labelFakeForUploadButton}</button>
 					<input
-						id="buttonSelectDocuments"
+						id="buttonSelectPhotos"
 						hidden
 						type="file"
+						accept="image/*"
 						multiple
-						accept="application/pdf,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 						class="form-control bg-light text-dark border-0"
-						bind:files={documentsForUpload}
+						bind:files={photosForUpload}
 						onchange={() => {
-							if (documentsForUpload != undefined && documentsForUpload.length > 0) {
+							if (photosForUpload != undefined && photosForUpload.length > 0) {
 								labelFakeForUploadButton = 'Файлы загружаются';
-								Array.from(documentsForUpload).forEach((p, i, a) => {
+								Array.from(photosForUpload).forEach((p, i, a) => {
 									uploadBytes(
-										ref(storage, `/${documentsFolder}/${p.name.replace('(', '').replace(')', '')}`),
+										ref(
+											storage,
+											`/${albumsFolder}/${folders[selectedFolder].name}/${p.name.replace('(', '').replace(')', '')}`
+										),
 										p
 									).then(() => {
 										if (i == a.length - 1) {
-											getDocuments();
-											documentsForUpload = undefined;
+											getPhotos();
+											photosForUpload = undefined;
 											labelFakeForUploadButton = 'Загрузка завершена';
 											setTimeout(() => {
-												labelFakeForUploadButton = 'Загрузить новые';
+												labelFakeForUploadButton = 'Добавить новые';
 											}, 1000);
 										}
 									});
@@ -311,46 +213,138 @@
 						}} />
 				</div>
 			</PageTitle>
-			{#if documents.length > 0}
-				<div class="d-flex flex-column align-items-start gap-2">
-					{#each documents as doc, i}
-						{#await getDownloadURL(ref(storage, doc.fullPath)) then s}
-							<div class="d-flex align-items-baseline justify-content-end gap-1 bg-light rounded-1">
-								<div class="text-dark">
-									<span class="badge bg-dark text-light ms-1">{i + 1}</span>
-									{doc.name}
+			{#if photos.length > 0}
+				<div class="row row-cols-1 row-cols-md-{$countPhotoOnAdminPage} g-3">
+					{#each photos as photo}
+						{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
+							<!-- svelte-ignore a11y_click_events_have_key_events -->
+							<!-- svelte-ignore a11y_no_static_element_interactions -->
+							<div
+								class="col h-100"
+								aria-label=""
+								onclick={() => {
+									selectedPhoto = s;
+									isSelectedPhotoShow = true;
+								}}>
+								<div
+									class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
+									style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em;">
+									<button
+										aria-label=""
+										class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
+										title="Скачать фотографию"
+										onclick={() => downloadImage(s, photo.name)}>
+										<i class="fa-solid fa-cloud-arrow-down"></i>
+									</button>
+									<button
+										aria-label=""
+										class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-dark"
+										title="Скопировать url"
+										onclick={() => {
+											navigator.clipboard.writeText(s).then(s => {});
+										}}>
+										<i class="fa-solid fa-copy"></i>
+									</button>
+									<button
+										aria-label=""
+										class="btn btn-sm btn-light bg-light bg-opacity-25 border-0 text-danger"
+										title="Удалить фото"
+										onclick={() => {
+											deleteObject(
+												ref(
+													storage,
+													`/${albumsFolder}/${folders[selectedFolder].name}/${photo.name}`
+												)
+											);
+											getPhotos();
+										}}>
+										<i class="fa-solid fa-xmark"></i>
+									</button>
 								</div>
-								<a
-									aria-label=""
-									class="btn btn-sm btn-light border-0 text-dark"
-									title="Скачать файл"
-									href={s}
-									download>
-									<i class="fa-solid fa-cloud-arrow-down"></i>
-								</a>
-								<button
-									aria-label=""
-									class="btn btn-sm btn-light border-0 text-dark"
-									title="Скопировать url"
-									onclick={() => {
-										navigator.clipboard.writeText(s).then(s => {});
-									}}><i class="fa-solid fa-copy"></i></button>
-								<button
-									aria-label=""
-									class="btn btn-sm btn-light border-0 text-danger"
-									title="Удалить"
-									onclick={() => {
-										deleteObject(ref(storage, `/${documentsFolder}/${doc.name}`));
-										getDocuments();
-									}}>
-									<i class="fa-solid fa-xmark"></i>
-								</button>
 							</div>
 						{/await}
 					{/each}
 				</div>
 			{/if}
 		</div>
+	</div>
+	<div id="documents" class="tab-pane fade">
+		<PageTitle title={'Документы'} _class="mb-1 px-1">
+			<div>
+				<button
+					class="btn btn-dark text-light"
+					onclick={() => {
+						document.querySelector('#buttonSelectDocuments')?.click();
+					}}><i class="fa-solid fa-cloud-arrow-up me-1"></i>{labelFakeForUploadButton}</button>
+				<input
+					id="buttonSelectDocuments"
+					hidden
+					type="file"
+					multiple
+					accept="application/pdf,application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+					class="form-control bg-light text-dark border-0"
+					bind:files={documentsForUpload}
+					onchange={() => {
+						if (documentsForUpload != undefined && documentsForUpload.length > 0) {
+							labelFakeForUploadButton = 'Файлы загружаются';
+							Array.from(documentsForUpload).forEach((p, i, a) => {
+								uploadBytes(
+									ref(storage, `/${documentsFolder}/${p.name.replace('(', '').replace(')', '')}`),
+									p
+								).then(() => {
+									if (i == a.length - 1) {
+										getDocuments();
+										documentsForUpload = undefined;
+										labelFakeForUploadButton = 'Загрузка завершена';
+										setTimeout(() => {
+											labelFakeForUploadButton = 'Загрузить новые';
+										}, 1000);
+									}
+								});
+							});
+						}
+					}} />
+			</div>
+		</PageTitle>
+		{#if documents.length > 0}
+			<div class="d-flex flex-column align-items-start gap-2">
+				{#each documents as doc, i}
+					{#await getDownloadURL(ref(storage, doc.fullPath)) then s}
+						<div class="d-flex align-items-baseline justify-content-end gap-1 bg-light rounded-1">
+							<div class="text-dark">
+								<span class="badge bg-dark text-light ms-1">{i + 1}</span>
+								{doc.name}
+							</div>
+							<a
+								aria-label=""
+								class="btn btn-sm btn-light border-0 text-dark"
+								title="Скачать файл"
+								href={s}
+								download>
+								<i class="fa-solid fa-cloud-arrow-down"></i>
+							</a>
+							<button
+								aria-label=""
+								class="btn btn-sm btn-light border-0 text-dark"
+								title="Скопировать url"
+								onclick={() => {
+									navigator.clipboard.writeText(s).then(s => {});
+								}}><i class="fa-solid fa-copy"></i></button>
+							<button
+								aria-label=""
+								class="btn btn-sm btn-light border-0 text-danger"
+								title="Удалить"
+								onclick={() => {
+									deleteObject(ref(storage, `/${documentsFolder}/${doc.name}`));
+									getDocuments();
+								}}>
+								<i class="fa-solid fa-xmark"></i>
+							</button>
+						</div>
+					{/await}
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>
 

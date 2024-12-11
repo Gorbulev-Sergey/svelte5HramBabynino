@@ -39,7 +39,7 @@
 	</PageTitle>
 {/snippet}
 
-<div class="d-flex flex-wrap gap-2 text-dark rounded p-3">
+<div class="d-flex flex-wrap gap-2 text-dark">
 	{#each tags as item, i}
 		<div class="btn-group btn-group-sm">
 			<div
