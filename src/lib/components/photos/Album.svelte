@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { scale } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Album } from '$lib/models/photos/Album';
@@ -21,7 +22,9 @@
 	}}
 	onmousemove={() => (hoverEffect = 'bg-opacity-75')}
 	onmouseleave={() => (hoverEffect = 'bg-opacity-50')}>
-	<div class="d-flex justify-content-between bg-light text-dark {hoverEffect} p-3 rounded-bottom">
+	<div
+		class="d-flex justify-content-between bg-light text-dark {hoverEffect} p-3 rounded-bottom"
+		style="transition: background-color 0.7s ease;">
 		<div>
 			<h5 class="mb-0">
 				{album.title}
