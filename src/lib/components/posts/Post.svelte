@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { Post } from '$lib/models/Post';
 	import type { Snippet } from 'svelte';
+	import { slide } from 'svelte/transition';
 
 	interface Props {
 		uid?: string;
@@ -14,7 +15,7 @@
 	let showContent = $state(false);
 </script>
 
-<div class="col" id={uid ? uid : ''}>
+<div transition:slide class="col" id={uid ? uid : ''}>
 	<div
 		class="d-flex flex-column gap-3 rounded-2 {!post.inverted
 			? 'bg-light bg-opacity-50 text-dark'

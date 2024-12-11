@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { Post } from '$lib/models/Post';
 	import { type Snippet } from 'svelte';
+	import { slide } from 'svelte/transition';
 
 	interface IProps {
 		uid: string;
@@ -16,6 +17,7 @@
 </script>
 
 <div
+	transition:slide
 	id={uid ? uid : ''}
 	class="{_class} card rounded-2 mb-3 p-0 {!post.inverted
 		? 'bg-light bg-opacity-50 text-dark'

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { slide, scale } from 'svelte/transition';
 	import { browser } from '$app/environment';
 	import { theme } from '$lib/scripts/store';
 	import Large from './Breakpoint/Large.svelte';
@@ -9,12 +10,12 @@
 
 {#if browser}
 	<Large>
-		<div class="bg-white rounded-3 m-0 p-4 {$theme == 'light' ? 'shadow-sm' : ''}">
+		<div transition:scale class="bg-white rounded-3 m-0 p-4 {$theme == 'light' ? 'shadow-sm' : ''}">
 			{@render children?.()}
 		</div>
 	</Large>
 	<Small>
-		<div class="bg-white p-3" style="margin:0 -1em">
+		<div transition:scale class="bg-white p-3" style="margin:0 -1em">
 			{@render children?.()}
 		</div>
 	</Small>
