@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { scale } from 'svelte/transition';
 
 	interface IProps {
 		children?: Snippet;
@@ -11,7 +12,7 @@
 
 <div class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" tabindex="-1">
-		<div class="modal-content border-0 shadow-sm">
+		<div transition:scale class="modal-content border-0 shadow-sm">
 			<button
 				aria-label=""
 				class="btn btn-sm bg-transparent border-0 text-dark position-absolute z-2 top-0 end-0"

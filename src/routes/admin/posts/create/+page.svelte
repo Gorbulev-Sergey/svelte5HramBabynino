@@ -91,7 +91,7 @@
 						{!post.inverted ? 'bg-light text-dark' : 'bg-dark text-light'}"
 						placeholder="краткое описание"
 						style="min-height: 10em;"
-						bind:value={post.description} />
+						bind:value={post.description}></textarea>
 					<div class="input-group mb-3">
 						<span class="input-group-text bg-dark text-light">Дата публикации</span>
 						<input type="date" class="form-control bg-light text-dark" bind:value={post.created} />
@@ -133,10 +133,8 @@
 										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 										allowfullscreen
 										class="embed-responsive-item"
-										src={post.cover.video.replace(
-											'https://youtu.be',
-											'https://youtube.com/embed'
-										)} />
+										src={post.cover.video.replace('https://youtu.be', 'https://youtube.com/embed')}
+									></iframe>
 								{:else if post.cover.video.includes('https://vk.com/video')}
 									<iframe
 										class="embed-responsive-item"
@@ -145,7 +143,7 @@
 												'https://vk.com/video',
 												`https://vk.com/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}&hash=d46c7611ec96988b`
 											)
-											.replace('-' + post.cover.video?.split('-')[1], '')} />
+											.replace('-' + post.cover.video?.split('-')[1], '')}></iframe>
 								{:else if post.cover.video.includes('https://rutube.ru/video')}
 									<iframe
 										frameBorder="0"
@@ -155,7 +153,7 @@
 										src={post.cover.video.replace(
 											'https://rutube.ru/video/',
 											'https://rutube.ru/play/embed/'
-										)} />
+										)}></iframe>
 								{/if}
 							</div>
 						{/if}
