@@ -110,12 +110,12 @@ export function Month(
 	updateFildsDayAll = () => {}
 ): IMonth {
 	return {
-		month: month,
-		year: year,
-		fildsDayAll: fildsDayAll,
-		fildsDayNotEmpty: fildsDayNotEmpty,
-		daysInMonth: daysInMonth,
-		setFildsDayAll: setFildsDayAll,
-		updateFildsDayAll: updateFildsDayAll
+		month,
+		year,
+		fildsDayAll,
+		fildsDayNotEmpty,
+		daysInMonth,
+		setFildsDayAll,
+		updateFildsDayAll
 	};
 }

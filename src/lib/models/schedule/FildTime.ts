@@ -6,8 +6,8 @@ export interface IFildTime {
 
 export function FildTime(event = '', time = '', prayer = ''): IFildTime {
 	return {
-		event: event,
-		time: time,
-		prayer: prayer
+		event,
+		time,
+		prayer
 	};
 }

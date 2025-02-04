@@ -5,7 +5,7 @@ export interface ICover {
 
 export function Cover(image = null, video = null): ICover {
 	return {
-		image: image,
-		video: video
+		image,
+		video
 	};
 }

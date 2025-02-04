@@ -12,14 +12,14 @@ export function Album(
 	title = '',
 	description = null,
 	date = '',
-	photos = [],
+	photos: IPhoto[] = [],
 	cover = null
 ): IAlbum {
 	return {
-		title: title,
-		description: description,
-		date: date,
-		photos: photos,
-		cover: cover
+		title,
+		description,
+		date,
+		photos,
+		cover
 	};
 }

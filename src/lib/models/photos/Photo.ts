@@ -5,7 +5,7 @@ export interface IPhoto {
 
 export function Photo(title = '', url = ''): IPhoto {
 	return {
-		title: title,
-		url: url
+		title,
+		url
 	};
 }

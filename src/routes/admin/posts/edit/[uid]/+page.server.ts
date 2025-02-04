@@ -1,8 +1,9 @@
-import type { Post } from '$lib/models/Post.js';
+import { Post, type IPost } from '$lib/models/Post.js';
 
 export async function load({ fetch, params }) {
-	let post = async (): Promise<Post> => await fetch(`/api/posts/${params.uid}`).then(v => v.json());
+	let post = async (): Promise<IPost> =>
+		await fetch(`/api/posts/${params.uid}`).then(v => v.json());
 	return {
-		post: await post()
+		post: { ...Post(), ...(await post()) }
 	};
 }

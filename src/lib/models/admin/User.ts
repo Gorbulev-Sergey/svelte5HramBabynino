@@ -1,7 +1,7 @@
-import { type Role } from './Role';
+import { type IRole } from './Role';
 
-export interface User {
+export interface IUser {
 	uid: string;
 	email: string;
-	role: Role;
+	role: IRole;
 }

@@ -15,10 +15,10 @@ export function Contacts(
 	}
 ): IContacts {
 	return {
-		scheduleOfWork: scheduleOfWork,
-		phones: phones,
-		socialNetworks: socialNetworks,
-		address: address
+		scheduleOfWork,
+		phones,
+		socialNetworks,
+		address
 	};
 }
 

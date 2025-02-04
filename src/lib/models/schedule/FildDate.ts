@@ -16,10 +16,14 @@ export interface IFildDate {
 	dayOfWeek: DayOfWeek;
 }
 
-export function FildDate(date = '', fildsTime = [], dayOfWeek = DayOfWeek.воскресенье): IFildDate {
+export function FildDate(
+	date = '',
+	fildsTime: IFildTime[] = [],
+	dayOfWeek = DayOfWeek.воскресенье
+): IFildDate {
 	return {
-		date: date,
-		fildsTime: fildsTime,
-		dayOfWeek: dayOfWeek
+		date,
+		fildsTime,
+		dayOfWeek
 	};
 }

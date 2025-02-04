@@ -6,8 +6,8 @@ export interface ITag {
 
 export function Tag(name = '', description = '', postUID = null): ITag {
 	return {
-		name: name,
-		description: description,
-		postUID: postUID
+		name,
+		description,
+		postUID
 	};
 }

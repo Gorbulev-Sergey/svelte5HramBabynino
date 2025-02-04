@@ -8,7 +8,7 @@ export interface IPost {
 	cover: ICover;
 	content: string | null;
 	created: string;
-	published: boolean;
+	published: boolean | null;
 	pinned: boolean | null;
 	inverted: boolean | null;
 	tags: ITag[];
@@ -18,23 +18,6 @@ export interface IPost {
 	isHorisontal: boolean | null;
 	isImageHeightFull: boolean | null;
 	isHeightAuto: boolean | null;
-}
-export class CPost implements IPost {
-	title: string = $state('');
-	description: string | null = $state(null);
-	cover: ICover | null = $state(null);
-	content: string | null = $state(null);
-	created: string = $state('');
-	published: boolean = $state(true);
-	pinned: boolean | null = $state(null);
-	inverted: boolean | null = $state(null);
-	tags: ITag[] = $bindable([]);
-	comments: IComment[] = $bindable([]);
-	userName: string = $state('');
-	userUID: string = $state('');
-	isHorisontal: boolean | null = $state(null);
-	isImageHeightFull: boolean | null = $state(null);
-	isHeightAuto: boolean | null = $state(null);
 }
 
 export function Post(
@@ -46,8 +29,8 @@ export function Post(
 	published = true,
 	pinned = null,
 	inverted = null,
-	tags = [],
-	comments = [],
+	tags: ITag[] = [],
+	comments: IComment[] = [],
 	userName = null,
 	userUID = null,
 	isHorisontal = null,
@@ -55,20 +38,20 @@ export function Post(
 	isHeightAuto = null
 ): IPost {
 	return {
-		title: title,
-		description: description,
-		cover: cover,
-		content: content,
-		created: created,
-		published: published,
-		pinned: pinned,
-		inverted: inverted,
-		tags: tags,
-		comments: comments,
-		userName: userName,
-		userUID: userUID,
-		isHorisontal: isHorisontal,
-		isImageHeightFull: isImageHeightFull,
-		isHeightAuto: isHeightAuto
+		title,
+		description,
+		cover,
+		content,
+		created,
+		published,
+		pinned,
+		inverted,
+		tags,
+		comments,
+		userName,
+		userUID,
+		isHorisontal,
+		isImageHeightFull,
+		isHeightAuto
 	};
 }

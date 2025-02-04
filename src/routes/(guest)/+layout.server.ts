@@ -6,6 +6,6 @@ export async function load({ fetch }) {
 	let tags: ITag[] = await fetch('/api/tags').then(v => v.json());
 	return {
 		posts: Object.entries(posts),
-		tags: tags
+		tags
 	};
 }

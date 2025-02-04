@@ -7,9 +7,9 @@ export interface IComment {
 
 export function Comment(text = '', created = '', userUID = null, postUID = null): IComment {
 	return {
-		text: text,
-		created: created,
-		userUID: userUID,
-		postUID: postUID
+		text,
+		created,
+		userUID,
+		postUID
 	};
 }
