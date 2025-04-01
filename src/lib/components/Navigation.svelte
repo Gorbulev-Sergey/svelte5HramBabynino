@@ -130,34 +130,7 @@
 	</Smalle>
 	<Large>
 		<div class="d-flex flex-column">
-			<div class="container-fluid d-flex justify-content-between align-items-center">
-				<div class="flex-grow-1 d-flex flex-wrap justify-content-between align-items-center">
-					<button
-						class="btn btn-light text-dark border-0 text-uppercase text-start me-3 rounded-1"
-						style="background-color: {color}"
-						onclick={() => goto(routesLeft[0].url)}
-						><b class="text-nowrap">{@html title}</b></button>
-					<div>
-						{#each routesLeft as item}
-							<a
-								class="btn btn-light bg-light text-dark bg-transparent border-0 me-1 {decodeURI(
-									$page.url.pathname
-								).indexOf(item.url) >= 0
-									? 'fw-bold'
-									: ''}"
-								href={item.url}
-								>{item.title}
-							</a>
-						{/each}
-					</div>
-				</div>
-				<IsAuth>
-					<div>
-						{#each routesRight as item}
-							<a class="btn btn-dark text-light border-0 me-1" href={item.url}>{item.title}</a>
-						{/each}
-					</div>
-				</IsAuth>
+			<div class="container-fluid d-flex justify-content-center align-items-center">
 				<div class="dropdown-center rounded">
 					<!-- svelte-ignore a11y_consider_explicit_label -->
 					<button
@@ -182,6 +155,31 @@
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
 					</ul>
 				</div>
+				{#each routesLeft as item, i}
+					<a
+						class="btn btn-light bg-light text-dark bg-transparent border-0 me-1 {decodeURI(
+							$page.url.pathname
+						).indexOf(item.url) >= 0
+							? 'fw-bold'
+							: ''}"
+						href={item.url}
+						>{item.title}
+					</a>
+					{#if i == 2}
+						<button
+							class="btn btn-light text-dark border-0 text-uppercase text-start me-3 rounded-1"
+							style="background-color: {color}; font-size:1.1em"
+							onclick={() => goto(routesLeft[0].url)}
+							><b class="text-nowrap">{@html title}</b></button>
+					{/if}
+				{/each}
+				<IsAuth>
+					<div>
+						{#each routesRight as item}
+							<a class="btn btn-dark text-light border-0 me-1" href={item.url}>{item.title}</a>
+						{/each}
+					</div>
+				</IsAuth>
 			</div>
 		</div>
 	</Large>
