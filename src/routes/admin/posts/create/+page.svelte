@@ -135,13 +135,13 @@
 										class="embed-responsive-item"
 										src={post.cover.video.replace('https://youtu.be', 'https://youtube.com/embed')}
 									></iframe>
-								{:else if post.cover.video.includes('https://vk.com/video')}
+								{:else if post.cover.video.includes('https://vkvideo.ru/video')}
 									<iframe
 										class="embed-responsive-item"
 										src={post.cover.video
 											.replace(
-												'https://vk.com/video',
-												`https://vk.com/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}&hash=d46c7611ec96988b`
+												'https://vkvideo.ru/video',
+												`https://vkvideo.ru/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}&hash=d46c7611ec96988b`
 											)
 											.replace('-' + post.cover.video?.split('-')[1], '')}></iframe>
 								{:else if post.cover.video.includes('https://rutube.ru/video')}

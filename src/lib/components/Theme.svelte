@@ -2,7 +2,7 @@
 	import { theme } from '$lib/scripts/store';
 
 	$effect.pre(() => {
-		$theme = localStorage.getItem('theme') || 'light';
+		$theme = localStorage.getItem('theme') ?? 'light';
 		$theme ? localStorage.getItem('theme') : localStorage.setItem('theme', 'light');
 
 		document.querySelector('#theme')?.setAttribute('href', `/bootstrap.${$theme}.min.css`);
