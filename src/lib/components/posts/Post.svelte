@@ -71,8 +71,11 @@
 						src={post.cover.video.replace('https://youtu.be', 'https://youtube.com/embed')}
 					></iframe>
 				{:else if post.cover.video.includes('https://vkvideo.ru/video')}
-					<!-- svelte-ignore a11y_missing_attribute -->
 					<iframe
+						title=""
+						frameborder="0"
+						allowfullscreen
+						allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
 						class="embed-responsive-item"
 						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
 						src={post.cover.video
