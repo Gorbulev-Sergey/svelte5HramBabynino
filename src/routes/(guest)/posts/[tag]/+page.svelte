@@ -64,10 +64,10 @@
 		</div>
 	</PageTitle>
 
-	<div class="alert alert-success border-0 text-center">
+	<!-- <div class="alert alert-info border-0 text-center">
 		Дорогие посетители! В связи с ограничениями, наложенными на Youtube в нашей стране, некоторые
 		видео на нашем сайте будут работать неккоректно! Приносим свои извинения!
-	</div>
+	</div> -->
 
 	<div class="mb-4">
 		<!--Для закреплённых-->
