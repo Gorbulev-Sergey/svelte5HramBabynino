@@ -28,41 +28,19 @@
 
 <Container>
 	<PageTitle title={description} {description} {keywords} _class="mb-4 position-relative">
-		<div slot="navigation" class="d-flex overflow-x-hidden overflow-y-visible h-100 mt-md-0 mt-1">
-			<div class="btn-group btn-group-sm scroll overflow-scroll bg-light pe-1">
+		<div slot="navigation" class="">
+			<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
 				{#each tags as item, i}
 					<button
-						class="btn text-nowrap {item.name == $page.params.tag
-							? 'btn-dark text-light'
-							: 'btn-light text-dark'} 
-						{tags.length == i + 1 ? 'rounded-end-0' : ''}"
+						class="badge text-nowrap border-0 {item.name == $page.params.tag
+							? 'bg-dark text-bg-dark'
+							: 'bg-light text-bg-light'} "
 						onclick={async () => {
 							goto(`/posts/${item.name}`);
 						}}>{item.name}</button>
 				{/each}
 			</div>
-			<div class="dropdown position-absolute end-0" style="z-index:1000">
-				<button
-					aria-label=""
-					class="btn btn-sm btn-light text-dark rounded-start-0"
-					data-bs-toggle="dropdown">
-					<i class="fa-solid fa-ellipsis-vertical"></i>
-				</button>
-				<div class="dropdown-menu bg-light py-1 border-light shadow-sm rounded-1">
-					{#each tags as item}
-						<button
-							class="btn btn-sm text-nowrap w-100 rounded-0 text-start ps-2 {item.name ==
-							$page.params.tag
-								? 'btn-dark text-light'
-								: 'btn-light text-dark'}"
-							onclick={async () => {
-								goto(`/posts/${item.name}`);
-							}}>{item.name}</button>
-					{/each}
-				</div>
-			</div>
-		</div>
-	</PageTitle>
+		</div></PageTitle>
 
 	<!-- <div class="alert alert-info border-0 text-center">
 		Дорогие посетители! В связи с ограничениями, наложенными на Youtube в нашей стране, некоторые
