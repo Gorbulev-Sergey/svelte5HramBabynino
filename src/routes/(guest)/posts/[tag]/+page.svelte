@@ -7,6 +7,8 @@
 	import type { Post as _Post } from '$lib/models/Post.js';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
+	import Large from '$lib/components/Breakpoint/Large.svelte';
+	import Small from '$lib/components/Breakpoint/Small.svelte';
 
 	let { data } = $props();
 	let tags = $derived(data.tags);
@@ -28,18 +30,45 @@
 
 <Container>
 	<PageTitle title={description} {description} {keywords} _class="mb-4 position-relative">
-		<div slot="navigation" class="d-flex overflow-x-hidden overflow-y-visible h-100 mt-md-0 mt-1">
-			<div class="d-flex flex-wrap justify-content-end gap-1 mt-2">
-				{#each tags as item, i}
+		<div slot="navigation">
+			<Large>
+				<div class="d-flex flex-wrap justify-content-end gap-1 mt-2">
+					{#each tags as item, i}
+						<button
+							class="badge text-nowrap border-0 {item.name == $page.params.tag
+								? 'bg-dark text-bg-dark'
+								: 'bg-light text-bg-light'} "
+							onclick={async () => {
+								goto(`/posts/${item.name}`);
+							}}>{item.name}</button>
+					{/each}
+				</div>
+			</Large>
+			<Small>
+				<div class="dropdown pt-1">
 					<button
-						class="badge text-nowrap border-0 {item.name == $page.params.tag
-							? 'bg-dark text-bg-dark'
-							: 'bg-light text-bg-light'} "
+						class="badge text-nowrap border-0 bg-dark text-bg-dark dropdown-toggle"
+						data-bs-toggle="dropdown"
 						onclick={async () => {
-							goto(`/posts/${item.name}`);
-						}}>{item.name}</button>
-				{/each}
-			</div>
+							goto(`/posts/${$page.params.tag}`);
+						}}>
+						{$page.params.tag}
+					</button>
+					<ul class="dropdown-menu bg-light">
+						{#each tags as item, i}
+							<li>
+								<button
+									class="dropdown-item {item.name == $page.params.tag
+										? 'bg-dark text-bg-dark'
+										: 'bg-light text-bg-light'}"
+									onclick={async () => {
+										goto(`/posts/${item.name}`);
+									}}>{item.name}</button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			</Small>
 		</div>
 	</PageTitle>
 
