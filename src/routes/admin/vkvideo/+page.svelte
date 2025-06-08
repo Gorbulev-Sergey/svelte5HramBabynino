@@ -3,7 +3,7 @@
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Post } from '$lib/models/Post.js';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts, Header } from '$lib/scripts/store';
+	import { Header } from '$lib/scripts/store';
 	import { child, push, ref, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
@@ -14,9 +14,9 @@
 		'vk1.a.5iNLx-ZwQO96HxS-gjPg6PjQ3WxuXlzNTrUZuTAjD3eavzobdKErygz_7glHpQ6q-WOmaOTYXygoJMiwlGDWUz7WhLA8eLOJTffiaJP0OKdGQgQ-T8ZnOAxSka2RJ5vYrfmZOBPD7lfsazN5X6rtqi7BGPPvgZzN-MoKGicnUfJGOCVTHBgQschpNYGE0mfQ_uY5lgKFpmo4QtAABbIDWw'
 	);
 	// id группы, из которой берутся видео
-	let owner_id = $state('-39975299');
+	let owner_id = $state('');
 	// id плейлиста
-	let album_id = $state('55923173');
+	let album_id = $state('');
 	// Список всех запрошенных видео
 	let allVideos = $state([]);
 	// Описание для всех видео
@@ -30,8 +30,8 @@
 
 {#snippet header()}
 	<PageTitle title="ВК видео (загрузка видео из вк)">
-		{#if allVideos.length < 0}
-			<button class="btn btn-dark text-light" disabled>Загрузить видео на сайт</button>
+		{#if allVideos.length <= 0}
+			<button class="btn btn-dark text-light" disabled>Загрузить видео на наш сайт</button>
 		{:else}
 			<button
 				class="btn btn-dark text-light"
@@ -47,16 +47,29 @@
 						update(ref(db, `/posts/${postId}`), post);
 					});
 					//console.log(posts);
-				}}>Загрузить видео на сайт</button>
+					allVideos = [];
+				}}>Загрузить видео на наш сайт</button>
 		{/if}
 	</PageTitle>
 {/snippet}
 
 <div class="d-flex flex-column align-items-start gap-2">
 	<h5>Начальные данные для доступа к видео на сайте вк</h5>
-	<input class="form-control" bind:value={access_token} placeholder="access_token" />
-	<input class="form-control" bind:value={owner_id} placeholder="owner_id" />
-	<input class="form-control" bind:value={album_id} placeholder="album_id" />
+	<div class="d-flex flex-column w-100">
+		<div>
+			<b>Access_token</b> (токен доступа, можно получить
+			<a href="https://vkhost.github.io/" target="_blank">здесь</a>):
+		</div>
+		<input class="form-control" bind:value={access_token} placeholder="access_token" />
+	</div>
+	<div class="d-flex flex-column w-100">
+		<div><b>Owner_id</b> (id канала вк, с которого берутся видео):</div>
+		<input class="form-control" bind:value={owner_id} placeholder="owner_id" />
+	</div>
+	<div class="d-flex flex-column w-100">
+		<div><b>Album_id</b> (id плейлиста):</div>
+		<input class="form-control" bind:value={album_id} placeholder="album_id" />
+	</div>
 	<button
 		class="btn btn-dark text-light"
 		onclick={async () => {
@@ -75,36 +88,38 @@
 </div>
 
 {#if allVideos.length > 0}
-	<div>
-		<h5 class="mt-3">Строка описания для всех видео</h5>
+	<div class="mt-5">
+		<h5>Строка описания для всех видео</h5>
 		<textarea class="form-control" bind:value={description}></textarea>
 	</div>
 {/if}
 
 {#if allVideos.length > 0}
-	<div>
-		<h5 class="mt-3">Теги, которые добавляются ко всем видео</h5>
+	<div class="mt-5">
+		<h5>Теги, которые добавляются ко всем видео</h5>
 		<TagManager tags={allTags} bind:selectedTags={tags} />
 	</div>
 {/if}
 
 {#if allVideos.length > 0}
-	<h5 class="mt-3">Список полученных видео ({allVideos.length} видео)</h5>
-	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2">
-		{#each allVideos as item}
-			{#if item.player.includes('https://vk.com/video_ext.php')}
-				<div class="col">
-					<div class="ratio ratio-16x9 rounded">
-						<iframe
-							class="rounded"
-							title={item.title}
-							src={item.player}
-							frameborder="0"
-							allowfullscreen
-							allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+	<div class="mt-5">
+		<h5>Список полученных видео ({allVideos.length} видео)</h5>
+		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2">
+			{#each allVideos as item}
+				{#if item.player.includes('https://vk.com/video_ext.php')}
+					<div class="col">
+						<div class="ratio ratio-16x9 rounded">
+							<iframe
+								class="rounded"
+								title={item.title}
+								src={item.player}
+								frameborder="0"
+								allowfullscreen
+								allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
+						</div>
 					</div>
-				</div>
-			{/if}
-		{/each}
+				{/if}
+			{/each}
+		</div>
 	</div>
 {/if}
