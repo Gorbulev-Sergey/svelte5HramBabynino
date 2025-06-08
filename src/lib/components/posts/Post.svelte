@@ -81,9 +81,18 @@
 						src={post.cover.video
 							.replace(
 								'https://vkvideo.ru/video',
-								`https://vkvideo.ru/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}&hash=d46c7611ec96988b`
+								`https://vkvideo.ru/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}`
 							)
 							.replace('-' + post.cover.video?.split('-')[1], '')}></iframe>
+				{:else if post.cover.video.includes('https://vk.com/video_ext.php')}
+					<iframe
+						title=""
+						frameborder="0"
+						allowfullscreen
+						allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+						class="embed-responsive-item"
+						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
+						src={post.cover.video}></iframe>
 				{:else if post.cover.video.includes('https://rutube.ru/video')}
 					<!-- svelte-ignore a11y_missing_attribute -->
 					<iframe

@@ -50,6 +50,11 @@
 			icon: 'fa-solid fa-tags'
 		},
 		{
+			url: '/admin/vkvideo',
+			title: 'ВК видео',
+			icon: '<i class="fa-brands fa-vk"></i>'
+		},
+		{
 			url: '/admin/contacts',
 			title: 'Контакты',
 			icon: 'fa-regular fa-id-card'
