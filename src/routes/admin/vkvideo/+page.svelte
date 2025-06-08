@@ -16,7 +16,7 @@
 	// id группы, из которой берутся видео
 	let owner_id = $state('-39975299');
 	// id плейлиста
-	let album_id = $state('55923177');
+	let album_id = $state('55923173');
 	// Список всех запрошенных видео
 	let allVideos = $state([]);
 	// Описание для всех видео
@@ -39,13 +39,14 @@
 					// Формируем посты
 					let posts: Post[] = [];
 					allVideos.forEach(v => {
-						let postId = push(child(ref(db), '/test')).key;
+						//let postId = push(child(ref(db), '/posts')).key;
 						let post: Post = new Post();
 						post.title = v.title;
 						post.description = description;
 						post.cover.video = v.player;
 						post.tags = tags;
-						update(ref(db, `/test/${postId}`), post);
+						//update(ref(db, `/posts/${postId}`), post);
+						posts.push(post);
 					});
 					console.log(posts);
 				}}>Загрузить видео на сайт</button>
