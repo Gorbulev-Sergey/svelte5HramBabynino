@@ -1,11 +1,13 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts, Header } from '$lib/scripts/store';
 	import { push, ref, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	$Header = header;
+	let { data } = $props();
 	// Access toket
 	let access_token = $state(
 		'vk1.a.5iNLx-ZwQO96HxS-gjPg6PjQ3WxuXlzNTrUZuTAjD3eavzobdKErygz_7glHpQ6q-WOmaOTYXygoJMiwlGDWUz7WhLA8eLOJTffiaJP0OKdGQgQ-T8ZnOAxSka2RJ5vYrfmZOBPD7lfsazN5X6rtqi7BGPPvgZzN-MoKGicnUfJGOCVTHBgQschpNYGE0mfQ_uY5lgKFpmo4QtAABbIDWw'
@@ -18,6 +20,10 @@
 	let allVideos = $state([]);
 	// Описание для всех видео
 	let description = $state('');
+	// Список всех доступных тегов
+	let allTags = $derived(data.tags);
+	// Список прикрепляемых тегов
+	let tags = $state([]);
 	onDestroy(() => ($Header = null));
 </script>
 
@@ -53,6 +59,13 @@
 	<div>
 		<h5 class="mt-3">Строка описания для всех видео</h5>
 		<textarea class=" form-control" bind:value={description}></textarea>
+	</div>
+{/if}
+
+{#if allVideos.length > 0}
+	<div>
+		<h5 class="mt-3">Теги, которые добавляются ко всем видео</h5>
+		<TagManager tags={allTags} bind:selectedTags={tags} />
 	</div>
 {/if}
 
