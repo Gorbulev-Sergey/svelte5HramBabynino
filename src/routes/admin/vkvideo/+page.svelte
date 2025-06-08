@@ -1,9 +1,10 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
+	import { Post } from '$lib/models/Post.js';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts, Header } from '$lib/scripts/store';
-	import { push, ref, update } from 'firebase/database';
+	import { child, push, ref, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	$Header = header;
@@ -29,7 +30,26 @@
 
 {#snippet header()}
 	<PageTitle title="ВК видео (загрузка видео из вк)">
-		<button class="btn btn-dark text-light">Загрузить видео на сайт</button>
+		{#if allVideos.length < 0}
+			<button class="btn btn-dark text-light" disabled>Загрузить видео на сайт</button>
+		{:else}
+			<button
+				class="btn btn-dark text-light"
+				onclick={async () => {
+					// Формируем посты
+					let posts: Post[] = [];
+					allVideos.forEach(v => {
+						let postId = push(child(ref(db), '/test')).key;
+						let post: Post = new Post();
+						post.title = v.title;
+						post.description = description;
+						post.cover.video = v.player;
+						post.tags = tags;
+						update(ref(db, `/test/${postId}`), post);
+					});
+					console.log(posts);
+				}}>Загрузить видео на сайт</button>
+		{/if}
 	</PageTitle>
 {/snippet}
 
@@ -58,7 +78,7 @@
 {#if allVideos.length > 0}
 	<div>
 		<h5 class="mt-3">Строка описания для всех видео</h5>
-		<textarea class=" form-control" bind:value={description}></textarea>
+		<textarea class="form-control" bind:value={description}></textarea>
 	</div>
 {/if}
 
