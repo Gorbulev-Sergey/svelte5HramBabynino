@@ -37,18 +37,16 @@
 				class="btn btn-dark text-light"
 				onclick={async () => {
 					// Формируем посты
-					let posts: Post[] = [];
 					allVideos.forEach(v => {
-						//let postId = push(child(ref(db), '/posts')).key;
+						let postId = push(child(ref(db), '/posts')).key;
 						let post: Post = new Post();
 						post.title = v.title;
 						post.description = description;
 						post.cover.video = v.player;
 						post.tags = tags;
-						//update(ref(db, `/posts/${postId}`), post);
-						posts.push(post);
+						update(ref(db, `/posts/${postId}`), post);
 					});
-					console.log(posts);
+					//console.log(posts);
 				}}>Загрузить видео на сайт</button>
 		{/if}
 	</PageTitle>
