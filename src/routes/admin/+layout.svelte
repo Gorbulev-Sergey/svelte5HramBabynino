@@ -52,7 +52,7 @@
 		{
 			url: '/admin/vkvideo',
 			title: 'ВК видео',
-			icon: '<i class="fa-brands fa-vk"></i>'
+			icon: 'fa-brands fa-vk'
 		},
 		{
 			url: '/admin/contacts',
