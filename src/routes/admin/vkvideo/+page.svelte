@@ -11,7 +11,7 @@
 	let { data } = $props();
 	// Access toket
 	let access_token = $state(
-		'vk1.a.5iNLx-ZwQO96HxS-gjPg6PjQ3WxuXlzNTrUZuTAjD3eavzobdKErygz_7glHpQ6q-WOmaOTYXygoJMiwlGDWUz7WhLA8eLOJTffiaJP0OKdGQgQ-T8ZnOAxSka2RJ5vYrfmZOBPD7lfsazN5X6rtqi7BGPPvgZzN-MoKGicnUfJGOCVTHBgQschpNYGE0mfQ_uY5lgKFpmo4QtAABbIDWw'
+		'vk1.a.xm0YSBut11g_tmJiIuGCV635mkYyBT_zGWun5haYma6SXcO92Npisia5FqCCl6FH4tFwvFRp0XLfU7a1YxKeZBQ02fk-cF4ej2GG0MUyY0DXOjc7OSZOzoBQ3mARjnzGa7-XKrSVg22c-JoBiGtaVuyphGEM6JcggO7B1sRLnEDKisNdVhkQRnBMYe8bg707VO2ujGHwyqGqhVLORupnkA'
 	);
 	// id группы, из которой берутся видео
 	let owner_id = $state('');
@@ -24,7 +24,7 @@
 	// Список всех доступных тегов
 	let allTags = $derived(data.tags);
 	// Список прикрепляемых тегов
-	let tags = $state([]);
+	let tags = $state([data.tags.find(t => t.name == 'видео')]);
 	onDestroy(() => ($Header = null));
 </script>
 
@@ -36,17 +36,20 @@
 			<button
 				class="btn btn-dark text-light"
 				onclick={async () => {
+					let posts: Post[] = [];
 					// Формируем посты
 					allVideos.forEach(v => {
-						let postId = push(child(ref(db), '/posts')).key;
+						//let postId = push(child(ref(db), '/posts')).key;
 						let post: Post = new Post();
 						post.title = v.title;
 						post.description = description;
 						post.cover.video = v.player;
+						post.created = new Date(v.date * 1000).toISOString().slice(0, 10);
 						post.tags = tags;
-						update(ref(db, `/posts/${postId}`), post);
+						posts.push(post);
+						//update(ref(db, `/posts/${postId}`), post);
 					});
-					//console.log(posts);
+					console.log(posts);
 					allVideos = [];
 				}}>Загрузить видео на наш сайт</button>
 		{/if}
