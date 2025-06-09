@@ -4,7 +4,7 @@
 	import { Post } from '$lib/models/Post.js';
 	import { db } from '$lib/scripts/firebase';
 	import { Header } from '$lib/scripts/store';
-	import { child, push, ref, update } from 'firebase/database';
+	import { child, off, push, ref, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	$Header = header;
@@ -17,6 +17,10 @@
 	let owner_id = $state('');
 	// id плейлиста
 	let album_id = $state('');
+	// Колличество запрашиваемых видео (по умолчанию 100, максимум 200)
+	let count = $state(100);
+	// Пропустить столько видео при запросе
+	let offset = $state(0);
 	// Список всех запрошенных видео
 	let allVideos = $state([]);
 	// Описание для всех видео
@@ -36,20 +40,20 @@
 			<button
 				class="btn btn-dark text-light"
 				onclick={async () => {
-					let posts: Post[] = [];
+					//let posts: Post[] = [];
 					// Формируем посты
 					allVideos.forEach(v => {
-						//let postId = push(child(ref(db), '/posts')).key;
+						let postId = push(child(ref(db), '/posts')).key;
 						let post: Post = new Post();
 						post.title = v.title;
 						post.description = description;
 						post.cover.video = v.player;
 						post.created = new Date(v.date * 1000).toISOString().slice(0, 10);
 						post.tags = tags;
-						posts.push(post);
-						//update(ref(db, `/posts/${postId}`), post);
+						update(ref(db, `/posts/${postId}`), post);
+						//posts.push(post);
 					});
-					console.log(posts);
+					//console.log(posts);
 					allVideos = [];
 				}}>Загрузить видео на наш сайт</button>
 		{/if}
@@ -73,6 +77,14 @@
 		<div><b>Album_id</b> (id плейлиста):</div>
 		<input class="form-control" bind:value={album_id} placeholder="album_id" />
 	</div>
+	<div class="d-flex flex-column w-100">
+		<div><b>Count</b> (колличество запрашиваемых видео (по умолчанию 100, максимум 200)):</div>
+		<input type="number" min="0" class="form-control" bind:value={count} placeholder="count" />
+	</div>
+	<div class="d-flex flex-column w-100">
+		<div><b>Offset</b> (пропустить такое колличество видео при запросе):</div>
+		<input type="number" min="0" class="form-control" bind:value={offset} placeholder="offset" />
+	</div>
 	<button
 		class="btn btn-dark text-light"
 		onclick={async () => {
@@ -81,11 +93,17 @@
 				headers: {
 					'Content-type': 'application/json; charset=UTF-8'
 				},
-				body: JSON.stringify({ access_token: access_token, owner_id: owner_id, album_id: album_id })
+				body: JSON.stringify({
+					access_token,
+					owner_id,
+					album_id,
+					count,
+					offset
+				})
 			});
 			try {
 				allVideos = (await result.json()).response.items;
-				console.log(allVideos);
+				//console.log(allVideos);
 			} catch (error) {}
 		}}>Запросить видео</button>
 </div>
