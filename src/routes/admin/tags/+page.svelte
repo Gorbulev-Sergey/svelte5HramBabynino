@@ -13,7 +13,7 @@
 	let tag = $state(new Tag());
 	let indexEditedTag = $state(-1);
 	let modalTitle = $state('Создать тег');
-	let isModalShow = $state(false);
+	let isModalShow = $state(true);
 	function saveToDb(ts: Tag[]) {
 		set(ref(db, `/tags`), ts).then(() => {
 			invalidateAll();
@@ -39,7 +39,7 @@
 	</PageTitle>
 {/snippet}
 
-<div class="d-flex flex-wrap gap-2 text-dark">
+<div class="d-flex flex-column align-items-start flex-wrap gap-1 text-dark">
 	{#each tags as item, i}
 		<div class="btn-group btn-group-sm">
 			<div
@@ -56,7 +56,7 @@
 					tags.splice(i - 1, 0, tags.splice(i, 1)[0]);
 					saveToDb(tags);
 				}}>
-				<i class="fa-solid fa-angle-left"></i>
+				<i class="fa-solid fa-angle-up"></i>
 			</div>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -66,7 +66,7 @@
 					tags.splice(i + 1, 0, tags.splice(i, 1)[0]);
 					saveToDb(tags);
 				}}>
-				<i class="fa-solid fa-angle-right"></i>
+				<i class="fa-solid fa-angle-down"></i>
 			</div>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
