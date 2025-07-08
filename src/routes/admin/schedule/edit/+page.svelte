@@ -60,7 +60,8 @@
 					// Удаляем пустые fildTime
 					$month.fildsDayNotEmpty.forEach(fDay => {
 						fDay.fildsTime = fDay.fildsTime.filter(
-							fTime => fTime.event != '' || fTime.time != '00:00'
+							fTime =>
+								fTime.event.trim() != '' || fTime.time != '00:00' || fTime.prayer.trim() != ''
 						);
 					});
 					set(
