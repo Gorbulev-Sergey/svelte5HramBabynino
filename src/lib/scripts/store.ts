@@ -46,7 +46,7 @@ export let showedPostsLength = writable<IMap>({ главное: showedPostsStep 
  */
 export let searchAlbumsString = writable('');
 export let countAlbumsColumns = writable(3);
-export let countAlbumsOnPage = writable(8);
+export let countAlbumsOnPage = writable(6);
 export let countPagesForShow = writable(1);
 export let isNewAlbumsFirst = writable(true);
 

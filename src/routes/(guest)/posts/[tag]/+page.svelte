@@ -27,14 +27,14 @@
 </script>
 
 <Container>
-	<PageTitle title={description} {description} {keywords} _class="mb-4 position-relative">
+	<PageTitle title={description} {description} {keywords} _class="mb-4 position-relative p-2">
 		<div slot="navigation" class="">
 			<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
 				{#each tags as item, i}
 					<button
-						class="badge text-nowrap border-0 {item.name == $page.params.tag
+						class="badge text-nowrap border-0 shadow-sm {item.name == $page.params.tag
 							? 'bg-dark text-bg-dark'
-							: 'bg-light text-bg-light'} "
+							: 'bg-white text-bg-light'} "
 						onclick={async () => {
 							goto(`/posts/${item.name}`);
 						}}>{item.name}</button>
@@ -72,7 +72,7 @@
 
 	{#if notPinnedPosts.length > notPinnedPostsForShow.length}
 		<button
-			class="btn btn-light text-dark mt-3 w-100"
+			class="btn btn-dark text-light mt-3 w-100"
 			onclick={() => {
 				$showedPostsLength[$page.params.tag] =
 					$showedPostsLength[$page.params.tag] + showedPostsStep;
