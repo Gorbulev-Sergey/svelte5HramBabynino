@@ -10,12 +10,12 @@
 
 {#if browser}
 	<Large>
-		<div transition:scale class="bg-white rounded-3 m-0 p-4 {$theme == 'light' ? 'shadow-sm' : ''}">
+		<div transition:scale class="m-0 px-5 py-4">
 			{@render children?.()}
 		</div>
 	</Large>
 	<Small>
-		<div transition:scale class="bg-white p-3" style="margin:0 -1em">
+		<div transition:scale class="p-3" style="margin:0 -1em">
 			{@render children?.()}
 		</div>
 	</Small>

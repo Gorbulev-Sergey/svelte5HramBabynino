@@ -30,7 +30,7 @@ export let scheduleMonth = writable(new Month(new Date().getMonth() + 1, new Dat
 
 // Для работы публикаций, чтобы публикации показывались порционно
 // по showedPostsStep раз и для каждого тега отдельно
-export let showedPostsStep = 6;
+export let showedPostsStep = 8;
 
 interface IMap {
 	[key: string]: number;
@@ -45,7 +45,7 @@ export let showedPostsLength = writable<IMap>({ главное: showedPostsStep 
  * countPagesForShow - Количество страниц для отображения (изначально 1-на)
  */
 export let searchAlbumsString = writable('');
-export let countAlbumsColumns = writable(2);
+export let countAlbumsColumns = writable(3);
 export let countAlbumsOnPage = writable(8);
 export let countPagesForShow = writable(1);
 export let isNewAlbumsFirst = writable(true);

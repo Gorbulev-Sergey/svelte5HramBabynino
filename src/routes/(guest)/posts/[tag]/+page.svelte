@@ -55,7 +55,8 @@
 			{/each}
 		</div>
 		<!--Для закреплённых-->
-		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 flex-row-reverse">
+		<div
+			class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 flex-row-reverse justify-content-center">
 			{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
 				<Post {uid} {post} />
 			{/each}
@@ -63,7 +64,7 @@
 	</div>
 
 	<!--Для не закреплённых-->
-	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
 		{#each notPinnedPostsForShow as [uid, post], i}
 			<Post {uid} {post} />
 		{/each}

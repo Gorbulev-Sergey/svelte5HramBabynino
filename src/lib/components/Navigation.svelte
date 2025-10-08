@@ -55,7 +55,7 @@
 </script>
 
 <div id="top" />
-<nav class="sticky-top bg-light text-dark no-print" style="padding:.75em 0">
+<nav class="sticky-top bg-white text-dark no-print" style="padding:.75em 0">
 	<Smalle>
 		<div class="container-fluid d-flex justify-content-between align-items-center dropdown">
 			<div class="flex-grow-1 d-flex justify-content-between align-items-center">
@@ -127,7 +127,7 @@
 		</div>
 	</Smalle>
 	<Large>
-		<div class="d-flex flex-column">
+		<div class="d-flex flex-column px-4">
 			<div class="container-fluid d-flex justify-content-between align-items-center">
 				<div class="flex-grow-1 d-flex flex-wrap justify-content-between align-items-center">
 					<button

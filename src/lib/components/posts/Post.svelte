@@ -17,8 +17,8 @@
 
 <div transition:slide class="col" id={uid ? uid : ''}>
 	<div
-		class="d-flex flex-column gap-3 rounded-2 {!post.inverted
-			? 'bg-light bg-opacity-50 text-dark'
+		class="d-flex flex-column gap-2 rounded-3 {!post.inverted
+			? 'bg-white text-dark shadow-sm'
 			: 'bg-dark text-light'} {post.isHeightAuto == true || post.isHeightAuto == null
 			? 'h-100'
 			: ''} {_class}">
@@ -46,90 +46,93 @@
 				</div>
 			</div>
 			<div class="d-flex justify-content-between">
-				<h5 class="card-title">{@html post.title}</h5>
+				<h6 class="card-title" style="font-size:1.03em">{@html post.title}</h6>
 				{#if post.pinned}
 					<i class="fa-solid fa-thumbtack pt-1"></i>
 				{/if}
 			</div>
 		</div>
-		{#if post.description}
-			<div class="px-3 {!post.cover || post.content == '' ? 'mb-3' : ''}">
-				{@html post.description}
-			</div>
-		{/if}
+
+		<!-- description -->
+
 		{@render children?.()}
-		{#if post.cover && post.cover.video}
-			<div class="ratio ratio-21x9" style="min-height:12em;">
-				{#if post.cover.video.includes('https://youtu.be')}
-					<!-- svelte-ignore a11y_missing_attribute -->
-					<iframe
-						frameborder="0"
-						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
-						allowfullscreen
-						class="embed-responsive-item"
-						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
-						src={post.cover.video.replace('https://youtu.be', 'https://youtube.com/embed')}
-					></iframe>
-				{:else if post.cover.video.includes('https://vkvideo.ru/video')}
-					<iframe
-						title=""
-						frameborder="0"
-						allowfullscreen
-						allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-						class="embed-responsive-item"
-						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
-						src={post.cover.video
-							.replace(
-								'https://vkvideo.ru/video',
-								`https://vkvideo.ru/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}`
-							)
-							.replace('-' + post.cover.video?.split('-')[1], '')}></iframe>
-				{:else if post.cover.video.includes('https://vk.com/video_ext.php')}
-					<iframe
-						title=""
-						frameborder="0"
-						allowfullscreen
-						allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-						class="embed-responsive-item"
-						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
-						src={post.cover.video}></iframe>
-				{:else if post.cover.video.includes('https://rutube.ru/video')}
-					<!-- svelte-ignore a11y_missing_attribute -->
-					<iframe
-						frameBorder="0"
-						allow="clipboard-write; autoplay"
-						allowFullScreen
-						class="embed-responsive-item"
-						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
-						src={post.cover.video.replace(
-							'https://rutube.ru/video/',
-							'https://rutube.ru/play/embed/'
-						)}></iframe>
-				{/if}
-			</div>
-		{:else if post.cover && post.cover.image}
-			{#if !post.isImageHeightFull}
-				<div
-					class="img-fluid"
-					style="background-image: url({post.cover.image});
+		<div class="mx-2">
+			{#if post.cover && post.cover.video}
+				<div class="ratio ratio-21x9" style="min-height:12em;">
+					{#if post.cover.video.includes('https://youtu.be')}
+						<!-- svelte-ignore a11y_missing_attribute -->
+						<iframe
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+							allowfullscreen
+							class="embed-responsive-item rounded-3"
+							src={post.cover.video.replace('https://youtu.be', 'https://youtube.com/embed')}
+						></iframe>
+					{:else if post.cover.video.includes('https://vkvideo.ru/video')}
+						<iframe
+							title=""
+							frameborder="0"
+							allowfullscreen
+							allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+							class="embed-responsive-item rounded-3"
+							src={post.cover.video
+								.replace(
+									'https://vkvideo.ru/video',
+									`https://vkvideo.ru/video_ext.php?oid=-${post.cover.video?.split('-')[1]?.split('_')[0]}&id=${post.cover.video?.split('-')[1]?.split('_')[1]}`
+								)
+								.replace('-' + post.cover.video?.split('-')[1], '')}></iframe>
+					{:else if post.cover.video.includes('https://vk.com/video_ext.php')}
+						<iframe
+							title=""
+							frameborder="0"
+							allowfullscreen
+							allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+							class="embed-responsive-item rounded-2"
+							src={post.cover.video}></iframe>
+					{:else if post.cover.video.includes('https://rutube.ru/video')}
+						<!-- svelte-ignore a11y_missing_attribute -->
+						<iframe
+							frameBorder="0"
+							allow="clipboard-write; autoplay"
+							allowFullScreen
+							class="embed-responsive-item"
+							style={!post.content ? 'border-radius: .4rem' : ''}
+							src={post.cover.video.replace(
+								'https://rutube.ru/video/',
+								'https://rutube.ru/play/embed/'
+							)}></iframe>
+					{/if}
+				</div>
+			{:else if post.cover && post.cover.image}
+				{#if !post.isImageHeightFull}
+					<div
+						class="img-fluid"
+						style="background-image: url({post.cover.image});
 					 background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em ;
 					 {!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}">
-				</div>
-			{:else}
-				<img
-					class="img-fluid"
-					style="border-radius: 0 0 .4rem .4rem"
-					src={post.cover.image}
-					alt="" />
+					</div>
+				{:else}
+					<img
+						class="img-fluid"
+						style="border-radius: 0 0 .4rem .4rem"
+						src={post.cover.image}
+						alt="" />
+				{/if}
 			{/if}
-		{/if}
-		{#if post.content}
-			<div class="d-flex align-items-center justify-content-end m-3 mt-0">
-				<button
-					class="btn btn-sm {!post.inverted ? 'btn-dark text-light' : 'btn-light text-dark'}"
-					onclick={() => {
-						if (uid) goto(`/posts/details/${uid}?returnUrl=${$page.url.pathname}`);
-					}}><i class="fa-solid fa-circle-arrow-right me-2"></i>Смотреть подробности</button>
+			{#if post.content}
+				<div class="d-flex align-items-center justify-content-end m-3 mt-0">
+					<button
+						class="btn btn-sm {!post.inverted ? 'btn-dark text-light' : 'btn-light text-dark'}"
+						onclick={() => {
+							if (uid) goto(`/posts/details/${uid}?returnUrl=${$page.url.pathname}`);
+						}}><i class="fa-solid fa-circle-arrow-right me-2"></i>Смотреть подробности</button>
+				</div>
+			{/if}
+		</div>
+
+		{#if post.description}
+			<div class="px-3 pb-3 {!post.cover || post.content == '' ? 'mb-3' : ''}">
+				{@html post.description}
 			</div>
 		{/if}
 	</div>
