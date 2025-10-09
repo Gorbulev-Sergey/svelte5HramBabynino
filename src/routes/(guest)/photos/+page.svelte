@@ -65,7 +65,8 @@
 	</PageTitle>
 
 	<div class="d-flex flex-column gap-3">
-		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-{$countAlbumsColumns} g-3">
+		<div
+			class="row row-cols-1 row-cols-md-2 row-cols-lg-{$countAlbumsColumns} g-3 justify-content-center">
 			{#each albumsByCountOnPage as [uid, album]}
 				<div class="col">
 					<Album {uid} {album} />

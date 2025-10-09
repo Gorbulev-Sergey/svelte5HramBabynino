@@ -17,7 +17,7 @@
 
 <div transition:slide class="col" id={uid ? uid : ''}>
 	<div
-		class="d-flex flex-column gap-3 rounded-2 {!post.inverted
+		class="d-flex flex-column gap-3 rounded-2 border border-light {!post.inverted
 			? 'bg-light bg-opacity-50 text-dark'
 			: 'bg-dark text-light'} {post.isHeightAuto == true || post.isHeightAuto == null
 			? 'h-100'

@@ -21,7 +21,7 @@
 	id={uid ? uid : ''}
 	class="{_class} card rounded-2 mb-3 p-0 {!post.inverted
 		? 'bg-light bg-opacity-50 text-dark'
-		: 'bg-dark text-light'} border-0">
+		: 'bg-dark text-light'} border-light">
 	<div class="row g-0">
 		<div class="{post.cover ? 'col-9' : ''} d-flex flex-column">
 			<div class="card-body flex-grow-1 mb-1">
