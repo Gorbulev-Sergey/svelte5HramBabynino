@@ -88,11 +88,11 @@
 <div class="d-flex flex-column rounded">
 	{#each Object.entries(dataMonth) as [date, item], i}
 		<div
-			class={`d-flex 
+			class={`d-flex
 						${new Date(date).getDay() == 0 ? 'bg-secondary text-danger bg-opacity-10' : 'bg-white text-dark'}  
 						${i == 0 ? 'rounded-top' : ''} 
 						${i == daysInMonth - 1 ? 'rounded-bottom' : ''}`}>
-			<div class={`px-2 py-1 text-nowrap text-end`} style="min-width: 9em;">
+			<div class={`px-2 py-1 text-nowrap text-center`} style="min-width: 9em;">
 				<div class="d-flex flex-column">
 					<b>{Number(date.slice(8, 10))} {monthToStringWithEnd}</b>
 					<div>
@@ -103,21 +103,21 @@
 				</div>
 			</div>
 			<button
-				class={`btn btn-light ${new Date(date).getDay() == 0 ? 'bg-secondary text-danger' : ' bg-dark text-dark'} bg-opacity-25 fw-bold rounded-1 px-2`}
+				class={`btn btn-light my-1 ${new Date(date).getDay() == 0 ? 'bg-dark bg-opacity-10 text-danger' : ' bg-light text-dark'} fw-bold rounded-1 px-2`}
 				onclick={() => {
 					item.push(Field());
 				}}>+</button>
 			<div class="flex-grow-1 d-flex flex-column">
 				{#each item as field, j}
 					<div class="d-flex h-100">
-						<div class="d-flex w-75">
+						<div class="d-flex justify-content-end w-75 ms-1 {j == 0 ? 'pt-1' : ''} pb-1">
 							{#if item.length > 1}
 								<button
-									class={`btn btn-light ${new Date(date).getDay() == 0 ? 'bg-danger text-danger' : ' bg-dark text-dark'} bg-opacity-25 fw-bold rounded-1 px-2`}
+									class={`btn btn-light ${new Date(date).getDay() == 0 ? 'bg-dark bg-opacity-10 text-danger' : 'bg-light text-dark'} fw-bold rounded-1 px-2`}
 									onclick={() => item.splice(j, 1)}>-</button>
 							{/if}
 							<input
-								class={`form-control bg-light bg-transparent border-0 rounded-0 ${getInputColors(date)} my-1 ms-1 px-2`}
+								class={`form-control bg-light bg-transparent border-0 rounded-0 ${getInputColors(date)} my-1 ms-1`}
 								bind:value={dataMonth[date][j].event}
 								placeholder=""
 								title="Праздник" />
