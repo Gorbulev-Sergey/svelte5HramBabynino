@@ -86,6 +86,22 @@
 {/snippet}
 
 <div class="d-flex flex-column rounded">
+	<div class="d-flex align-items-center no-print mb-1 w-100">
+		<div class="text-center py-2 px-2" style="min-width: 9em;">
+			<span class="badge bg-dark text-light">Дата</span>
+		</div>
+		<div class="flex-grow-1 d-flex">
+			<div class="py-2 text-start ps-5 pe-2 ms-3 flex-grow-1 w-75" style="min-width: 13em;">
+				<span class="badge bg-dark text-light">Праздник</span>
+			</div>
+			<div class="py-2 text-start pe-2" style="width: 8em;">
+				<span class="badge bg-dark text-light">Время</span>
+			</div>
+			<div class="py-2 text-start ps-3 pe-2" style="width: 24em;">
+				<span class="badge bg-dark text-light">Богослужение</span>
+			</div>
+		</div>
+	</div>
 	{#each Object.entries(dataMonth) as [date, item], i}
 		<div
 			class={`d-flex
