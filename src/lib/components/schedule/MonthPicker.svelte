@@ -14,7 +14,7 @@
 </script>
 
 <div class="d-flex align-items-center">
-	<div class="p-2 text-nowrap bg-white text-dark">{title}</div>
+	<div class="p-2 text-nowrap bg-transparent text-dark">{title}</div>
 	<div class="d-flex align-items-center rounded">
 		<button
 			title="предыдущий месяц"

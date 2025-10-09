@@ -5,15 +5,17 @@
 	import { type IField } from '$lib/models/schedule/Field';
 	import { db } from '$lib/scripts/firebase';
 	import { Header } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import { get, ref } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	// Выбранная дата, год, месяц
-	let date = $state(new Date().toISOString().slice(0, 7));
-	let year = $derived(date.slice(0, 4));
-	let month = $derived(date.slice(5, 7));
+	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
+	let month = $derived(SETTINGS.scheduleDate.slice(5, 7));
 	// Названия месяцев в именительном падеже
-	let monthToSring = $derived(new Date(date).toLocaleString('Ru-ru', { month: 'long' }));
+	let monthToSring = $derived(
+		new Date(SETTINGS.scheduleDate).toLocaleString('Ru-ru', { month: 'long' })
+	);
 	// Названия месяцев с буквой "я" или "а" на конце (в родительном падеже)
 	let monthToStringWithEnd = $derived(
 		Number(month) == 3 || Number(month) == 8
@@ -48,9 +50,9 @@
 </script>
 
 {#snippet header()}
-	<PageTitle title="Расписание богослужений">
+	<PageTitle title="Расписание">
 		<div class="d-flex align-items-center gap-2">
-			<MonthPicker title="на дату:" bind:date bind:month bind:year />
+			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
 			<a
 				href="/admin/schedule/edit"
 				aria-label="Редактировать"

@@ -4,17 +4,19 @@
 	import { Field, type IField } from '$lib/models/schedule/Field';
 	import { db } from '$lib/scripts/firebase';
 	import { Header } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import { get, ref, set } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	// Выбранная дата, год, месяц
-	let date = $state(new Date().toISOString().slice(0, 7));
-	let year = $derived(date.slice(0, 4));
-	let month = $derived(date.slice(5, 7));
+	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
+	let month = $derived(SETTINGS.scheduleDate.slice(5, 7));
 	//Количество дне в выбранном месяце
 	let daysInMonth = $derived(new Date(Number(year), Number(month), 0).getDate());
 	// Названия месяцев в именительном падеже
-	let monthToSring = $derived(new Date(date).toLocaleString('Ru-ru', { month: 'long' }));
+	let monthToSring = $derived(
+		new Date(SETTINGS.scheduleDate).toLocaleString('Ru-ru', { month: 'long' })
+	);
 	// Названия месяцев с буквой "я" или "а" на конце (в родительном падеже)
 	let monthToStringWithEnd = $derived(
 		Number(month) == 3 || Number(month) == 8
@@ -54,7 +56,7 @@
 </script>
 
 {#snippet header()}
-	<PageTitle title="Редактировать расписание богослужений">
+	<PageTitle title="Редактировать расписание">
 		<div class="d-flex align-items-center gap-2">
 			<button
 				aria-label="Печать"
@@ -62,7 +64,7 @@
 				onclick={() => window.print()}>
 				<i class="fa-solid fa-print"></i>
 			</button>
-			<MonthPicker title="на дату:" bind:date bind:month bind:year />
+			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
 			<a href="/admin/schedule" aria-label="Отмена" class="btn btn-light text-dark text-nowrap"
 				>Отмена</a>
 			<a
