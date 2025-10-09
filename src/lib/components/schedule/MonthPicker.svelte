@@ -14,26 +14,26 @@
 </script>
 
 <div class="d-flex align-items-center">
-	<div class="p-2 text-nowrap">{title}</div>
-	<div class="d-flex align-items-center border border-dark rounded">
+	<div class="p-2 text-nowrap bg-white text-dark">{title}</div>
+	<div class="d-flex align-items-center rounded">
 		<button
 			title="предыдущий месяц"
-			class="btn btn-dark text-light border-0 rounded-1 rounded-end-0 p-2"
+			class="btn btn-dark text-light border-0 rounded-1 rounded-end-0 px-2"
 			onclick={() =>
 				(date = new Date(Number(year), Number(month) - 1, 1).toISOString().slice(0, 7))}
 			>{'<'}</button>
 		<input
-			class="form-control text-center rounded-0 border-0 p-2 z-1"
+			class="form-control text-center bg-light text-dark rounded-0 border-0 px-2 z-1"
 			type="month"
 			style="width: 9.5em;"
 			bind:value={date} />
 		<button
 			title="текущий месяц"
-			class="btn btn-dark text-light border-0 rounded-0 p-2"
+			class="btn btn-dark text-light border-0 rounded-0 px-2"
 			onclick={() => (date = new Date().toISOString().slice(0, 7))}>!</button>
 		<button
 			title="следующий месяц"
-			class="btn btn-dark text-light border-0 rounded-1 p-2 rounded-start-0 justify-content-center"
+			class="btn btn-dark text-light border-0 rounded-1 px-2 rounded-start-0 justify-content-center"
 			onclick={() =>
 				(date = new Date(Number(year), Number(month) + 1, 1).toISOString().slice(0, 7))}
 			>{'>'}</button>
