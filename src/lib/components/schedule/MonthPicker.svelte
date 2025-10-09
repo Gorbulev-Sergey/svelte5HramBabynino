@@ -14,11 +14,11 @@
 </script>
 
 <div class="d-flex align-items-center">
-	<div class=" p-2 text-nowrap">{title}</div>
-	<div class="d-flex align-items-center border border-light rounded">
+	<div class="p-2 text-nowrap">{title}</div>
+	<div class="d-flex align-items-center border border-dark rounded">
 		<button
 			title="предыдущий месяц"
-			class="btn btn-light text-dark border-0 rounded-end-0 p-2"
+			class="btn btn-dark text-light border-0 rounded-1 rounded-end-0 p-2"
 			onclick={() =>
 				(date = new Date(Number(year), Number(month) - 1, 1).toISOString().slice(0, 7))}
 			>{'<'}</button>
@@ -29,11 +29,11 @@
 			bind:value={date} />
 		<button
 			title="текущий месяц"
-			class="btn btn-light text-dark border-0 rounded-0 p-2"
+			class="btn btn-dark text-light border-0 rounded-0 p-2"
 			onclick={() => (date = new Date().toISOString().slice(0, 7))}>!</button>
 		<button
 			title="следующий месяц"
-			class="btn btn-light text-dark border-0 rounded-0 p-2 rounded-end justify-content-center"
+			class="btn btn-dark text-light border-0 rounded-1 p-2 rounded-start-0 justify-content-center"
 			onclick={() =>
 				(date = new Date(Number(year), Number(month) + 1, 1).toISOString().slice(0, 7))}
 			>{'>'}</button>
