@@ -1,9 +1,11 @@
-export class Photo {
-	title: string | null = null;
-	url: string = '';
+export interface IPhoto {
+	title: string;
+	url: string;
+}
 
-	constructor(title = null, url = '') {
-		this.title = title;
-		this.url = url;
-	}
+export function Photo(title = '', url = ''): IPhoto {
+	return {
+		title,
+		url
+	};
 }

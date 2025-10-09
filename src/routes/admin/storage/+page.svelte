@@ -1,6 +1,5 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import Modal from '$lib/components/Modal.svelte';
 	import ModalPhoto from '$lib/components/ModalPhoto.svelte';
 	import { storage } from '$lib/scripts/firebase';
 	import { countPhotoOnAdminPage, Header } from '$lib/scripts/store';

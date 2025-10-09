@@ -11,7 +11,7 @@
 		tags = tags.filter(t => !selectedTags.includes(t));
 	};
 	export let _class = '';
-	let selectedTag = new _Tag();
+	let selectedTag = _Tag();
 
 	onMount(async () => {
 		setTimeout(() => onSelect(), 10000);
@@ -29,7 +29,7 @@
 					if (!selectedTags) selectedTags = new Array();
 					selectedTags = [...selectedTags, selectedTag];
 					tags = tags.filter(t => t.name != selectedTag.name);
-					selectedTag = new _Tag();
+					selectedTag = _Tag();
 					onSelect();
 				}
 			}} />

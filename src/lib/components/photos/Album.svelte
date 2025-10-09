@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { scale } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Album } from '$lib/models/photos/Album';
+	import { Album, type IAlbum } from '$lib/models/photos/Album';
 
-	let { uid = '', album = new Album() }: { uid: string; album: Album } = $props();
+	let { uid = '', album = Album() }: { uid: string; album: IAlbum } = $props();
 	let hoverEffect = $state('bg-opacity-25');
 </script>
 

@@ -1,9 +1,11 @@
-export class Cover {
-	image: string | null = null;
-	video: string | null = null;
+export interface ICover {
+	image: string | null;
+	video: string | null;
+}
 
-	constructor(image = null, video = null) {
-		this.image = image;
-		this.video = video;
-	}
+export function Cover(image = null, video = null): ICover {
+	return {
+		image,
+		video
+	};
 }

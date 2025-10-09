@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { User as MyUser } from '$lib/models/admin/User';
+	import { type IUser, User as _User } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onAuthStateChanged, type User } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount } from 'svelte';
 
-	let currentUser: User;
-	let users: MyUser[] = [];
+	let currentUser: IUser = _User();
+	let users: IUser[] = [];
 
 	onMount(async () => {
 		onAuthStateChanged(auth, user => {

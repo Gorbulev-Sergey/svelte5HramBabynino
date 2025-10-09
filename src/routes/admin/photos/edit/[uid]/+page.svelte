@@ -3,7 +3,7 @@
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { Photo as _Photo } from '$lib/models/photos/Photo';
+	import { type IPhoto, Photo as _Photo } from '$lib/models/photos/Photo';
 	import { Album } from '$lib/models/photos/Album';
 	import { db, storage } from '$lib/scripts/firebase';
 	import { onValue, ref as refDb, update } from 'firebase/database';
@@ -13,7 +13,7 @@
 	import { Header } from '$lib/scripts/store';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 
-	let album = new Album();
+	let album = Album();
 
 	// Для работы с хранилищем
 	let folders = [];
@@ -79,14 +79,14 @@
 				<div class="d-flex flex-wrap gap-1">
 					<button
 						class="btn btn-sm btn-dark me-1"
-						on:click={() => (album.photos = [...album.photos, new _Photo()])}
+						on:click={() => (album.photos = [...album.photos, _Photo()])}
 						><i class="fa-solid fa-plus" /> 1 фото
 					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
 						on:click={() => {
 							for (let i = 0; i < 5; i++) {
-								album.photos = [...album.photos, new _Photo()];
+								album.photos = [...album.photos, _Photo()];
 							}
 						}}
 						><i class="fa-solid fa-plus" /> 5 фото
@@ -95,7 +95,7 @@
 						class="btn btn-sm btn-dark me-1"
 						on:click={() => {
 							for (let i = 0; i < 10; i++) {
-								album.photos = [...album.photos, new _Photo()];
+								album.photos = [...album.photos, _Photo()];
 							}
 						}}
 						><i class="fa-solid fa-plus" /> 10 фото
@@ -241,7 +241,7 @@
 								on:click={() => {
 									if (checkedPhotos.length > 0) {
 										checkedPhotos.forEach(v => {
-											album.photos = [...album.photos, new _Photo(null, v)];
+											album.photos = [...album.photos, _Photo()];
 										});
 										checkedPhotos = [];
 									}

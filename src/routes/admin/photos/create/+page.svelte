@@ -2,8 +2,8 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { goto } from '$app/navigation';
-	import { Photo as _Photo } from '$lib/models/photos/Photo';
-	import { Album } from '$lib/models/photos/Album';
+	import { type IPhoto, Photo as _Photo } from '$lib/models/photos/Photo';
+	import { type IAlbum, Album } from '$lib/models/photos/Album';
 	import { db, storage } from '$lib/scripts/firebase';
 	import { push, ref as refDb } from 'firebase/database';
 	import { ref, getDownloadURL, listAll } from 'firebase/storage';
@@ -11,15 +11,15 @@
 	import { Header } from '$lib/scripts/store';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 
-	let album = new Album();
+	let album = Album();
 
 	// Для работы с хранилищем
-	let folders = [];
-	let photos = [];
+	let folders: string | any[] | null | undefined = [];
+	let photos: string | any[] | null | undefined = [];
 	let albumsFolder = '/Photos';
 	let albumsRef = ref(storage, `${albumsFolder}`);
 	let selectedFolder = 0;
-	let checkedPhotos = [];
+	let checkedPhotos: any[] = [];
 	let getFolders = () =>
 		listAll(ref(storage, albumsRef)).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
@@ -71,14 +71,14 @@
 				<div class="d-flex flex-wrap gap-1 mb-3">
 					<button
 						class="btn btn-sm btn-dark me-1"
-						on:click={() => (album.photos = [...album.photos, new _Photo()])}
+						on:click={() => (album.photos = [...album.photos, _Photo()])}
 						><i class="fa-solid fa-plus" /> 1 фото
 					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
 						on:click={() => {
 							for (let i = 0; i < 5; i++) {
-								album.photos = [...album.photos, new _Photo()];
+								album.photos = [...album.photos, _Photo()];
 							}
 						}}
 						><i class="fa-solid fa-plus" /> 5 фото
@@ -87,7 +87,7 @@
 						class="btn btn-sm btn-dark me-1"
 						on:click={() => {
 							for (let i = 0; i < 10; i++) {
-								album.photos = [...album.photos, new _Photo()];
+								album.photos = [...album.photos, _Photo()];
 							}
 						}}
 						><i class="fa-solid fa-plus" /> 10 фото
@@ -232,7 +232,7 @@
 					on:click={() => {
 						if (checkedPhotos.length > 0) {
 							checkedPhotos.forEach(v => {
-								album.photos = [...album.photos, new _Photo(null, v)];
+								album.photos = [...album.photos, _Photo()];
 							});
 							checkedPhotos = [];
 						}
