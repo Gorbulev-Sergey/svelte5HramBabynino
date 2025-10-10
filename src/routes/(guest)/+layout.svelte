@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import Footer from '$lib/components/Footer.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
-	import type { Tag } from '$lib/models/Tag';
+	import { type ITag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import { onValue, ref } from 'firebase/database';
@@ -49,7 +49,7 @@
 	// Заполняем переменную $showedPostsLength в хранилище
 	$effect.pre(() => {
 		onValue(ref(db, '/tags'), s =>
-			(s.val() as Tag[]).forEach(t => ($showedPostsLength[t.name] = showedPostsStep))
+			(s.val() as ITag[]).forEach(t => ($showedPostsLength[t.name] = showedPostsStep))
 		);
 	});
 </script>

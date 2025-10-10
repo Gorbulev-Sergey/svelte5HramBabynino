@@ -28,15 +28,10 @@
 	};
 
 	$Header = header;
-
-	$inspect(folders, photos);
-
 	onMount(() => {
 		listAll(albumsRef).then(result => {
 			folders = result.prefixes;
-			listAll(ref(storage, folders[$state.snapshot(selectedFolder)].fullPath)).then(s => {
-				photos = s.items.filter(p => p.name != 'empty');
-			});
+			getPhotos();
 		});
 	});
 	onDestroy(() => ($Header = null));
@@ -160,6 +155,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- Фотографии из хранилища (модальное окно) -->
 <div id="modalStoragePhotos" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
 	<div class="modal-dialog modal-dialog-centered modal-fullscreen">

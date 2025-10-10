@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { type IPhoto, Photo } from '$lib/models/photos/Photo';
+	import type { Snippet } from 'svelte';
 
 	interface Props {
 		photo: IPhoto;
@@ -7,8 +8,16 @@
 		onUp: () => void;
 		onDown: () => void;
 		onDelete: () => void;
+		children?: Snippet;
 	}
-	let { photo = Photo(), _class = '', onUp, onDown, onDelete }: Props = $props();
+	let {
+		photo = Photo(),
+		_class = '',
+		onUp,
+		onDown,
+		onDelete,
+		children = undefined
+	}: Props = $props();
 </script>
 
 <div
@@ -41,5 +50,5 @@
 				><i class="fa-solid fa-angle-right text-light"></i></button>
 		</div>
 	</div>
-	<slot name="navigation" />
+	{@render children?.()}
 </div>
