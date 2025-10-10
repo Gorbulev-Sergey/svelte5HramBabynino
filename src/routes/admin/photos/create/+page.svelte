@@ -18,8 +18,7 @@
 	let photos: StorageReference[] = $state([]);
 	let albumsRef = ref(storage, '/Photos');
 	let selectedFolder = $state(0);
-	let checkedPhotos: any[] = $state([]);
-	let getFolders = () => listAll(albumsRef).then(result => (folders = result.prefixes));
+	let checkedPhotos: string[] = $state([]);
 	let getPhotos = () => {
 		if (folders.length > 0) {
 			listAll(ref(storage, folders[$state.snapshot(selectedFolder)].fullPath)).then(s => {
@@ -141,7 +140,7 @@
 		</div>
 		<!-- Вкладка содержимое -->
 		<div id="content" class="tab-pane">
-			<div class="row row-cols-1 row-cols-md-3 g-3">
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
 				{#each album.photos as photo, i}
 					<div class="col">
 						<Photo
@@ -212,10 +211,11 @@
 												<div
 													class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
 													style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
-													onclick={() =>
-														(checkedPhotos = !checkedPhotos.includes(s)
+													onclick={() => {
+														checkedPhotos = !checkedPhotos.includes(s)
 															? [...checkedPhotos, s]
-															: checkedPhotos.filter(v => v != s))}>
+															: checkedPhotos.filter(v => v != s);
+													}}>
 													<input
 														type="checkbox"
 														class="form-check"
@@ -242,7 +242,7 @@
 					onclick={() => {
 						if (checkedPhotos.length > 0) {
 							checkedPhotos.forEach(v => {
-								album.photos = [...album.photos, _Photo()];
+								album.photos = [...album.photos, _Photo('', v)];
 							});
 							checkedPhotos = [];
 						}
