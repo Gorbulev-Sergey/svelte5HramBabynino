@@ -69,6 +69,9 @@
 		}
 		return p;
 	});
+	let sizeArrayOfFilteredPosts = $derived(arrayOfFilteredPosts.length);
+
+	let countPostForShow: { [key: string]: number } = $state({});
 
 	onMount(async () => {
 		onValue(ref(db, '/tags'), s => {
@@ -76,6 +79,8 @@
 				tags = s.val();
 				tags.push(Tag('все вместе', 'Все вместе'));
 				tags.push(Tag('без тега', 'Без тега'));
+
+				tags.forEach(t => (countPostForShow[t.name] = $countPostOnAdminPage));
 			}
 		});
 		onValue(ref(db, '/posts'), s => {
@@ -133,10 +138,17 @@
 							$countPostOnAdminPage = 1;
 						} else $countPostOnAdminPage++;
 						localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
+						tags.forEach(t => (countPostForShow[t.name] = $countPostOnAdminPage));
 					}}>
 					<span>колонки</span>
 					<span class="badge bg-light text-dark ms-1">{$countPostOnAdminPage}</span>
 				</button>
+			</div>
+			<div class="flex-grow-1 text-center text-dark">
+				Всего публикаций с тегом
+				<span class="badge bg-dark bg-opacity-10 text-dark p-1 border-0"
+					>{$adminPostsFilters.tag.name}</span>
+				- {sizeArrayOfFilteredPosts}
 			</div>
 		</div>
 		<button class="btn btn-dark" onclick={() => goto('/admin/posts/create')}>Создать</button>
@@ -225,7 +237,16 @@
 
 <div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3">
 	<!-- not pinned -->
-	{#each arrayOfFilteredPosts.filter(([uid, item]) => !item.pinned) as [uid, item]}
+	{#each arrayOfFilteredPosts
+		.filter(([uid, item]) => !item.pinned)
+		.slice(0, countPostForShow[$adminPostsFilters.tag.name]) as [uid, item]}
 		{@render post(uid, item)}
 	{/each}
 </div>
+
+{#if countPostForShow[$adminPostsFilters.tag.name] < sizeArrayOfFilteredPosts}
+	<button
+		class="btn btn-light text-dark w-100 mt-3"
+		onclick={() => (countPostForShow[$adminPostsFilters.tag.name] += $countPostOnAdminPage)}
+		>Загрузить ещё...</button>
+{/if}
