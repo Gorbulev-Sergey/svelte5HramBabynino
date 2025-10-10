@@ -1,11 +1,13 @@
-export class Tag {
-	name: string = '';
-	description: string = '';
-	postUID: null = null;
+export interface ITag {
+	name: string;
+	description: string;
+	postUID?: string | null;
+}
 
-	constructor(name = '', description = '', postUID = null) {
-		this.name = name;
-		this.description = description;
-		this.postUID = postUID;
-	}
+export function Tag(name = '', description = '', postUID = null): ITag {
+	return {
+		name,
+		description,
+		postUID
+	};
 }

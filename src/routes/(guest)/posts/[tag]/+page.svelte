@@ -3,10 +3,9 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import PageTitle from '$lib/components/PageTitle.svelte';
-	import Post from '$lib/components/posts/Post.svelte';
-	import type { Post as _Post } from '$lib/models/Post.js';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
+	import Post from '$lib/components/posts/Post.svelte';
 
 	let { data } = $props();
 	let tags = $derived(data.tags);

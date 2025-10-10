@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Container from '$lib/components/Container.svelte';
-	import { Post as _Post } from '$lib/models/Post';
 
 	let { data } = $props();
 	let post = $derived(data.post);

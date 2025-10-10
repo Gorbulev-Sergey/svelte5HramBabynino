@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
 	import { Tag } from '$lib/models/Tag';
-	export let item = new Tag();
+	export let item = Tag();
 	export let onDelete = () => {};
 </script>
 

@@ -1,23 +1,25 @@
-import type { Photo } from '$lib/models/photos/Photo';
+import type { IPhoto } from '$lib/models/photos/Photo';
 
-export class Album {
-	title: string = '';
+export interface IAlbum {
+	title: string;
 	description: string | null;
-	date: string = new Date().toISOString().slice(0, 10);
-	photos: Photo[] = [];
-	cover: string | null = null;
+	date: string;
+	photos: IPhoto[];
+	cover: string | null;
+}
 
-	constructor(
-		title = '',
-		description = null,
-		date = new Date().toISOString().slice(0, 10),
-		photos = [],
-		cover = null
-	) {
-		this.title = title;
-		this.description = description;
-		this.date = date;
-		this.photos = photos;
-		this.cover = cover;
-	}
+export function Album(
+	title = '',
+	description = null,
+	date = '',
+	photos: IPhoto[] = [],
+	cover = null
+): IAlbum {
+	return {
+		title,
+		description,
+		date,
+		photos,
+		cover
+	};
 }

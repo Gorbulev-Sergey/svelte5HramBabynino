@@ -3,7 +3,7 @@
 
 	export let title = 'Добавить тег:';
 	export let tags = new Array();
-	export let selected = new Tag();
+	export let selected = Tag();
 	export let _class = '';
 	export let onSelect = () => {};
 </script>

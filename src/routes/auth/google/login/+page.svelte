@@ -1,5 +1,4 @@
-<script>
-	// @ts-nocheck
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/scripts/firebase';
 	import { userSigned } from '$lib/scripts/store';

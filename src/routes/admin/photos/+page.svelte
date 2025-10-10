@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { Album as _Album } from '$lib/models/photos/Album';
 	import Album from '$lib/components/photos/Album.svelte';
 	import { db } from '$lib/scripts/firebase';
 	import { countAlbumOnAdminPage, Header } from '$lib/scripts/store';
