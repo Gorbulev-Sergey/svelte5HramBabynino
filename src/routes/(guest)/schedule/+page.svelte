@@ -49,6 +49,7 @@
 		<div slot="navigation" class="d-flex align-items-center gap-2">
 			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
 			<button
+				hidden
 				aria-label="Печать"
 				class="btn btn-dark text-light text-nowrap"
 				onclick={() => window.print()}>
