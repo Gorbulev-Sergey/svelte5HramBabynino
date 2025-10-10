@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { db } from '$lib/scripts/firebase';
-	import { ref, remove, update } from 'firebase/database';
+	import { onValue, ref, remove, update } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
@@ -15,31 +15,34 @@
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { Tag } from '$lib/models/Tag';
+	import { type ITag, Tag } from '$lib/models/Tag';
 	import { type IPost, Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 
-	let { data } = $props();
-	let posts = $derived(data.posts);
-	let tags = $derived(data.tags);
+	let posts: [string, IPost][] = $state([]);
+	let tags: ITag[] = $state([]);
 	let arrayOfFilteredPosts = $derived.by(() => {
-		let p: [string, IPost][];
+		let p: [string, IPost][] = [];
 		switch ($adminPostsFilters.tag.name) {
 			case 'все вместе':
-				p = posts.filter(([k, v]) => v.published == $adminPostsFilters.published);
+				p = $state.snapshot(posts).filter(([k, v]) => v.published == $adminPostsFilters.published);
 				break;
 			case 'без тега':
-				p = posts.filter(
-					([k, v]) =>
-						v.published == $adminPostsFilters.published && (v.tags == null || v.tags.length == 0)
-				);
+				p = $state
+					.snapshot(posts)
+					.filter(
+						([k, v]) =>
+							v.published == $adminPostsFilters.published && (v.tags == null || v.tags.length == 0)
+					);
 				break;
 			default:
-				p = posts.filter(
-					([k, v]) =>
-						v.published == $adminPostsFilters.published &&
-						v.tags?.find(t => t.name == $adminPostsFilters.tag.name)
-				);
+				p = $state
+					.snapshot(posts)
+					.filter(
+						([k, v]) =>
+							v.published == $adminPostsFilters.published &&
+							v.tags?.find(t => t.name == $adminPostsFilters.tag.name)
+					);
 				break;
 		}
 		switch ($adminPostsFilters.newFirst) {
@@ -67,21 +70,22 @@
 		return p;
 	});
 
-	$Header = header;
-
-	$effect.pre(() => {
-		if ($isPostUpdated) {
-			$isPostUpdated = false;
-			invalidateAll();
-		}
-		tags.push(new Tag('все вместе', 'Все вместе'));
-		tags.push(new Tag('без тега', 'Без тега'));
-		document.addEventListener('visibilitychange', function () {
-			if (!document.hidden) {
-				invalidateAll();
+	onMount(async () => {
+		onValue(ref(db, '/tags'), s => {
+			if (s.exists()) {
+				tags = s.val();
+				tags.push(Tag('все вместе', 'Все вместе'));
+				tags.push(Tag('без тега', 'Без тега'));
+			}
+		});
+		onValue(ref(db, '/posts'), s => {
+			if (s.exists()) {
+				posts = Object.entries(s.val());
 			}
 		});
 	});
+
+	$Header = header;
 	onDestroy(() => ($Header = null));
 </script>
 
@@ -147,7 +151,7 @@
 			<div class="d-flex flex-column align-items-end flex-wrap gap-2">
 				<TagManager
 					title="Теги:"
-					tags={tags.filter((t: Tag) => !post.tags?.find(i => i.name == t.name))}
+					tags={tags.filter((t: ITag) => !post.tags?.find(i => i.name == t.name))}
 					bind:selectedTags={post.tags}
 					onSelect={() => {
 						update(ref(db, `/posts/${uid}`), post);

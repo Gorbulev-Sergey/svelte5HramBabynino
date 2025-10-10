@@ -3,10 +3,10 @@
 
 	interface Props {
 		photo: IPhoto;
-		_class: String;
-		onUp: () => {};
-		onDown: () => {};
-		onDelete: () => {};
+		_class?: String;
+		onUp: () => void;
+		onDown: () => void;
+		onDelete: () => void;
 	}
 	let { photo = Photo(), _class = '', onUp, onDown, onDelete }: Props = $props();
 </script>

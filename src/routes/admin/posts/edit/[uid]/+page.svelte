@@ -15,7 +15,7 @@
 	let { data } = $props();
 	let tags = data.tags;
 	let post = $state(data.post);
-	let selectedTag = $state(new Tag());
+	let selectedTag = $state(Tag());
 
 	$Header = header;
 	onDestroy(() => ($Header = null));

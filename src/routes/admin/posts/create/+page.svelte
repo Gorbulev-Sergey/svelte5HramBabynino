@@ -12,10 +12,10 @@
 	import { Header } from '$lib/scripts/store.js';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 
-	export let data;
-	$: tags = data.tags;
-	let post = new Post();
-	let selectedTag = new Tag();
+	let { data } = $props();
+	let tags = $state(data.tags);
+	let post = Post();
+	let selectedTag = Tag();
 	let showCode = false;
 
 	$Header = header;
