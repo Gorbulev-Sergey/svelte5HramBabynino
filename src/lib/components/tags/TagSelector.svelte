@@ -27,7 +27,7 @@
 		<i class="fa-solid fa-circle-plus"></i>
 	</button>
 	<ul class="dropdown-menu overflow-y-scroll" style="max-height: 75vh;">
-		{#each tags.sort((a, b) => a.name.localeCompare(b.name)) as item}
+		{#each [...tags].sort((a, b) => a.name.localeCompare(b.name)) as item}
 			<li>
 				<button
 					class="dropdown-item"

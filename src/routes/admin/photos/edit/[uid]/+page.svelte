@@ -72,27 +72,17 @@
 			</div>
 			{#if isSecondTabActive}
 				<div class="d-flex flex-wrap gap-1">
-					<button
-						class="btn btn-sm btn-dark me-1"
-						onclick={() => (album.photos = [...album.photos, _Photo()])}
+					<button class="btn btn-sm btn-dark me-1" onclick={() => album.photos.push(_Photo())}
 						><i class="fa-solid fa-plus"></i> 1 фото
 					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
-						onclick={() => {
-							for (let i = 0; i < 5; i++) {
-								album.photos = [...album.photos, _Photo()];
-							}
-						}}
+						onclick={() => [...new Array(5)].forEach(i => album.photos.push(_Photo()))}
 						><i class="fa-solid fa-plus"></i> 5 фото
 					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
-						onclick={() => {
-							for (let i = 0; i < 10; i++) {
-								album.photos = [...album.photos, _Photo()];
-							}
-						}}
+						onclick={() => [...new Array(10)].forEach(i => album.photos.push(_Photo()))}
 						><i class="fa-solid fa-plus"></i> 10 фото
 					</button>
 					<button
@@ -142,19 +132,13 @@
 		<!-- Вкладка содержимое -->
 		<div id="content" class="tab-pane">
 			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2">
-				{#each album.photos as photo, i}
+				{#each new Array(album.photos.length) as _, i}
 					<div class="col">
 						<Photo
-							{photo}
-							onUp={() => {
-								album.photos.splice(i - 1, 0, album.photos.splice(i, 1)[0]);
-								album.photos = [...album.photos];
-							}}
-							onDown={() => {
-								album.photos.splice(i + 1, 0, album.photos.splice(i, 1)[0]);
-								album.photos = [...album.photos];
-							}}
-							onDelete={() => (album.photos = album.photos.filter(p => p != photo))} />
+							bind:photo={album.photos[i]}
+							onUp={() => album.photos.splice(i - 1, 0, album.photos.splice(i, 1)[0])}
+							onDown={() => album.photos.splice(i + 1, 0, album.photos.splice(i, 1)[0])}
+							onDelete={() => album.photos.splice(i, 1)} />
 					</div>
 				{/each}
 			</div>

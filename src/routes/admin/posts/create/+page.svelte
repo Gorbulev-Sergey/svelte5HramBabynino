@@ -170,7 +170,7 @@
 			</div>
 		</div>
 		<div class="tab-pane" id="content">
-			<Editor {post} />
+			<Editor bind:post />
 		</div>
 	</div>
 </div>

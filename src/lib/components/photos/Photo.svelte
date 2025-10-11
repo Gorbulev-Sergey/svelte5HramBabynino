@@ -11,7 +11,7 @@
 		children?: Snippet;
 	}
 	let {
-		photo = Photo(),
+		photo = $bindable(Photo()),
 		_class = '',
 		onUp,
 		onDown,

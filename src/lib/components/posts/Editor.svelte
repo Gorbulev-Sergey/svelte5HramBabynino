@@ -2,7 +2,11 @@
 	import { Post, type IPost } from '$lib/models/Post';
 	import EditorControls from './EditorControls.svelte';
 
-	let { post = Post() }: { post: IPost } = $props();
+	interface IProps {
+		post: IPost;
+	}
+
+	let { post = $bindable(Post()) }: IProps = $props();
 	let showCode = $state(false);
 </script>
 
