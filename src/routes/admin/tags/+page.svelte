@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
 	import Modal from '$lib/components/Modal.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Tag, type ITag } from '$lib/models/Tag';
@@ -11,24 +10,21 @@
 	let tags: ITag[] = $state([]);
 	let tag = $state(Tag());
 	let indexEditedTag = $state(-1);
-	let modalTitle = $state('Создать тег');
+	let isTagEdited = $state(false);
+	let modalTitle = $derived(isTagEdited ? 'Редактировать тег' : 'Создать тег');
 	let isModalShow = $state(false);
 	function saveToDb(ts: ITag[]) {
-		set(ref(db, `/tags`), ts).then(() => {
-			invalidateAll();
-		});
+		set(ref(db, `/tags`), ts);
 	}
 	function saveOneToDb(t: ITag) {
-		set(ref(db, `/tags/${tags.length}`), t).then(() => {
-			invalidateAll();
-		});
+		set(ref(db, `/tags/${tags.length}`), t);
 	}
 	SETTINGS.Header = header;
 
 	onMount(async () => {
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
-				tags = s.val();
+				tags = Object.values(s.val());
 			}
 		});
 	});
@@ -36,12 +32,7 @@
 
 {#snippet header()}
 	<PageTitle title="Теги">
-		<button
-			class="btn btn-dark text-light"
-			onclick={() => {
-				modalTitle = 'Создать тег';
-				isModalShow = true;
-			}}>Создать</button>
+		<button class="btn btn-dark text-light" onclick={() => (isModalShow = true)}>Создать</button>
 	</PageTitle>
 {/snippet}
 
@@ -79,9 +70,9 @@
 			<div
 				class="btn btn-dark text-light"
 				onclick={() => {
-					modalTitle = 'Редактировать тег';
 					tag = item;
 					indexEditedTag = i;
+					isTagEdited = true;
 					isModalShow = true;
 				}}>
 				<i class="fa-solid fa-pencil"></i>
@@ -110,6 +101,7 @@
 			class="btn btn-light text-dark"
 			onclick={() => {
 				tag = Tag();
+				indexEditedTag = -1;
 				isModalShow = false;
 			}}>Отмена</button>
 		<button
@@ -123,19 +115,17 @@
 						else
 							tag.description = tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
 					}
-					if (modalTitle == 'Редактировать тег') {
+					if (isTagEdited) {
 						// Перезаписываем тег
-						update(ref(db, `tags/${indexEditedTag}`), tag).then(() => {
-							tag = Tag();
-							indexEditedTag = -1;
-						});
+						update(ref(db, `tags/${indexEditedTag}`), tag);
 					} else {
 						// Создаём новый тег
 						saveOneToDb(tag);
-						tag = Tag();
 					}
 				}
 				tag = Tag();
+				indexEditedTag = -1;
+				isTagEdited = false;
 				isModalShow = false;
 			}}>Сохранить</button>
 	</div>

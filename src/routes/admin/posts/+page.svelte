@@ -71,7 +71,8 @@
 	onMount(async () => {
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
-				tags = s.val();
+				tags = Object.values(s.val());
+				console.log(tags);
 				tags.push(Tag('все вместе', 'Все вместе'));
 				tags.push(Tag('без тега', 'Без тега'));
 
