@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { db } from '$lib/scripts/firebase';
 	import { onValue, ref, remove, update } from 'firebase/database';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { adminPostsFilters, countPostOnAdminPage, EFixedUnfixed } from '$lib/scripts/store.js';

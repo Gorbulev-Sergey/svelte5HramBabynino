@@ -3,7 +3,7 @@
 	import Pin from '$lib/components/Pin.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Post } from '$lib/models/Post';
-	import { Tag } from '$lib/models/Tag';
+	import { Tag, type ITag } from '$lib/models/Tag';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { push, ref } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
@@ -12,7 +12,7 @@
 	import { SETTINGS } from '$lib/store/store.svelte.js';
 
 	let { data } = $props();
-	let tags = $state(data.tags);
+	let tags = data.tags;
 	let post = $state(Post());
 	let selectedTag = $state(Tag());
 	let showCode = $state(false);

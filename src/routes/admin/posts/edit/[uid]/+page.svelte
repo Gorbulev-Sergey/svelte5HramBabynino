@@ -13,7 +13,7 @@
 	import { SETTINGS } from '$lib/store/store.svelte.js';
 
 	let { data } = $props();
-	let tags = $state(data.tags);
+	let tags = data.tags;
 	let post = $state(data.post);
 	let selectedTag = $state(Tag());
 

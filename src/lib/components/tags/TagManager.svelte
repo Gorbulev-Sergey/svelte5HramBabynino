@@ -1,17 +1,28 @@
-<script>
+<script lang="ts">
 	import Tag from './Tag.svelte';
-	import { Tag as _Tag } from '$lib/models/Tag';
+	import { Tag as _Tag, type ITag } from '$lib/models/Tag';
 	import TagSelector from './TagSelector.svelte';
 	import { onMount } from 'svelte';
 
-	export let title = 'Добавить тег:';
-	export let tags = new Array();
-	export let selectedTags = new Array();
-	export let onSelect = () => {
-		tags = tags.filter(t => !selectedTags.includes(t));
-	};
-	export let _class = '';
-	let selectedTag = _Tag();
+	interface IProps {
+		title?: string;
+		tags: ITag[];
+		selectedTag: ITag;
+		selectedTags: ITag[];
+		_class?: string;
+		onSelect: () => void;
+	}
+
+	let {
+		title = 'Добавить тег:',
+		tags = [],
+		selectedTag = _Tag(),
+		selectedTags = $bindable([]),
+		_class = '',
+		onSelect = () => {
+			tags = tags.filter(t => !selectedTags.includes(t));
+		}
+	}: IProps = $props();
 
 	onMount(async () => {
 		setTimeout(() => onSelect(), 10000);
@@ -26,7 +37,7 @@
 			bind:selected={selectedTag}
 			onSelect={() => {
 				if (selectedTag.name != '') {
-					if (!selectedTags) selectedTags = new Array();
+					if (!selectedTags) selectedTags = [];
 					selectedTags = [...selectedTags, selectedTag];
 					tags = tags.filter(t => t.name != selectedTag.name);
 					selectedTag = _Tag();
