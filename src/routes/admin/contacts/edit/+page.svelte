@@ -7,9 +7,9 @@
 	import { onValue, ref, set } from 'firebase/database';
 	import { onMount } from 'svelte';
 
-	let contacts: IContacts = $state(Contacts());
-	SETTINGS.Header = header;
+	let contacts = $state(Contacts());
 	onMount(() => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/contacts'), s => {
 			if (s.exists()) {
 				contacts = s.val();

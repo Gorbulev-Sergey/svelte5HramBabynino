@@ -8,8 +8,6 @@
 	import { child, off, onValue, push, ref, update } from 'firebase/database';
 	import { onMount } from 'svelte';
 
-	SETTINGS.Header = header;
-
 	// Access toket
 	let access_token = $state(SETTINGS.vkAccessToken);
 	// id группы, из которой берутся видео
@@ -31,6 +29,7 @@
 	let tags = $state([_Tag('видео', 'Видео')]);
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				allTags = Object.values(s.val());
@@ -107,7 +106,6 @@
 			});
 			try {
 				allVideos = (await result.json()).response.items;
-				//console.log(allVideos);
 			} catch (error) {}
 		}}>Запросить видео</button>
 </div>

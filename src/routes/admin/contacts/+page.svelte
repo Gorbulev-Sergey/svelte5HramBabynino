@@ -5,10 +5,11 @@
 	import { db } from '$lib/scripts/firebase';
 	import { onValue, ref } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
+	import { Contacts } from '$lib/models/Contacts';
 
-	let { contacts } = $props();
-	SETTINGS.Header = header;
+	let contacts = $state(Contacts());
 	onMount(() => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/contacts'), s => {
 			if (s.exists()) {
 				contacts = s.val();

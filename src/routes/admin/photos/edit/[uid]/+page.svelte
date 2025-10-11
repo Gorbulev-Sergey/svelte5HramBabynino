@@ -28,9 +28,8 @@
 		}
 	};
 
-	SETTINGS.Header = header;
-
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(refDb(db, `/photos/${$page.params.uid}`), s => {
 			if (s.exists()) {
 				album = s.val();

@@ -10,9 +10,9 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	let albums: [string, IAlbum][] = $state([]);
-	SETTINGS.Header = header;
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/photos'), s => {
 			if (s.exists()) {
 				albums = Object.entries(s.val());

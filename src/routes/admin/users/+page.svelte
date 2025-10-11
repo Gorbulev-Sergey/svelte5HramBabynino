@@ -9,9 +9,9 @@
 
 	let users: [String, IUser][] = $state([]);
 	let newUser = $state<IUser>(User());
-	SETTINGS.Header = header;
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/users'), s => {
 			if (s.exists()) {
 				users = Object.entries(s.val()) as [string, IUser][];

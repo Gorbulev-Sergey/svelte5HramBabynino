@@ -5,19 +5,26 @@
 	import { Post } from '$lib/models/Post';
 	import { Tag, type ITag } from '$lib/models/Tag';
 	import { auth, db } from '$lib/scripts/firebase';
-	import { push, ref } from 'firebase/database';
+	import { onValue, push, ref } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
+	import { onMount } from 'svelte';
 
-	let { data } = $props();
-	let tags = data.tags;
+	let tags: ITag[] = $state([]);
 	let post = $state(Post());
 	let selectedTag = $state(Tag());
 	let showCode = $state(false);
 
-	SETTINGS.Header = header;
+	onMount(async () => {
+		SETTINGS.Header = header;
+		onValue(ref(db, '/tags'), s => {
+			if (s.exists()) {
+				tags = Object.values(s.val());
+			}
+		});
+	});
 </script>
 
 {#snippet header()}

@@ -5,6 +5,7 @@
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { get, ref, set } from 'firebase/database';
+	import { onMount } from 'svelte';
 
 	// Выбранная дата, год, месяц
 	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
@@ -49,7 +50,9 @@
 		return new Date(date).getDay() == 0 ? 'text-danger' : 'text-dark';
 	}
 
-	SETTINGS.Header = header;
+	onMount(async () => {
+		SETTINGS.Header = header;
+	});
 </script>
 
 {#snippet header()}

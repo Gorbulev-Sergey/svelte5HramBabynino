@@ -33,7 +33,7 @@
 				</div>
 				<div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
 					{#if post.tags}
-						{#each post.tags.sort((t1, t2) => t1.name.localeCompare(t2.name)) as tag}
+						{#each post.tags as tag}
 							<button
 								class="badge {!post.inverted
 									? 'bg-dark bg-opacity-10 text-dark'
@@ -107,11 +107,11 @@
 						)}></iframe>
 				{/if}
 			</div>
-		{:else if post.cover && post.cover.image}
+		{:else if post.cover && post.cover?.image}
 			{#if !post.isImageHeightFull}
 				<div
 					class="img-fluid"
-					style="background-image: url({post.cover.image});
+					style="background-image: url({post.cover?.image});
 					 background-repeat: no-repeat; background-position: center; background-size: cover; min-height:12em ;
 					 {!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}">
 				</div>
@@ -119,7 +119,7 @@
 				<img
 					class="img-fluid"
 					style="border-radius: 0 0 .4rem .4rem"
-					src={post.cover.image}
+					src={post.cover?.image}
 					alt="" />
 			{/if}
 		{/if}

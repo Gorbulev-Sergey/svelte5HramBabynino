@@ -35,8 +35,6 @@
 	let documentsFolder = '/Documents';
 	let documentsRef: StorageReference = $derived(ref(storage, `${documentsFolder}`));
 
-	SETTINGS.Header = header;
-
 	let getFolders = () => listAll(albumsRef).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
 		if (folders.length > 0) {
@@ -67,6 +65,7 @@
 	};
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		getFolders().then(() => {
 			getPhotos();
 			getDocuments();

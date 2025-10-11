@@ -103,6 +103,7 @@
 	};
 
 	onMount(async () => {
+		SETTINGS.Header = subpanel;
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				onValue(ref(db, '/users'), s => {
@@ -149,12 +150,10 @@
 			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
 		else $isAdminCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
 	});
-
-	SETTINGS.Header = subpanel;
 </script>
 
 {#snippet subpanel()}
-	<div></div>
+	<div hidden></div>
 {/snippet}
 
 <IsAuth>

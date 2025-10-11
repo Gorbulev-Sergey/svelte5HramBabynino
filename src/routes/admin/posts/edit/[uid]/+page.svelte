@@ -4,20 +4,28 @@
 	import { page } from '$app/stores';
 	import Pin from '$lib/components/Pin.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { Tag } from '$lib/models/Tag';
+	import { Tag, type ITag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
-	import { ref, update } from 'firebase/database';
+	import { onValue, ref, update } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
-	let tags = data.tags;
+	let tags: ITag[] = $state([]);
 	let post = $state(data.post);
 	let selectedTag = $state(Tag());
 
-	SETTINGS.Header = header;
+	onMount(async () => {
+		SETTINGS.Header = header;
+		onValue(ref(db, '/tags'), s => {
+			if (s.exists()) {
+				tags = Object.values(s.val());
+			}
+		});
+	});
 </script>
 
 {#snippet header()}

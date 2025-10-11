@@ -19,9 +19,9 @@
 	function saveOneToDb(t: ITag) {
 		set(ref(db, `/tags/${tags.length}`), t);
 	}
-	SETTINGS.Header = header;
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				tags = Object.values(s.val());

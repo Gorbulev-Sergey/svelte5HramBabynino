@@ -20,24 +20,20 @@
 		let p: [string, IPost][] = [];
 		switch ($adminPostsFilters.tag.name) {
 			case 'все вместе':
-				p = $state.snapshot(posts).filter(([k, v]) => v.published == $adminPostsFilters.published);
+				p = posts.filter(([k, v]) => v.published == $adminPostsFilters.published);
 				break;
 			case 'без тега':
-				p = $state
-					.snapshot(posts)
-					.filter(
-						([k, v]) =>
-							v.published == $adminPostsFilters.published && (v.tags == null || v.tags.length == 0)
-					);
+				p = posts.filter(
+					([k, v]) =>
+						v.published == $adminPostsFilters.published && (v.tags == null || v.tags.length == 0)
+				);
 				break;
 			default:
-				p = $state
-					.snapshot(posts)
-					.filter(
-						([k, v]) =>
-							v.published == $adminPostsFilters.published &&
-							v.tags?.find(t => t.name == $adminPostsFilters.tag.name)
-					);
+				p = posts.filter(
+					([k, v]) =>
+						v.published == $adminPostsFilters.published &&
+						v.tags?.find(t => t.name == $adminPostsFilters.tag.name)
+				);
 				break;
 		}
 		switch ($adminPostsFilters.newFirst) {
@@ -69,13 +65,12 @@
 	let countPostForShow: { [key: string]: number } = $state({});
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				tags = Object.values(s.val());
-				console.log(tags);
 				tags.push(Tag('все вместе', 'Все вместе'));
 				tags.push(Tag('без тега', 'Без тега'));
-
 				tags.forEach(t => (countPostForShow[t.name] = $countPostOnAdminPage));
 			}
 		});
@@ -85,8 +80,6 @@
 			}
 		});
 	});
-
-	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}
@@ -154,7 +147,7 @@
 	<Post {uid} {post}>
 		<div
 			class="p-3 bg-dark bg-opacity-10"
-			style={post.cover.image || post.cover.video ? 'margin-bottom: -1em;' : ''}>
+			style={post.cover?.image || post.cover?.video ? 'margin-bottom: -1em;' : ''}>
 			<div class="d-flex flex-column align-items-end flex-wrap gap-2">
 				<TagManager
 					title="Теги:"

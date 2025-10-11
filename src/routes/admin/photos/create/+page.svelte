@@ -27,8 +27,8 @@
 		}
 	};
 
-	SETTINGS.Header = header;
 	onMount(() => {
+		SETTINGS.Header = header;
 		listAll(albumsRef).then(result => {
 			folders = result.prefixes;
 			getPhotos();

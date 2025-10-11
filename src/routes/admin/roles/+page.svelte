@@ -14,9 +14,9 @@
 	let isRoleEdited = $state(false);
 	let modalTitle = $derived(isRoleEdited ? 'Редактировать роль' : 'Создать роль');
 	let isModalShow = $state(false);
-	SETTINGS.Header = header;
 
 	onMount(async () => {
+		SETTINGS.Header = header;
 		onValue(ref(db, '/roles'), s => {
 			if (s.exists()) roles = Object.entries(s.val()) as [string, IRole][];
 		});
