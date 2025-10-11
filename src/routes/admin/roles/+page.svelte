@@ -1,16 +1,14 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import type { IRole } from '$lib/models/admin/Role';
+	import { Role, type IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 
-	let roles = $state<[string, IRole][]>([]);
-	let newRole = $state<IRole>({
-		name: ''
-	});
+	let roles: [string, IRole][] = $state([]);
+	let newRole = $state(Role());
 	let isRoleEdit = $state(false);
 	let editedRoleUID = $state('');
 	SETTINGS.Header = header;

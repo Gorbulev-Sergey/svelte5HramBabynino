@@ -1,20 +1,14 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import type { IUser } from '$lib/models/admin/User';
+	import { User, type IUser } from '$lib/models/admin/User';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, ref, remove, set } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 
-	let users = $state<[String, IUser][]>([]);
-	let newUser = $state<IUser>({
-		uid: '',
-		email: '',
-		role: {
-			name: ''
-		}
-	});
+	let users: [String, IUser][] = $state([]);
+	let newUser = $state<IUser>(User());
 	SETTINGS.Header = header;
 
 	onMount(async () => {
@@ -37,13 +31,7 @@
 				class="btn btn-dark text-light"
 				onclick={async () => {
 					set(ref(db, `users/${newUser.uid}`), newUser);
-					newUser = {
-						uid: '',
-						email: '',
-						role: {
-							name: ''
-						}
-					};
+					newUser = User();
 				}}>Сохранить</button>
 		</div>
 	</PageTitle>

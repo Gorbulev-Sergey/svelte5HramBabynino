@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import { Contacts, type IContacts } from '$lib/models/Contacts';
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, ref, set } from 'firebase/database';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
-	let { contacts } = $props();
+	let contacts: IContacts = $state(Contacts());
 	SETTINGS.Header = header;
 	onMount(() => {
 		onValue(ref(db, '/contacts'), s => {
@@ -118,7 +119,7 @@
 								...contacts.socialNetworks,
 								{ title: '', url: '', icon: '' }
 							];
-						}}>Добавить <i class="fa-solid fa-circle-plus" /></button>
+						}}>Добавить <i class="fa-solid fa-circle-plus"></i></button>
 				</div>
 				{#each contacts.socialNetworks as item}
 					<div class="row g-2 mb-1">
@@ -183,15 +184,14 @@
 							<div class="rounded">
 								<div class="rounded w-100" style="overflow:hidden; height:400px">
 									<iframe
-										title="fghjfghj"
+										title=""
 										src={contacts.address.yandexMapsUrl.replace(
 											'https://yandex.ru/maps/',
 											'https://yandex.ru/map-widget/v1/'
 										)}
 										width="100%"
 										height="100%"
-										frameborder="1"
-										allowfullscreen="true" />
+										frameborder="1"></iframe>
 								</div>
 							</div>
 						</div>

@@ -10,9 +10,11 @@
 	let { children, isModalShow = $bindable(false), onClose = () => {} }: IProps = $props();
 </script>
 
-<div class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75">
+<div
+	class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75"
+	style="display: {isModalShow ? 'block' : 'none'};">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" tabindex="-1">
-		<div transition:scale class="modal-content border-0 shadow-sm">
+		<div transition:scale class="modal-content border-0 shadow-sm bg-white text-dark p-1">
 			<button
 				aria-label=""
 				class="btn btn-sm bg-transparent border-0 text-dark position-absolute z-2 top-0 end-0"

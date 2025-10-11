@@ -5,14 +5,12 @@
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { child, off, push, ref, update } from 'firebase/database';
-	import { onDestroy } from 'svelte';
 
 	SETTINGS.Header = header;
 	let { data } = $props();
+
 	// Access toket
-	let access_token = $state(
-		'vk1.a.xm0YSBut11g_tmJiIuGCV635mkYyBT_zGWun5haYma6SXcO92Npisia5FqCCl6FH4tFwvFRp0XLfU7a1YxKeZBQ02fk-cF4ej2GG0MUyY0DXOjc7OSZOzoBQ3mARjnzGa7-XKrSVg22c-JoBiGtaVuyphGEM6JcggO7B1sRLnEDKisNdVhkQRnBMYe8bg707VO2ujGHwyqGqhVLORupnkA'
-	);
+	let access_token = $state(SETTINGS.vkAccessToken);
 	// id группы, из которой берутся видео
 	let owner_id = $state('');
 	// id плейлиста

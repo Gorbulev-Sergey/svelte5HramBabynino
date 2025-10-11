@@ -5,7 +5,6 @@
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { get, ref, set } from 'firebase/database';
-	import { onDestroy } from 'svelte';
 
 	// Выбранная дата, год, месяц
 	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));

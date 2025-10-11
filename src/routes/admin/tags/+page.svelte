@@ -5,15 +5,14 @@
 	import { Tag, type ITag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
-	import { ref, set, update } from 'firebase/database';
-	import { onDestroy } from 'svelte';
+	import { onValue, ref, set, update } from 'firebase/database';
+	import { onMount } from 'svelte';
 
-	let { data } = $props();
-	let tags = $derived(data.tags);
+	let tags: ITag[] = $state([]);
 	let tag = $state(Tag());
 	let indexEditedTag = $state(-1);
 	let modalTitle = $state('Создать тег');
-	let isModalShow = $state(true);
+	let isModalShow = $state(false);
 	function saveToDb(ts: ITag[]) {
 		set(ref(db, `/tags`), ts).then(() => {
 			invalidateAll();
@@ -25,6 +24,14 @@
 		});
 	}
 	SETTINGS.Header = header;
+
+	onMount(async () => {
+		onValue(ref(db, '/tags'), s => {
+			if (s.exists()) {
+				tags = s.val();
+			}
+		});
+	});
 </script>
 
 {#snippet header()}
@@ -94,11 +101,11 @@
 
 <Modal bind:isModalShow onClose={() => (tag = Tag())}>
 	<h5 class="text-dark">{modalTitle}</h5>
-	<div class="d-flex flex-column gap-1">
+	<div class="d-flex flex-column gap-2">
 		<input class="form-control text-dark" bind:value={tag.name} placeholder="название" />
 		<input class="form-control text-dark" bind:value={tag.description} placeholder="описание" />
 	</div>
-	<div class="d-flex align-items-center justify-content-between">
+	<div class="d-flex align-items-center justify-content-end gap-1">
 		<button
 			class="btn btn-light text-dark"
 			onclick={() => {
