@@ -7,6 +7,7 @@
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, ref } from 'firebase/database';
+	import { onMount } from 'svelte';
 
 	let { children } = $props();
 	let routesLeft = [
@@ -47,13 +48,15 @@
 		}
 	];
 
-	SETTINGS.Header = null;
-
 	// Заполняем переменную $showedPostsLength в хранилище
 	$effect.pre(() => {
 		onValue(ref(db, '/tags'), s =>
 			(s.val() as ITag[]).forEach(t => ($showedPostsLength[t.name] = showedPostsStep))
 		);
+	});
+
+	onMount(async () => {
+		SETTINGS.Header = null;
 	});
 </script>
 

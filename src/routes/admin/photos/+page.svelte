@@ -10,7 +10,6 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	let albums: [string, IAlbum][] = $state([]);
-
 	onMount(async () => {
 		SETTINGS.Header = header;
 		onValue(ref(db, '/photos'), s => {
@@ -43,9 +42,7 @@
 {/snippet}
 
 <div class="row row-cols-1 row-cols-md-{$countAlbumOnAdminPage} g-3">
-	{#each $state
-		.snapshot(albums)
-		.sort(([k1, v1], [k2, v2]) => new Date(v2.date).getTime() - new Date(v1.date).getTime()) as [uid, album]}
+	{#each [...albums].sort(([k1, v1], [k2, v2]) => new Date(v2.date).getTime() - new Date(v1.date).getTime()) as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>
 				<div slot="navigation" class="flex-grow-1">

@@ -218,14 +218,14 @@
 
 <div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3 mb-3">
 	<!-- pinned -->
-	{#each arrayOfFilteredPosts.filter(([uid, item]) => item.pinned) as [uid, item]}
+	{#each [...arrayOfFilteredPosts].filter(([uid, item]) => item.pinned) as [uid, item]}
 		{@render post(uid, item)}
 	{/each}
 </div>
 
 <div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3">
 	<!-- not pinned -->
-	{#each arrayOfFilteredPosts
+	{#each [...arrayOfFilteredPosts]
 		.filter(([uid, item]) => !item.pinned)
 		.slice(0, countPostForShow[$adminPostsFilters.tag.name]) as [uid, item]}
 		{@render post(uid, item)}
