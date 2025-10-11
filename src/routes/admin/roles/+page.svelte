@@ -1,16 +1,19 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import { Role, type IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	let roles: [string, IRole][] = $state([]);
 	let newRole = $state(Role());
-	let isRoleEdit = $state(false);
 	let editedRoleUID = $state('');
+	let isRoleEdited = $state(false);
+	let modalTitle = $derived(isRoleEdited ? 'Редактировать роль' : 'Создать роль');
+	let isModalShow = $state(false);
 	SETTINGS.Header = header;
 
 	onMount(async () => {
@@ -22,59 +25,7 @@
 
 {#snippet header()}
 	<PageTitle title="Роли пользователей">
-		<div class="input-group">
-			<div class="bg-light text-dark py-2 px-3 rounded-start border">
-				{!isRoleEdit ? 'Новая' : 'Редактировать'} роль:
-			</div>
-
-			<input class="form-control text-dark" bind:value={newRole.name} />
-			{#if newRole.name.length > 0}
-				<button
-					aria-label=""
-					class="btn btn-light text-dark border {newRole.name.length > 0 ? '' : ''}"
-					onclick={() => {
-						newRole.name = '';
-					}}>
-					<i class="fa-solid fa-xmark"></i>
-				</button>
-			{/if}
-
-			{#if !isRoleEdit}
-				<button
-					class="btn btn-dark text-light"
-					onclick={async () => {
-						if (
-							roles.filter(v => v[1].name == newRole.name).length == 0 &&
-							newRole.name.trim().length > 0
-						) {
-							push(ref(db, '/roles'), newRole).then(r => {
-								$alerts = [...$alerts, `Роль '${newRole.name}' добавлена!`];
-								newRole = { name: '' };
-							});
-						}
-					}}>Создать</button>
-			{:else}
-				<button
-					class="btn btn-light text-dark border"
-					onclick={async () => {
-						newRole = { name: '' };
-						isRoleEdit = false;
-						editedRoleUID = '';
-					}}>Отмена</button>
-				<button
-					class="btn btn-dark text-light"
-					onclick={async () => {
-						if (newRole.name.trim().length > 0) {
-							update(ref(db, `/roles/${editedRoleUID}`), newRole).then(r => {
-								$alerts = [...$alerts, `Роль '${newRole.name}' обновлена!`];
-								newRole = { name: '' };
-								isRoleEdit = false;
-								editedRoleUID = '';
-							});
-						}
-					}}>Сохранить</button>
-			{/if}
-		</div>
+		<button class="btn btn-dark text-light" onclick={() => (isModalShow = true)}>Создать</button>
 	</PageTitle>
 {/snippet}
 
@@ -94,8 +45,9 @@
 					class="btn btn-sm btn-light text-dark"
 					onclick={() => {
 						newRole = role;
-						isRoleEdit = true;
 						editedRoleUID = uid;
+						isRoleEdited = true;
+						isModalShow = true;
 					}}>
 					<i class="fa-solid fa-pencil"></i>
 				</button>
@@ -113,6 +65,40 @@
 		</div>
 	{/each}
 </div>
+
+<Modal bind:isModalShow onClose={() => (newRole = Role())}>
+	<h5 class="text-dark">{modalTitle}</h5>
+	<div class="d-flex flex-column gap-2">
+		<input class="form-control text-dark" bind:value={newRole.name} placeholder="название" />
+	</div>
+	<div class="d-flex align-items-center justify-content-end gap-1">
+		<button
+			class="btn btn-light text-dark"
+			onclick={() => {
+				newRole = Role();
+				isModalShow = false;
+			}}>Отмена</button>
+		<button
+			class="btn btn-dark text-light"
+			onclick={() => {
+				if (newRole.name.trim() != '') {
+					if (isRoleEdited) {
+						// Перезаписываем тег
+						update(ref(db, `roles/${editedRoleUID}`), newRole);
+					} else {
+						// Создаём новый тег
+						if (!$state.snapshot(roles).find(r => r[1].name == newRole.name)) {
+							push(ref(db, '/roles'), newRole);
+						}
+					}
+				}
+				editedRoleUID = '';
+				newRole = Role();
+				isRoleEdited = false;
+				isModalShow = false;
+			}}>Сохранить</button>
+	</div>
+</Modal>
 
 <style>
 	.hover:hover {

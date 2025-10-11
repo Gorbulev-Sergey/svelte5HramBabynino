@@ -126,7 +126,6 @@
 					if (modalTitle == 'Редактировать тег') {
 						// Перезаписываем тег
 						update(ref(db, `tags/${indexEditedTag}`), tag).then(() => {
-							invalidateAll();
 							tag = Tag();
 							indexEditedTag = -1;
 						});
