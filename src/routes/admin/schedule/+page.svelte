@@ -48,24 +48,24 @@
 {#snippet header()}
 	<PageTitle title="Расписание">
 		<div class="d-flex align-items-center gap-2">
-			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
-			<a
-				href="/admin/schedule/edit"
-				aria-label="Редактировать"
-				class="btn btn-dark text-light text-nowrap">Редактировать</a>
 			<button
 				aria-label="Печать"
 				class="btn btn-dark text-light text-nowrap"
 				onclick={() => window.print()}>
 				<i class="fa-solid fa-print"></i>
 			</button>
+			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
+			<a
+				href="/admin/schedule/edit"
+				aria-label="Редактировать"
+				class="btn btn-dark text-light text-nowrap">Редактировать</a>
 		</div>
 	</PageTitle>
 {/snippet}
 
 <div class="d-flex flex-column rounded bg-white mx-2">
 	{#if daysInDataMonth > 0}
-		<div class="no-print mb-1" style="display: grid; grid-template-columns: .15fr 1fr;">
+		<div class="mb-1" style="display: grid; grid-template-columns: .15fr 1fr;">
 			<div class="text-center py-2 px-2" style="min-width: 8.2em;">
 				<span class="badge bg-dark text-light">Дата</span>
 			</div>

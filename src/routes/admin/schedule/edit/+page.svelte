@@ -56,12 +56,6 @@
 {#snippet header()}
 	<PageTitle title="Редактировать расписание">
 		<div class="d-flex align-items-center gap-2">
-			<button
-				aria-label="Печать"
-				class="btn btn-dark text-light text-nowrap"
-				onclick={() => window.print()}>
-				<i class="fa-solid fa-print"></i>
-			</button>
 			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
 			<a href="/admin/schedule" aria-label="Отмена" class="btn btn-light text-dark text-nowrap"
 				>Отмена</a>

@@ -16,17 +16,21 @@
 			data-bs-toggle="dropdown">
 			{selected.name}
 		</button>
-		<ul class="dropdown-menu bg-light border-0">
-			{#each tags as item}
-				<li>
-					<button
-						class="btn btn-light text-dark rounded-0 w-100 text-start text-nowrap"
-						on:click={() => {
-							selected = item;
-							onSelect(item);
-						}}>{item.name}</button>
-				</li>
-			{/each}
+		<ul class="dropdown-menu bg-light border-0 overflow-y-scroll" style="max-height: 75vh;">
+			<div class="d-flex flex-column">
+				{#each tags as item}
+					<li>
+						<button
+							class="btn {item.name == selected.name
+								? 'fw-bold '
+								: ''} btn-sm btn-light text-dark rounded-0 w-100 text-start text-nowrap"
+							on:click={() => {
+								selected = item;
+								onSelect(item);
+							}}>{item.name}</button>
+					</li>
+				{/each}
+			</div>
 		</ul>
 	</div>
 </div>

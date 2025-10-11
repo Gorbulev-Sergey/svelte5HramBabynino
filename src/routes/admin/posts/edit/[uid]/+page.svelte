@@ -9,12 +9,11 @@
 	import { ref, update } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { onDestroy } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
 
 	let { data } = $props();
-	let tags = data.tags;
+	let tags = $state(data.tags);
 	let post = $state(data.post);
 	let selectedTag = $state(Tag());
 

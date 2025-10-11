@@ -159,7 +159,7 @@
 
 <IsAuth>
 	<div class="d-flex align-items-start">
-		<div class="d-flex flex-column shadow sticky-top bg-light" style="height:100vh">
+		<div class="d-flex flex-column shadow sticky-top bg-light no-print" style="height:100vh">
 			<button
 				class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-4 text-uppercase fw-bold text-nowrap"
 				onclick={() => goto('/admin/posts')}>

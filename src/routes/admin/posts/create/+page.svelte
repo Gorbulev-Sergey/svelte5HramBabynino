@@ -6,7 +6,6 @@
 	import { Tag } from '$lib/models/Tag';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { push, ref } from 'firebase/database';
-	import { onDestroy } from 'svelte';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
@@ -14,9 +13,9 @@
 
 	let { data } = $props();
 	let tags = $state(data.tags);
-	let post = Post();
-	let selectedTag = Tag();
-	let showCode = false;
+	let post = $state(Post());
+	let selectedTag = $state(Tag());
+	let showCode = $state(false);
 
 	SETTINGS.Header = header;
 </script>
@@ -128,6 +127,7 @@
 								<!-- svelte-ignore a11y-missing-attribute -->
 								{#if post.cover.video.includes('https://youtu.be')}
 									<iframe
+										title=""
 										frameborder="0"
 										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 										allowfullscreen
@@ -136,6 +136,7 @@
 									></iframe>
 								{:else if post.cover.video.includes('https://vkvideo.ru/video')}
 									<iframe
+										title=""
 										class="embed-responsive-item"
 										src={post.cover.video
 											.replace(
@@ -145,6 +146,7 @@
 											.replace('-' + post.cover.video?.split('-')[1], '')}></iframe>
 								{:else if post.cover.video.includes('https://rutube.ru/video')}
 									<iframe
+										title=""
 										frameBorder="0"
 										allow="clipboard-write; autoplay"
 										allowFullScreen
