@@ -2,15 +2,23 @@
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Album from '$lib/components/photos/Album.svelte';
+	import type { IAlbum } from '$lib/models/photos/Album.js';
 	import { db } from '$lib/scripts/firebase';
 	import { countAlbumOnAdminPage } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
-	import { ref, remove } from 'firebase/database';
-	import { onDestroy } from 'svelte';
+	import { onValue, ref, remove } from 'firebase/database';
+	import { onDestroy, onMount } from 'svelte';
 
-	let { data } = $props();
-	let albums = $derived(data.albums);
+	let albums: [string, IAlbum][] = $state([]);
 	SETTINGS.Header = header;
+
+	onMount(async () => {
+		onValue(ref(db, '/photos'), s => {
+			if (s.exists()) {
+				albums = Object.entries(s.val());
+			}
+		});
+	});
 </script>
 
 {#snippet header()}
@@ -35,7 +43,9 @@
 {/snippet}
 
 <div class="row row-cols-1 row-cols-md-{$countAlbumOnAdminPage} g-3">
-	{#each albums.sort(([k1, v1], [k2, v2]) => new Date(v2.date).getTime() - new Date(v1.date).getTime()) as [uid, album]}
+	{#each $state
+		.snapshot(albums)
+		.sort(([k1, v1], [k2, v2]) => new Date(v2.date).getTime() - new Date(v1.date).getTime()) as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>
 				<div slot="navigation" class="flex-grow-1">
