@@ -2,12 +2,12 @@
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { db } from '$lib/scripts/firebase';
-	import { Header } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, ref, set } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 
 	let { contacts } = $props();
-	$Header = header;
+	SETTINGS.Header = header;
 	onMount(() => {
 		onValue(ref(db, '/contacts'), s => {
 			if (s.exists()) {
@@ -15,7 +15,6 @@
 			}
 		});
 	});
-	onDestroy(() => ($Header = null));
 </script>
 
 {#snippet header()}

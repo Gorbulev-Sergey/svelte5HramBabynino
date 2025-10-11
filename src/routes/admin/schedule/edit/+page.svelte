@@ -3,7 +3,6 @@
 	import MonthPicker from '$lib/components/schedule/MonthPicker.svelte';
 	import { Field, type IField } from '$lib/models/schedule/Field';
 	import { db } from '$lib/scripts/firebase';
-	import { Header } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import { get, ref, set } from 'firebase/database';
 	import { onDestroy } from 'svelte';
@@ -51,8 +50,7 @@
 		return new Date(date).getDay() == 0 ? 'text-danger' : 'text-dark';
 	}
 
-	$Header = header;
-	onDestroy(() => ($Header = null));
+	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Header, isPostUpdated } from '$lib/scripts/store.js';
+	import { isPostUpdated } from '$lib/scripts/store.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pin from '$lib/components/Pin.svelte';
@@ -11,14 +11,14 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { onDestroy } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
+	import { SETTINGS } from '$lib/store/store.svelte.js';
 
 	let { data } = $props();
 	let tags = data.tags;
 	let post = $state(data.post);
 	let selectedTag = $state(Tag());
 
-	$Header = header;
-	onDestroy(() => ($Header = null));
+	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}

@@ -5,6 +5,7 @@
 	import { type ITag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, ref } from 'firebase/database';
 
 	let { children } = $props();
@@ -45,6 +46,8 @@
 			title: 'Панель управления'
 		}
 	];
+
+	SETTINGS.Header = null;
 
 	// Заполняем переменную $showedPostsLength в хранилище
 	$effect.pre(() => {

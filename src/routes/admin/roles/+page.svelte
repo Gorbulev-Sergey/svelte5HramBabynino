@@ -2,7 +2,8 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import type { IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts, Header } from '$lib/scripts/store';
+	import { alerts } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 
@@ -12,14 +13,13 @@
 	});
 	let isRoleEdit = $state(false);
 	let editedRoleUID = $state('');
-	$Header = header;
+	SETTINGS.Header = header;
 
 	onMount(async () => {
 		onValue(ref(db, '/roles'), s => {
 			if (s.exists()) roles = Object.entries(s.val()) as [string, IRole][];
 		});
 	});
-	onDestroy(() => ($Header = null));
 </script>
 
 {#snippet header()}

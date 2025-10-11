@@ -2,7 +2,8 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import ModalPhoto from '$lib/components/ModalPhoto.svelte';
 	import { storage } from '$lib/scripts/firebase';
-	import { countPhotoOnAdminPage, Header } from '$lib/scripts/store';
+	import { countPhotoOnAdminPage } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import {
 		uploadBytes,
 		ref,
@@ -34,7 +35,7 @@
 	let documentsFolder = '/Documents';
 	let documentsRef: StorageReference = $derived(ref(storage, `${documentsFolder}`));
 
-	$Header = header;
+	SETTINGS.Header = header;
 
 	let getFolders = () => listAll(albumsRef).then(result => (folders = result.prefixes));
 	let getPhotos = () => {
@@ -71,7 +72,6 @@
 			getDocuments();
 		});
 	});
-	onDestroy(() => ($Header = null));
 </script>
 
 {#snippet header()}

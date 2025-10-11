@@ -1,13 +1,13 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { Post } from '$lib/models/Post.js';
+	import { Post, type IPost } from '$lib/models/Post.js';
 	import { db } from '$lib/scripts/firebase';
-	import { Header } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { child, off, push, ref, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
-	$Header = header;
+	SETTINGS.Header = header;
 	let { data } = $props();
 	// Access toket
 	let access_token = $state(
@@ -29,7 +29,6 @@
 	let allTags = $derived(data.tags);
 	// Список прикрепляемых тегов
 	let tags = $state([data.tags.find(t => t.name == 'видео')]);
-	onDestroy(() => ($Header = null));
 </script>
 
 {#snippet header()}
@@ -44,7 +43,7 @@
 					// Формируем посты
 					allVideos.forEach(v => {
 						let postId = push(child(ref(db), '/posts')).key;
-						let post: Post = new Post();
+						let post: IPost = Post();
 						post.title = v.title;
 						post.description = description;
 						post.cover.video = v.player;

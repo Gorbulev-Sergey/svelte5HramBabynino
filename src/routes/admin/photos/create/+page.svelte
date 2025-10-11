@@ -2,14 +2,14 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { goto } from '$app/navigation';
-	import { type IPhoto, Photo as _Photo } from '$lib/models/photos/Photo';
-	import { type IAlbum, Album } from '$lib/models/photos/Album';
+	import { Photo as _Photo } from '$lib/models/photos/Photo';
+	import { Album } from '$lib/models/photos/Album';
 	import { db, storage } from '$lib/scripts/firebase';
 	import { push, ref as refDb } from 'firebase/database';
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onDestroy, onMount } from 'svelte';
-	import { Header } from '$lib/scripts/store';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
+	import { SETTINGS } from '$lib/store/store.svelte';
 
 	let album = $state(Album());
 
@@ -27,14 +27,13 @@
 		}
 	};
 
-	$Header = header;
+	SETTINGS.Header = header;
 	onMount(() => {
 		listAll(albumsRef).then(result => {
 			folders = result.prefixes;
 			getPhotos();
 		});
 	});
-	onDestroy(() => ($Header = null));
 
 	let isSecondTabActive = $state(false);
 </script>

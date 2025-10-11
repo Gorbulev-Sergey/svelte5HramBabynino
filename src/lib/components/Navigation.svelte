@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { isSystemTheme, Header, theme } from '$lib/scripts/store';
+	import { isSystemTheme, theme } from '$lib/scripts/store';
 	import Large from '$lib/components/Breakpoint/Large.svelte';
 	import Smalle from '$lib/components/Breakpoint/Small.svelte';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { onMount, type Snippet } from 'svelte';
+	import { SETTINGS } from '$lib/store/store.svelte';
 
 	interface Props {
 		title: String;
@@ -183,7 +184,7 @@
 			</div>
 		</div>
 	</Large>
-	{#if $Header != null}
+	{#if SETTINGS.Header != null}
 		<div class="px-3">
 			<hr />
 			{@render children?.()}

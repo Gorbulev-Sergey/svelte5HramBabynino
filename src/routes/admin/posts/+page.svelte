@@ -4,13 +4,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import {
-		adminPostsFilters,
-		countPostOnAdminPage,
-		EFixedUnfixed,
-		Header,
-		isPostUpdated
-	} from '$lib/scripts/store.js';
+	import { adminPostsFilters, countPostOnAdminPage, EFixedUnfixed } from '$lib/scripts/store.js';
 	import FilterTags from '$lib/components/posts/FilterTags.svelte';
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
@@ -18,6 +12,7 @@
 	import { type ITag, Tag } from '$lib/models/Tag';
 	import { type IPost, Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
+	import { SETTINGS } from '$lib/store/store.svelte';
 
 	let posts: [string, IPost][] = $state([]);
 	let tags: ITag[] = $state([]);
@@ -90,8 +85,7 @@
 		});
 	});
 
-	$Header = header;
-	onDestroy(() => ($Header = null));
+	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}

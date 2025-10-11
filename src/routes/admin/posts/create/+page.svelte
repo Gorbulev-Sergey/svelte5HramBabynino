@@ -5,12 +5,12 @@
 	import { Post } from '$lib/models/Post';
 	import { Tag } from '$lib/models/Tag';
 	import { auth, db } from '$lib/scripts/firebase';
-	import { onValue, push, ref } from 'firebase/database';
-	import { onDestroy, onMount } from 'svelte';
+	import { push, ref } from 'firebase/database';
+	import { onDestroy } from 'svelte';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { Header } from '$lib/scripts/store.js';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
+	import { SETTINGS } from '$lib/store/store.svelte.js';
 
 	let { data } = $props();
 	let tags = $state(data.tags);
@@ -18,8 +18,7 @@
 	let selectedTag = Tag();
 	let showCode = false;
 
-	$Header = header;
-	onDestroy(() => ($Header = null));
+	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}

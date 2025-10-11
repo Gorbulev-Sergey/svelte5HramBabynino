@@ -2,30 +2,29 @@
 	import { invalidateAll } from '$app/navigation';
 	import Modal from '$lib/components/Modal.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { Tag } from '$lib/models/Tag';
+	import { Tag, type ITag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
-	import { Header } from '$lib/scripts/store.js';
+	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { ref, set, update } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
 	let tags = $derived(data.tags);
-	let tag = $state(new Tag());
+	let tag = $state(Tag());
 	let indexEditedTag = $state(-1);
 	let modalTitle = $state('Создать тег');
 	let isModalShow = $state(true);
-	function saveToDb(ts: Tag[]) {
+	function saveToDb(ts: ITag[]) {
 		set(ref(db, `/tags`), ts).then(() => {
 			invalidateAll();
 		});
 	}
-	function saveOneToDb(t: Tag) {
+	function saveOneToDb(t: ITag) {
 		set(ref(db, `/tags/${tags.length}`), t).then(() => {
 			invalidateAll();
 		});
 	}
-	$Header = header;
-	onDestroy(() => ($Header = null));
+	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}
@@ -85,7 +84,7 @@
 			<div
 				class="btn btn-dark text-dark"
 				onclick={async () => {
-					saveToDb(tags.filter((t: Tag) => t != item));
+					saveToDb(tags.filter((t: ITag) => t != item));
 				}}>
 				<i class="fa-solid fa-trash text-danger"></i>
 			</div>
@@ -93,7 +92,7 @@
 	{/each}
 </div>
 
-<Modal bind:isModalShow onClose={() => (tag = new Tag())}>
+<Modal bind:isModalShow onClose={() => (tag = Tag())}>
 	<h5 class="text-dark">{modalTitle}</h5>
 	<div class="d-flex flex-column gap-1">
 		<input class="form-control text-dark" bind:value={tag.name} placeholder="название" />
@@ -103,7 +102,7 @@
 		<button
 			class="btn btn-light text-dark"
 			onclick={() => {
-				tag = new Tag();
+				tag = Tag();
 				isModalShow = false;
 			}}>Отмена</button>
 		<button
@@ -121,16 +120,16 @@
 						// Перезаписываем тег
 						update(ref(db, `tags/${indexEditedTag}`), tag).then(() => {
 							invalidateAll();
-							tag = new Tag();
+							tag = Tag();
 							indexEditedTag = -1;
 						});
 					} else {
 						// Создаём новый тег
 						saveOneToDb(tag);
-						tag = new Tag();
+						tag = Tag();
 					}
 				}
-				tag = new Tag();
+				tag = Tag();
 				isModalShow = false;
 			}}>Сохранить</button>
 	</div>

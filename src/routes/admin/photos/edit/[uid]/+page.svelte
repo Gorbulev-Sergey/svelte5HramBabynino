@@ -3,15 +3,14 @@
 	import Photo from '$lib/components/photos/Photo.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { type IPhoto, Photo as _Photo } from '$lib/models/photos/Photo';
+	import { Photo as _Photo } from '$lib/models/photos/Photo';
 	import { Album } from '$lib/models/photos/Album';
 	import { db, storage } from '$lib/scripts/firebase';
 	import { onValue, ref as refDb, update } from 'firebase/database';
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onDestroy, onMount } from 'svelte';
-	import Container from '$lib/components/Container.svelte';
-	import { Header } from '$lib/scripts/store';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
+	import { SETTINGS } from '$lib/store/store.svelte';
 
 	let album = $state(Album());
 
@@ -29,7 +28,7 @@
 		}
 	};
 
-	$Header = header;
+	SETTINGS.Header = header;
 
 	onMount(async () => {
 		onValue(refDb(db, `/photos/${$page.params.uid}`), s => {
@@ -43,7 +42,6 @@
 			}
 		});
 	});
-	onDestroy(() => ($Header = null));
 
 	let isSecondTabActive = $state(false);
 </script>

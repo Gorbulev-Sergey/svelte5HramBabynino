@@ -1,9 +1,9 @@
 import { Tag } from '$lib/models/Tag';
+import { type Snippet } from 'svelte';
 import { writable, type Writable } from 'svelte/store';
-import type { Snippet } from 'svelte';
 
 // Дополнительная панель в макете
-export let Header: Writable<Snippet> | null = writable();
+//export let Header: Writable<Snippet> | null = writable();
 
 // Для сохранения темы оформления (светлой или тёмной)
 export let theme = writable('');
@@ -20,7 +20,7 @@ export let adminPostsFilters = writable({
 	published: true,
 	pinned: false,
 	newFirst: true,
-	tag: new Tag('главное', 'Главное'),
+	tag: Tag('главное', 'Главное'),
 	fixedUnfixed: EFixedUnfixed['закреплённые и незакреплённые']
 });
 

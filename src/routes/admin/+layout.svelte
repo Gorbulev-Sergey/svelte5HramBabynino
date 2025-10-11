@@ -3,19 +3,19 @@
 	import {
 		countPostOnAdminPage,
 		countAlbumOnAdminPage,
-		Header,
 		isAdminCompactMode,
 		isSystemTheme,
 		theme,
 		countPhotoOnAdminPage
 	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
-	import { User } from '$lib/models/admin/User';
+	import { User, type IUser } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { SETTINGS } from '$lib/store/store.svelte';
 
 	interface IRoute {
 		url: string;
@@ -108,7 +108,7 @@
 				onValue(ref(db, '/users'), s => {
 					if (
 						s.exists() &&
-						(Object.values(s.val()) as User[]).find(
+						(Object.values(s.val()) as IUser[]).find(
 							u => u.uid == user.uid && u.role.name == 'админ'
 						)
 					) {
@@ -149,7 +149,13 @@
 			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
 		else $isAdminCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
 	});
+
+	SETTINGS.Header = subpanel;
 </script>
+
+{#snippet subpanel()}
+	<div></div>
+{/snippet}
 
 <IsAuth>
 	<div class="d-flex align-items-start">
@@ -259,13 +265,13 @@
 			</div>
 		</div>
 		<div class="flex-grow-1 d-flex flex-column">
-			<div class="d-flex flex-column sticky-top">
-				{#if $Header}
+			{#if SETTINGS.Header}
+				<div class="d-flex flex-column sticky-top">
 					<div class="bg-light">
-						{@render $Header?.()}
+						{@render SETTINGS.Header?.()}
 					</div>
-				{/if}
-			</div>
+				</div>
+			{/if}
 			<Container>
 				{@render children?.()}
 			</Container>

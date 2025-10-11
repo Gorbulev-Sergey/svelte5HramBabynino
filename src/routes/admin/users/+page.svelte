@@ -2,7 +2,8 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import type { IUser } from '$lib/models/admin/User';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts, Header } from '$lib/scripts/store';
+	import { alerts } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte';
 	import { onValue, ref, remove, set } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 
@@ -14,7 +15,7 @@
 			name: ''
 		}
 	});
-	$Header = header;
+	SETTINGS.Header = header;
 
 	onMount(async () => {
 		onValue(ref(db, '/users'), s => {
@@ -23,7 +24,6 @@
 			}
 		});
 	});
-	onDestroy(() => ($Header = null));
 </script>
 
 {#snippet header()}

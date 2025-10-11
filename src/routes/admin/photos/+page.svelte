@@ -3,15 +3,14 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Album from '$lib/components/photos/Album.svelte';
 	import { db } from '$lib/scripts/firebase';
-	import { countAlbumOnAdminPage, Header } from '$lib/scripts/store';
+	import { countAlbumOnAdminPage } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { ref, remove } from 'firebase/database';
 	import { onDestroy } from 'svelte';
 
 	let { data } = $props();
 	let albums = $derived(data.albums);
-	$Header = header;
-
-	onDestroy(() => ($Header = null));
+	SETTINGS.Header = header;
 </script>
 
 {#snippet header()}
