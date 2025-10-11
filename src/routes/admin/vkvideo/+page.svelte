@@ -2,12 +2,13 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Post, type IPost } from '$lib/models/Post.js';
+	import { type ITag, Tag as _Tag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
-	import { child, off, push, ref, update } from 'firebase/database';
+	import { child, off, onValue, push, ref, update } from 'firebase/database';
+	import { onMount } from 'svelte';
 
 	SETTINGS.Header = header;
-	let { data } = $props();
 
 	// Access toket
 	let access_token = $state(SETTINGS.vkAccessToken);
@@ -23,21 +24,27 @@
 	let allVideos = $state([]);
 	// Описание для всех видео
 	let description = $state('');
+
 	// Список всех доступных тегов
-	let allTags = $derived(data.tags);
+	let allTags: ITag[] = $state([]);
 	// Список прикрепляемых тегов
-	let tags = $state([data.tags.find(t => t.name == 'видео')]);
+	let tags = $state([_Tag('видео', 'Видео')]);
+
+	onMount(async () => {
+		onValue(ref(db, '/tags'), s => {
+			if (s.exists()) {
+				allTags = Object.values(s.val());
+			}
+		});
+	});
 </script>
 
 {#snippet header()}
 	<PageTitle title="ВК видео (загрузка видео из вк)">
-		{#if allVideos.length <= 0}
-			<button class="btn btn-dark text-light" disabled>Загрузить видео на наш сайт</button>
-		{:else}
+		{#if allVideos.length > 0}
 			<button
 				class="btn btn-dark text-light"
 				onclick={async () => {
-					//let posts: Post[] = [];
 					// Формируем посты
 					allVideos.forEach(v => {
 						let postId = push(child(ref(db), '/posts')).key;
@@ -52,7 +59,7 @@
 					});
 					//console.log(posts);
 					allVideos = [];
-				}}>Загрузить видео на наш сайт</button>
+				}}>Загрузить видео в базу данных сайта</button>
 		{/if}
 	</PageTitle>
 {/snippet}
@@ -115,7 +122,7 @@
 {#if allVideos.length > 0}
 	<div class="mt-5">
 		<h5>Теги, которые добавляются ко всем видео</h5>
-		<TagManager tags={allTags} bind:selectedTags={tags} />
+		<TagManager tags={allTags} selectedTag={_Tag()} bind:selectedTags={tags} />
 	</div>
 {/if}
 

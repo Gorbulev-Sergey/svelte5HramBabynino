@@ -7,10 +7,10 @@
 	interface IProps {
 		title?: string;
 		tags: ITag[];
-		selectedTag: ITag;
+		selectedTag?: ITag;
 		selectedTags: ITag[];
 		_class?: string;
-		onSelect: () => void;
+		onSelect?: () => void;
 	}
 
 	let {
