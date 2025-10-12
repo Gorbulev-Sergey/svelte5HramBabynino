@@ -9,13 +9,17 @@
 		countPhotoOnAdminPage
 	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
-	import { User, type IUser } from '$lib/models/admin/User';
+	import { type IUser } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { SETTINGS } from '$lib/store/store.svelte';
+
+	interface IProps {
+		children: Snippet;
+	}
 
 	interface IRoute {
 		url: string;
@@ -79,9 +83,10 @@
 			icon: 'fa-solid fa-right-from-bracket'
 		}
 	];
-	let { children }: { children: Snippet } = $props();
 	let isCurrentUserAdmin = $state(false);
 	let activeRoute: IRoute = $state(routesLeft[0]);
+
+	let { children }: IProps = $props();
 
 	let changeTheme = (th: string, isSystemTheme1: boolean) => {
 		if (!isSystemTheme1) {
