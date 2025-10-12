@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 
 	interface IProps {
-		children: Snippet;
+		children?: Snippet;
 		title: String;
 		_class?: String;
 	}

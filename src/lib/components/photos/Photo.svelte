@@ -5,17 +5,17 @@
 	interface Props {
 		photo: IPhoto;
 		_class?: String;
-		onUp: () => void;
-		onDown: () => void;
-		onDelete: () => void;
+		onUp?: () => void;
+		onDown?: () => void;
+		onDelete?: () => void;
 		children?: Snippet;
 	}
 	let {
 		photo = $bindable(Photo()),
 		_class = '',
-		onUp,
-		onDown,
-		onDelete,
+		onUp = () => {},
+		onDown = () => {},
+		onDelete = () => {},
 		children = undefined
 	}: Props = $props();
 </script>

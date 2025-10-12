@@ -59,6 +59,11 @@
 			icon: 'fa-brands fa-vk'
 		},
 		{
+			url: '/admin/vkalbums',
+			title: 'ВК альбомы',
+			icon: 'fa-solid fa-images'
+		},
+		{
 			url: '/admin/contacts',
 			title: 'Контакты',
 			icon: 'fa-regular fa-id-card'
