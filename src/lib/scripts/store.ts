@@ -1,6 +1,4 @@
-import type { IRole } from '$lib/models/admin/Role';
 import { Tag } from '$lib/models/Tag';
-import { type Snippet } from 'svelte';
 import { writable, type Writable } from 'svelte/store';
 
 // Дополнительная панель в макете
