@@ -6,14 +6,20 @@
 		children?: Snippet;
 		isModalShow: boolean;
 		onClose?: () => void;
+		_class?: string;
 	}
-	let { children, isModalShow = $bindable(false), onClose = () => {} }: IProps = $props();
+	let {
+		children,
+		isModalShow = $bindable(false),
+		onClose = () => {},
+		_class = ''
+	}: IProps = $props();
 </script>
 
 <div
-	class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75"
+	class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75 {_class}"
 	style="display: {isModalShow ? 'block' : 'none'};">
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" tabindex="-1">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable {_class}" tabindex="-1">
 		<div transition:scale class="modal-content border-0 shadow-sm bg-white text-dark p-1">
 			<button
 				aria-label=""
