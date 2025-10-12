@@ -129,10 +129,10 @@
 	</div>
 </div>
 
-<Modal bind:isModalShow={isModalPhotoShow} _class="modal-fullscreen">
+<Modal bind:isModalShow={isModalPhotoShow} _class="modal-fullscreen bg-dark">
 	<div
 		class="img-fluid rounded d-flex flex-column"
-		style="background-image: url({modalPhotoUrl}); background-repeat: no-repeat; background-position: center; background-size: contain; height:95vh;">
+		style="background-image: url({modalPhotoUrl}); background-repeat: no-repeat; background-position: center; background-size: contain; height:93vh;">
 	</div>
 </Modal>
 

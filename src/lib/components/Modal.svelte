@@ -17,7 +17,7 @@
 </script>
 
 <div
-	class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75 {_class}"
+	class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75"
 	style="display: {isModalShow ? 'block' : 'none'};">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable {_class}" tabindex="-1">
 		<div transition:scale class="modal-content border-0 shadow-sm bg-white text-dark p-1">
