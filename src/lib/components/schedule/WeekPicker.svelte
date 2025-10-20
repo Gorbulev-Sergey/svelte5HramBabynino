@@ -6,6 +6,7 @@
 		value: number;
 		onDown?: () => void;
 		onUp?: () => void;
+		style?: string;
 	}
 	let {
 		title = '',
@@ -13,7 +14,8 @@
 		max = $bindable(50),
 		value = $bindable(10),
 		onDown = () => {},
-		onUp = () => {}
+		onUp = () => {},
+		style = 'width: 2.5em;'
 	}: IProps = $props();
 </script>
 
@@ -29,7 +31,7 @@
 			}}><i class="fa-solid fa-angle-left"></i></button>
 		<input
 			class="form-control border-0 text-center px-1 no-buttons bg-white text-dark"
-			style="width: 2.5em;"
+			{style}
 			type="number"
 			bind:value />
 		<button

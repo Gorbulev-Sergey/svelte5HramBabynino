@@ -1,4 +1,12 @@
-﻿@media print {
+﻿.only-print {
+	display: none;
+}
+
+@media print {
+	.only-print {
+		display: block;
+	}
+
 	@page {
 		size: auto;
 		margin: 1.8em !important;
@@ -8,6 +16,11 @@
 	@page :first {
 		margin: 1.8em !important;
 		padding: 0 !important;
+	}
+
+	.for-print {
+		color: black !important;
+		font-size: 1.1em;
 	}
 
 	html,
@@ -89,6 +102,7 @@
 		text-transform: uppercase;
 		margin-bottom: 0.5em !important;
 	}
+
 	.badge {
 		background-color: #e9ecef !important;
 		font-size: 0.8em !important;
