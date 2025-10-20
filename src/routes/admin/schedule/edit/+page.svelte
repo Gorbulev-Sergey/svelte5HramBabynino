@@ -56,7 +56,7 @@
 </script>
 
 {#snippet header()}
-	<PageTitle title="Редактировать расписание">
+	<PageTitle title="Редактировать расписание богослужений">
 		<div class="d-flex align-items-center gap-2">
 			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
 			<a href="/admin/schedule" aria-label="Отмена" class="btn btn-light text-dark text-nowrap"

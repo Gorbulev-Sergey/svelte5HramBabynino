@@ -49,9 +49,21 @@
 			</div>
 		</div>
 
+		{#snippet notAuth()}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<i
+				class="fa-solid fa-copyright me-1"
+				style="cursor: pointer;"
+				title="Вход для администраторов"
+				onclick={() => {
+					goto('/auth/login');
+				}}></i>
+		{/snippet}
+
 		<b class="text-center">
 			<div class="mb-0">
-				<IsAuth>
+				<IsAuth {notAuth}>
 					<!-- svelte-ignore a11y_click_events_have_key_events -->
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<i
@@ -61,14 +73,6 @@
 						onclick={() => {
 							auth.signOut();
 							goto('/');
-						}}></i>
-					<i
-						slot="notAuth"
-						class="fa-solid fa-copyright me-1"
-						style="cursor: pointer;"
-						title="Вход для администраторов"
-						onclick={() => {
-							goto('/auth/login');
 						}}></i>
 				</IsAuth>
 				Калужская область, посёлок Бабынино, храм "Вознесения Господня", {new Date().getFullYear()} год
