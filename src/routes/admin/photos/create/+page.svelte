@@ -33,17 +33,17 @@
 	interface IOrig_photo {
 		url: string;
 	}
-	interface IVk {
-		isVKModalShow: boolean;
-		albumsVK: IVkAlbum[];
-		photosVK: IVkPhoto[];
-		albumIdVK: string;
+	interface IVK {
+		isModalShow: boolean;
+		albums: IVkAlbum[];
+		photos: IVkPhoto[];
+		selectedAlbumId: string;
 	}
-	let vk: IVk = $state({
-		isVKModalShow: false,
-		albumsVK: [],
-		photosVK: [],
-		albumIdVK: ''
+	let vk: IVK = $state({
+		isModalShow: false,
+		albums: [],
+		photos: [],
+		selectedAlbumId: ''
 	});
 
 	let getPhotos = () => {
@@ -115,7 +115,7 @@
 					<button
 						class="btn btn-sm btn-dark me-1"
 						onclick={() => {
-							vk.isVKModalShow = true;
+							vk.isModalShow = true;
 							// Запрашиваем список альбомов VK
 							fetch('/api/vkalbums', {
 								method: 'POST',
@@ -130,11 +130,11 @@
 								.then(r => r.json())
 								.then(data => {
 									if (data.response) {
-										vk.albumsVK = data.response.items;
+										vk.albums = data.response.items;
 
 										// Запрашиваем фотографии из первого альбома VK
-										if (vk.albumIdVK == '') {
-											vk.albumIdVK = vk.albumsVK[0].id;
+										if (vk.selectedAlbumId == '') {
+											vk.selectedAlbumId = vk.albums[0].id;
 											fetch('/api/vkphotos', {
 												method: 'POST',
 												headers: {
@@ -142,14 +142,14 @@
 												},
 												body: JSON.stringify({
 													owner_id: '-164431454',
-													album_id: vk.albumIdVK,
+													album_id: vk.selectedAlbumId,
 													v: '5.131'
 												})
 											})
 												.then(r => r.json())
 												.then(data => {
 													if (data.response) {
-														vk.photosVK = data.response.items;
+														vk.photos = data.response.items;
 													}
 												});
 										}
@@ -302,7 +302,7 @@
 </Modal>
 
 <!-- Фотографии из VK (модальное окно) -->
-<Modal isModalShow={vk.isVKModalShow} isFullScreen={true}>
+<Modal isModalShow={vk.isModalShow} isFullScreen={true}>
 	<h5 class="mx-2">Добавить фотографии из VK</h5>
 	<div class="d-flex gap-3 p-2 overflow-hidden">
 		<!-- Папки -->
@@ -310,16 +310,16 @@
 			<b>Папки:</b>
 			<div class="overflow-y-scroll pe-1">
 				<div class="d-flex flex-column flex-nowrap gap-1">
-					{#each vk.albumsVK as item, i}
+					{#each vk.albums as item, i}
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<!-- svelte-ignore a11y_no_static_element_interactions -->
 						<div
-							class="d-flex flex-nowrap align-items-top {vk.albumIdVK == item.id
+							class="d-flex flex-nowrap align-items-top {vk.selectedAlbumId == item.id
 								? 'bg-dark text-light'
 								: 'bg-light text-dark'} px-2 rounded-1"
 							style="cursor:pointer"
 							onclick={() => {
-								vk.albumIdVK = item.id;
+								vk.selectedAlbumId = item.id;
 								fetch('/api/vkphotos', {
 									method: 'POST',
 									headers: {
@@ -327,18 +327,19 @@
 									},
 									body: JSON.stringify({
 										owner_id: '-164431454',
-										album_id: vk.albumIdVK,
+										album_id: vk.selectedAlbumId,
 										v: '5.131'
 									})
 								})
 									.then(r => r.json())
 									.then(data => {
 										if (data.response) {
-											vk.photosVK = data.response.items;
+											vk.photos = data.response.items;
 										}
 									});
 							}}>
-							<div class="text-wrap p-1 {vk.albumIdVK == item.id ? 'text-light' : 'text-dark'}">
+							<div
+								class="text-wrap p-1 {vk.selectedAlbumId == item.id ? 'text-light' : 'text-dark'}">
 								{item.title}
 							</div>
 						</div>
@@ -351,9 +352,9 @@
 			<b>Фотографии:</b>
 			<div class="overflow-y-scroll overflow-x-hidden">
 				<div>
-					{#if vk.photosVK.length > 0}
+					{#if vk.photos.length > 0}
 						<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
-							{#each vk.photosVK as item, i}
+							{#each vk.photos as item, i}
 								<div class="col">
 									<!-- svelte-ignore a11y_click_events_have_key_events -->
 									<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -386,7 +387,7 @@
 			data-bs-dismiss="modal"
 			onclick={() => {
 				checkedPhotos = [];
-				vk.isVKModalShow = false;
+				vk.isModalShow = false;
 			}}>Отмена</button>
 		<button
 			class="btn btn-dark text-light"
@@ -397,7 +398,7 @@
 						album.photos = [...album.photos, _Photo('', v)];
 					});
 					checkedPhotos = [];
-					vk.isVKModalShow = false;
+					vk.isModalShow = false;
 				}
 			}}>Добавить</button>
 	</div>
