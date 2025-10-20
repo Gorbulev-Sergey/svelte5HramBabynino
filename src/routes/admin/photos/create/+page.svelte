@@ -298,106 +298,104 @@
 
 <!-- Фотографии из VK (модальное окно) -->
 <Modal isModalShow={isVKModalShow} isFullScreen={true}>
-	<div class="modal-content text-dark p-3">
-		<div class="d-flex justify-content-between align-items-center">
-			<h5 class="pb-0">Добавить фотографии из VK</h5>
-		</div>
-		<div class="d-flex gap-3 p-2 overflow-hidden">
-			<!-- Папки -->
-			<div class="d-flex flex-column flex-nowrap gap-2">
-				<b>Папки:</b>
-				<div class="overflow-y-scroll pe-1">
-					<div class="d-flex flex-column flex-nowrap gap-1">
-						{#each albumsVK as item, i}
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<!-- svelte-ignore a11y_no_static_element_interactions -->
-							<div
-								class="d-flex flex-nowrap align-items-top {selectedFolder == i
-									? 'bg-dark text-light'
-									: 'bg-light'} px-2 rounded-1"
-								style="cursor:pointer"
-								onclick={() => {
-									albumIdVK = item.id;
-									fetch('/api/vkphotos', {
-										method: 'POST',
-										headers: {
-											'Content-type': 'application/json; charset=UTF-8'
-										},
-										body: JSON.stringify({
-											owner_id: '-164431454',
-											album_id: albumIdVK,
-											v: '5.131'
-										})
+	<div class="d-flex justify-content-between align-items-center">
+		<h5 class="pb-0">Добавить фотографии из VK</h5>
+	</div>
+	<div class="d-flex gap-3 p-2 overflow-hidden">
+		<!-- Папки -->
+		<div class="d-flex flex-column flex-nowrap gap-2">
+			<b>Папки:</b>
+			<div class="overflow-y-scroll pe-1">
+				<div class="d-flex flex-column flex-nowrap gap-1">
+					{#each albumsVK as item, i}
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						<!-- svelte-ignore a11y_no_static_element_interactions -->
+						<div
+							class="d-flex flex-nowrap align-items-top {selectedFolder == i
+								? 'bg-dark text-light'
+								: 'bg-light'} px-2 rounded-1"
+							style="cursor:pointer"
+							onclick={() => {
+								albumIdVK = item.id;
+								fetch('/api/vkphotos', {
+									method: 'POST',
+									headers: {
+										'Content-type': 'application/json; charset=UTF-8'
+									},
+									body: JSON.stringify({
+										owner_id: '-164431454',
+										album_id: albumIdVK,
+										v: '5.131'
 									})
-										.then(r => r.json())
-										.then(data => {
-											if (data.response) {
-												photosVK = data.response.items;
-											}
-										});
-								}}>
-								<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
-									{item.title}
-								</div>
+								})
+									.then(r => r.json())
+									.then(data => {
+										if (data.response) {
+											photosVK = data.response.items;
+										}
+									});
+							}}>
+							<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
+								{item.title}
 							</div>
-						{/each}
-					</div>
-				</div>
-			</div>
-			<!-- Фотографии из папки -->
-			<div class="flex-grow-1 d-flex flex-column gap-2">
-				<b>Фотографии:</b>
-				<div class="overflow-y-scroll overflow-x-hidden">
-					<div>
-						{#if photosVK.length > 0}
-							<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
-								{#each photosVK as item, i}
-									<div class="col">
-										<!-- svelte-ignore a11y_click_events_have_key_events -->
-										<!-- svelte-ignore a11y_no_static_element_interactions -->
-										<div
-											class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-											style="background-image: url({item?.orig_photo
-												?.url}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
-											onclick={() => {
-												checkedPhotos = !checkedPhotos.includes(item?.orig_photo?.url)
-													? [...checkedPhotos, item?.orig_photo?.url]
-													: checkedPhotos.filter(v => v != item?.orig_photo?.url);
-											}}>
-											<input
-												type="checkbox"
-												class="form-check"
-												value={item?.orig_photo?.url}
-												bind:group={checkedPhotos} />
-										</div>
-									</div>
-								{/each}
-							</div>
-						{/if}
-					</div>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>
-		<div class="d-flex justify-content-end align-items-center gap-1">
-			<button
-				class="btn btn-light text-dark"
-				data-bs-dismiss="modal"
-				onclick={() => {
+		<!-- Фотографии из папки -->
+		<div class="flex-grow-1 d-flex flex-column gap-2">
+			<b>Фотографии:</b>
+			<div class="overflow-y-scroll overflow-x-hidden">
+				<div>
+					{#if photosVK.length > 0}
+						<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
+							{#each photosVK as item, i}
+								<div class="col">
+									<!-- svelte-ignore a11y_click_events_have_key_events -->
+									<!-- svelte-ignore a11y_no_static_element_interactions -->
+									<div
+										class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
+										style="background-image: url({item?.orig_photo
+											?.url}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
+										onclick={() => {
+											checkedPhotos = !checkedPhotos.includes(item?.orig_photo?.url)
+												? [...checkedPhotos, item?.orig_photo?.url]
+												: checkedPhotos.filter(v => v != item?.orig_photo?.url);
+										}}>
+										<input
+											type="checkbox"
+											class="form-check"
+											value={item?.orig_photo?.url}
+											bind:group={checkedPhotos} />
+									</div>
+								</div>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex justify-content-end align-items-center gap-1">
+		<button
+			class="btn btn-light text-dark"
+			data-bs-dismiss="modal"
+			onclick={() => {
+				checkedPhotos = [];
+				isVKModalShow = false;
+			}}>Отмена</button>
+		<button
+			class="btn btn-dark text-light"
+			data-bs-dismiss="modal"
+			onclick={() => {
+				if (checkedPhotos.length > 0) {
+					checkedPhotos.forEach(v => {
+						album.photos = [...album.photos, _Photo('', v)];
+					});
 					checkedPhotos = [];
 					isVKModalShow = false;
-				}}>Отмена</button>
-			<button
-				class="btn btn-dark text-light"
-				data-bs-dismiss="modal"
-				onclick={() => {
-					if (checkedPhotos.length > 0) {
-						checkedPhotos.forEach(v => {
-							album.photos = [...album.photos, _Photo('', v)];
-						});
-						checkedPhotos = [];
-						isVKModalShow = false;
-					}
-				}}>Добавить</button>
-		</div>
+				}
+			}}>Добавить</button>
 	</div>
 </Modal>
