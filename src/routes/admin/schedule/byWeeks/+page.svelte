@@ -89,13 +89,15 @@
 </script>
 
 {#snippet header()}
-	<PageTitle title="Расписание">
+	<PageTitle title="Расписание богослужений">
+		<div class="flex-grow-1">
+			<a class="btn btn-dark text-light text-nowrap" href="/admin/schedule">По неделям</a>
+		</div>
 		<div class="d-flex align-items-center gap-2">
 			<div class=" bg-white text-dark px-3 py-1 rounded">
 				В <span class="badge bg-light text-dark">{year}</span> году
 				<span class="badge bg-light text-dark">{getWeeksInYear(year)}</span> недели
 			</div>
-			<a class="btn btn-dark text-light text-nowrap" href="/admin/schedule">По месяцам </a>
 			<div>
 				<WeekPicker
 					title="Год:"

@@ -68,9 +68,9 @@
 							style="min-width: 5em;">
 							{@html schedule[date][j].time}
 						</div>
-						<div class={`text-wrap py-1 px-2 ${getInputColors(date)}`} style="min-width: 10em;">
+						<i class={`text-wrap py-1 px-2 ${getInputColors(date)}`} style="min-width: 10em;">
 							{@html schedule[date][j].pray}
-						</div>
+						</i>
 					{/each}
 				</div>
 			</div>
