@@ -35,7 +35,7 @@
 {#snippet header()}
 	<PageTitle title="Расписание богослужений">
 		<div class="flex-grow-1">
-			<a class="btn btn-dark text-light text-nowrap" href="/admin/schedule/byWeeks">По месяцам</a>
+			<a class="btn btn-dark text-light text-nowrap" href="/admin/schedule/byWeeks">по месяцам</a>
 		</div>
 		<div class="d-flex align-items-center gap-2">
 			<button
