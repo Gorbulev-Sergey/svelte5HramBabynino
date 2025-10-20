@@ -51,6 +51,7 @@
 {#snippet header()}
 	<PageTitle title="Расписание">
 		<div class="d-flex align-items-center gap-2">
+			<a class="btn btn-dark text-light text-nowrap" href="/admin/schedule/byWeeks"> По неделям </a>
 			<button
 				aria-label="Печать"
 				class="btn btn-dark text-light text-nowrap"

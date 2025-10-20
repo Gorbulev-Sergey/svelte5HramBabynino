@@ -14,8 +14,6 @@
 	let currentUser = $state<User>({} as User);
 	let users: IUser[] = $state([]);
 
-	$inspect(currentUser, users);
-
 	onMount(async () => {
 		onAuthStateChanged(auth, user => {
 			if (user) currentUser = user;
