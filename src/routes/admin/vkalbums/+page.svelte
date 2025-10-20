@@ -137,7 +137,7 @@
 </Modal>
 
 <div>
-	<h5>Созлать фотоальбом</h5>
+	<h5>Создать фотоальбом</h5>
 	<div class="d-flex gap-1">
 		<input class="form-control" bind:value={newAlbum} placeholder="Новый альбом" />
 		<button
