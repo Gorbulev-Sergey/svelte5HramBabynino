@@ -3,10 +3,18 @@
 	import { auth, db } from '$lib/scripts/firebase';
 	import { onAuthStateChanged, type User } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
-	let currentUser: IUser = _User();
-	let users: IUser[] = [];
+	interface IProps {
+		children?: Snippet;
+		notAuth?: Snippet;
+	}
+	let { children, notAuth }: IProps = $props();
+
+	let currentUser = $state<User>({} as User);
+	let users: IUser[] = $state([]);
+
+	$inspect(currentUser, users);
 
 	onMount(async () => {
 		onAuthStateChanged(auth, user => {
@@ -20,10 +28,10 @@
 	});
 </script>
 
-{#if currentUser}
+{#if currentUser.uid}
 	{#if users.find(u => u.uid == currentUser.uid)?.role.name == 'админ' || users.find(u => u.uid == currentUser.uid)?.role.name == 'редактор'}
-		<slot />
+		{@render children?.()}
 	{/if}
 {:else}
-	<slot name="notAuth" />
+	{@render notAuth?.()}
 {/if}
