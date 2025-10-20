@@ -7,9 +7,10 @@
 	import { db, storage } from '$lib/scripts/firebase';
 	import { push, ref as refDb } from 'firebase/database';
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 
 	let album = $state(Album());
 
@@ -19,6 +20,32 @@
 	let albumsRef = ref(storage, '/Photos');
 	let selectedFolder = $state(0);
 	let checkedPhotos: string[] = $state([]);
+	let isFirestoreModalShow = $state(false);
+
+	interface IVkAlbum {
+		id: string;
+		title: string;
+	}
+	interface IVkPhoto {
+		text: string;
+		orig_photo: IOrig_photo;
+	}
+	interface IOrig_photo {
+		url: string;
+	}
+	interface IVK {
+		isModalShow: boolean;
+		albums: IVkAlbum[];
+		photos: IVkPhoto[];
+		selectedAlbumId: string;
+	}
+	let vk: IVK = $state({
+		isModalShow: false,
+		albums: [],
+		photos: [],
+		selectedAlbumId: ''
+	});
+
 	let getPhotos = () => {
 		if (folders.length > 0) {
 			listAll(ref(storage, folders[$state.snapshot(selectedFolder)].fullPath)).then(s => {
@@ -82,11 +109,54 @@
 						}}
 						><i class="fa-solid fa-plus"></i> 10 фото
 					</button>
+					<button class="btn btn-sm btn-dark me-1" onclick={() => (isFirestoreModalShow = true)}>
+						<i class="fa-solid fa-cloud-arrow-down me-1"></i>из хранилища
+					</button>
 					<button
 						class="btn btn-sm btn-dark me-1"
-						data-bs-toggle="modal"
-						data-bs-target="#modalStoragePhotos">
-						<i class="fa-solid fa-cloud-arrow-down me-1"></i>из хранилища
+						onclick={() => {
+							vk.isModalShow = true;
+							// Запрашиваем список альбомов VK
+							fetch('/api/vkalbums', {
+								method: 'POST',
+								headers: {
+									'Content-type': 'application/json; charset=UTF-8'
+								},
+								body: JSON.stringify({
+									owner_id: '-164431454',
+									v: '5.131'
+								})
+							})
+								.then(r => r.json())
+								.then(data => {
+									if (data.response) {
+										vk.albums = data.response.items;
+
+										// Запрашиваем фотографии из первого альбома VK
+										if (vk.selectedAlbumId == '') {
+											vk.selectedAlbumId = vk.albums[0].id;
+											fetch('/api/vkphotos', {
+												method: 'POST',
+												headers: {
+													'Content-type': 'application/json; charset=UTF-8'
+												},
+												body: JSON.stringify({
+													owner_id: '-164431454',
+													album_id: vk.selectedAlbumId,
+													v: '5.131'
+												})
+											})
+												.then(r => r.json())
+												.then(data => {
+													if (data.response) {
+														vk.photos = data.response.items;
+													}
+												});
+										}
+									}
+								});
+						}}>
+						<i class="fa-solid fa-cloud-arrow-down me-1"></i>из VK
 					</button>
 				</div>
 			{/if}
@@ -144,93 +214,192 @@
 </div>
 
 <!-- Фотографии из хранилища (модальное окно) -->
-<div id="modalStoragePhotos" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
-	<div class="modal-dialog modal-dialog-centered modal-fullscreen">
-		<div class="modal-content bg-light text-dark p-3">
-			<div class="d-flex justify-content-between align-items-center">
-				<h5 class="pb-0">Добавить фотографии из хранилища</h5>
-				<button aria-label="" class="btn btn-sm btn-light text-dark" data-bs-dismiss="modal"
-					><i class="fa-solid fa-xmark"></i></button>
+<Modal isModalShow={isFirestoreModalShow} isFullScreen={true}>
+	<h5 class="mx-2">Добавить фотографии из Firestore</h5>
+	<div class="d-flex gap-3 p-2 overflow-hidden">
+		<!-- Папки -->
+		<div class="d-flex flex-column flex-nowrap gap-2">
+			<b>Папки:</b>
+			<div class="overflow-y-scroll pe-1">
+				<div class="d-flex flex-column flex-nowrap gap-1">
+					{#each folders as item, i}
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						<!-- svelte-ignore a11y_no_static_element_interactions -->
+						<div
+							class="d-flex flex-nowrap align-items-top {selectedFolder == i
+								? 'bg-dark text-light'
+								: 'bg-light'} px-2 rounded-1"
+							style="cursor:pointer"
+							onclick={() => {
+								selectedFolder = i;
+								getPhotos();
+							}}>
+							<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
+								{item.name}
+							</div>
+						</div>
+					{/each}
+				</div>
 			</div>
-			<div class="d-flex gap-3 p-2 overflow-hidden">
-				<!-- Папки -->
-				<div class="d-flex flex-column flex-nowrap gap-2">
-					<b>Папки:</b>
-					<div class="overflow-y-scroll pe-1">
-						<div class="d-flex flex-column flex-nowrap gap-1">
-							{#each folders as item, i}
-								<!-- svelte-ignore a11y_click_events_have_key_events -->
-								<!-- svelte-ignore a11y_no_static_element_interactions -->
-								<div
-									class="d-flex flex-nowrap align-items-top {selectedFolder == i
-										? 'bg-dark text-light'
-										: 'bg-light'} px-2 rounded-1"
-									style="cursor:pointer"
-									onclick={() => {
-										selectedFolder = i;
-										getPhotos();
-									}}>
-									<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
-										{item.name}
+		</div>
+		<!-- Фотографии из папки -->
+		<div class="flex-grow-1 d-flex flex-column gap-2">
+			<b>Фотографии:</b>
+			<div class="overflow-y-scroll overflow-x-hidden">
+				<div>
+					{#if photos.length > 0}
+						<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
+							{#each photos as photo, i}
+								<div class="col">
+									<!-- svelte-ignore a11y_click_events_have_key_events -->
+									{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
+										<!-- svelte-ignore a11y_click_events_have_key_events -->
+										<!-- svelte-ignore a11y_no_static_element_interactions -->
+										<div
+											class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
+											style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
+											onclick={() => {
+												checkedPhotos = !checkedPhotos.includes(s)
+													? [...checkedPhotos, s]
+													: checkedPhotos.filter(v => v != s);
+											}}>
+											<input
+												type="checkbox"
+												class="form-check"
+												value={s}
+												bind:group={checkedPhotos} />
+										</div>
+									{/await}
+								</div>
+							{/each}
+						</div>
+					{/if}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex justify-content-end align-items-center gap-1">
+		<button
+			class="btn btn-light text-dark"
+			data-bs-dismiss="modal"
+			onclick={() => {
+				checkedPhotos = [];
+				isFirestoreModalShow = false;
+			}}>Отмена</button>
+		<button
+			class="btn btn-dark text-light"
+			data-bs-dismiss="modal"
+			onclick={() => {
+				if (checkedPhotos.length > 0) {
+					checkedPhotos.forEach(v => {
+						album.photos = [...album.photos, _Photo('', v)];
+					});
+					checkedPhotos = [];
+					isFirestoreModalShow = false;
+				}
+			}}>Добавить</button>
+	</div>
+</Modal>
+
+<!-- Фотографии из VK (модальное окно) -->
+<Modal isModalShow={vk.isModalShow} isFullScreen={true}>
+	<h5 class="mx-2">Добавить фотографии из VK</h5>
+	<div class="d-flex gap-3 p-2 overflow-hidden">
+		<!-- Папки -->
+		<div class="d-flex flex-column flex-nowrap gap-2">
+			<b>Папки:</b>
+			<div class="overflow-y-scroll pe-1">
+				<div class="d-flex flex-column flex-nowrap gap-1">
+					{#each vk.albums as item, i}
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						<!-- svelte-ignore a11y_no_static_element_interactions -->
+						<div
+							class="d-flex flex-nowrap align-items-top {vk.selectedAlbumId == item.id
+								? 'bg-dark text-light'
+								: 'bg-light text-dark'} px-2 rounded-1"
+							style="cursor:pointer"
+							onclick={() => {
+								vk.selectedAlbumId = item.id;
+								fetch('/api/vkphotos', {
+									method: 'POST',
+									headers: {
+										'Content-type': 'application/json; charset=UTF-8'
+									},
+									body: JSON.stringify({
+										owner_id: '-164431454',
+										album_id: vk.selectedAlbumId,
+										v: '5.131'
+									})
+								})
+									.then(r => r.json())
+									.then(data => {
+										if (data.response) {
+											vk.photos = data.response.items;
+										}
+									});
+							}}>
+							<div
+								class="text-wrap p-1 {vk.selectedAlbumId == item.id ? 'text-light' : 'text-dark'}">
+								{item.title}
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+		</div>
+		<!-- Фотографии из папки -->
+		<div class="flex-grow-1 d-flex flex-column gap-2">
+			<b>Фотографии:</b>
+			<div class="overflow-y-scroll overflow-x-hidden">
+				<div>
+					{#if vk.photos.length > 0}
+						<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
+							{#each vk.photos as item, i}
+								<div class="col">
+									<!-- svelte-ignore a11y_click_events_have_key_events -->
+									<!-- svelte-ignore a11y_no_static_element_interactions -->
+									<div
+										class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
+										style="background-image: url({item?.orig_photo
+											?.url}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
+										onclick={() => {
+											checkedPhotos = !checkedPhotos.includes(item?.orig_photo?.url)
+												? [...checkedPhotos, item?.orig_photo?.url]
+												: checkedPhotos.filter(v => v != item?.orig_photo?.url);
+										}}>
+										<input
+											type="checkbox"
+											class="form-check"
+											value={item?.orig_photo?.url}
+											bind:group={checkedPhotos} />
 									</div>
 								</div>
 							{/each}
 						</div>
-					</div>
+					{/if}
 				</div>
-				<!-- Фотографии из папки -->
-				<div class="flex-grow-1 d-flex flex-column gap-2">
-					<b>Фотографии:</b>
-					<div class="overflow-y-scroll overflow-x-hidden">
-						<div>
-							{#if photos.length > 0}
-								<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
-									{#each photos as photo, i}
-										<div class="col">
-											<!-- svelte-ignore a11y_click_events_have_key_events -->
-											{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
-												<!-- svelte-ignore a11y_click_events_have_key_events -->
-												<!-- svelte-ignore a11y_no_static_element_interactions -->
-												<div
-													class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-													style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
-													onclick={() => {
-														checkedPhotos = !checkedPhotos.includes(s)
-															? [...checkedPhotos, s]
-															: checkedPhotos.filter(v => v != s);
-													}}>
-													<input
-														type="checkbox"
-														class="form-check"
-														value={s}
-														bind:group={checkedPhotos} />
-												</div>
-											{/await}
-										</div>
-									{/each}
-								</div>
-							{/if}
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="d-flex justify-content-end align-items-center gap-1">
-				<button
-					class="btn btn-light text-dark"
-					data-bs-dismiss="modal"
-					onclick={() => (checkedPhotos = [])}>Отмена</button>
-				<button
-					class="btn btn-dark text-light"
-					data-bs-dismiss="modal"
-					onclick={() => {
-						if (checkedPhotos.length > 0) {
-							checkedPhotos.forEach(v => {
-								album.photos = [...album.photos, _Photo('', v)];
-							});
-							checkedPhotos = [];
-						}
-					}}>Добавить</button>
 			</div>
 		</div>
 	</div>
-</div>
+	<div class="d-flex justify-content-end align-items-center gap-1">
+		<button
+			class="btn btn-light text-dark"
+			data-bs-dismiss="modal"
+			onclick={() => {
+				checkedPhotos = [];
+				vk.isModalShow = false;
+			}}>Отмена</button>
+		<button
+			class="btn btn-dark text-light"
+			data-bs-dismiss="modal"
+			onclick={() => {
+				if (checkedPhotos.length > 0) {
+					checkedPhotos.forEach(v => {
+						album.photos = [...album.photos, _Photo('', v)];
+					});
+					checkedPhotos = [];
+					vk.isModalShow = false;
+				}
+			}}>Добавить</button>
+	</div>
+</Modal>
