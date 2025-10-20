@@ -21,7 +21,8 @@
 	<meta name="keywords" content={keywords} />
 </svelte:head>
 
-<div class="d-flex justify-content-between flex-wrap align-items-center mb-3 no-print {_class}">
+<div
+	class="d-flex justify-content-between flex-wrap align-items-center mb-3 no-print mx-1 {_class}">
 	<div class="d-flex justify-content-between align-items-center flex-wrap">
 		<h4 class="text-dark ms-1 my-0 me-3 fw-bold" style="font-size:1.5em">
 			{title}

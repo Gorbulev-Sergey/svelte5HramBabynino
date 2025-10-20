@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { IField } from '$lib/models/schedule/Field';
+	import { monthToStringWithEnd } from './scheduleAddons';
 
 	interface IProps {
 		schedule: { [date: string]: IField[] };
@@ -7,17 +8,6 @@
 
 	let { schedule }: IProps = $props();
 
-	// Названия месяцев в именительном падеже
-	function monthToSring(date: Date) {
-		return date.toLocaleString('Ru-ru', { month: 'long' });
-	}
-	// Названия месяцев с буквой "я" или "а" на конце (в родительном падеже)
-	function monthToStringWithEnd(date: Date) {
-		let m = date.getMonth() + 1;
-		return Number(m) == 3 || Number(m) == 8
-			? monthToSring(date).replace('т', 'та')
-			: monthToSring(date).replace('ь', 'я');
-	}
 	// Функция для настройки оформления наших элементов
 	function getInputColors(date: string) {
 		return new Date(date).getDay() == 0 ? 'for-danger for-print' : 'text-dark for-print';

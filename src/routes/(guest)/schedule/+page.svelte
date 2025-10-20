@@ -3,6 +3,7 @@
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import MonthPicker from '$lib/components/schedule/MonthPicker.svelte';
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
+	import { monthToSring } from '$lib/components/schedule/scheduleAddons';
 	import { type IField } from '$lib/models/schedule/Field';
 	import { db } from '$lib/scripts/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte';
@@ -29,7 +30,9 @@
 </script>
 
 <Container>
-	<PageTitleWrap title="Расписание богослужений" _class="mb-4">
+	<PageTitleWrap
+		title={`Расписание богослужений на ${monthToSring(new Date(Number(year), Number(month) - 1)).toUpperCase()} ${year} года`}
+		_class="mb-4">
 		<div slot="navigation" class="d-flex align-items-center gap-2">
 			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
 			<button
