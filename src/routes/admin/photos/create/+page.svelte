@@ -13,15 +13,25 @@
 	import Modal from '$lib/components/Modal.svelte';
 
 	let album = $state(Album());
-
-	// Для работы с хранилищем
-	let folders: StorageReference[] = $state([]);
-	let photos: StorageReference[] = $state([]);
-	let albumsRef = ref(storage, '/Photos');
-	let selectedFolder = $state(0);
 	let checkedPhotos: string[] = $state([]);
-	let isFirestoreModalShow = $state(false);
 
+	// Для работы с фотографиями Firestore
+	interface IFirestore {
+		ref: StorageReference;
+		isModalShow: boolean;
+		albums: StorageReference[];
+		photos: StorageReference[];
+		selectedAlbumIndex: number;
+	}
+	let firestore = $state<IFirestore>({
+		ref: ref(storage, '/Photos'),
+		isModalShow: false,
+		albums: [],
+		photos: [],
+		selectedAlbumIndex: 0
+	});
+
+	// Для работы с фотографиями VK
 	interface IVkAlbum {
 		id: string;
 		title: string;
@@ -39,7 +49,7 @@
 		photos: IVkPhoto[];
 		selectedAlbumId: string;
 	}
-	let vk: IVK = $state({
+	let vk = $state<IVK>({
 		isModalShow: false,
 		albums: [],
 		photos: [],
@@ -47,17 +57,19 @@
 	});
 
 	let getPhotos = () => {
-		if (folders.length > 0) {
-			listAll(ref(storage, folders[$state.snapshot(selectedFolder)].fullPath)).then(s => {
-				photos = s.items.filter(p => p.name != 'empty');
+		if (firestore.albums.length > 0) {
+			listAll(
+				ref(storage, firestore.albums[$state.snapshot(firestore.selectedAlbumIndex)].fullPath)
+			).then(s => {
+				firestore.photos = s.items.filter(p => p.name != 'empty');
 			});
 		}
 	};
 
 	onMount(() => {
 		SETTINGS.Header = header;
-		listAll(albumsRef).then(result => {
-			folders = result.prefixes;
+		listAll(firestore.ref).then(result => {
+			firestore.albums = result.prefixes;
 			getPhotos();
 		});
 	});
@@ -109,11 +121,13 @@
 						}}
 						><i class="fa-solid fa-plus"></i> 10 фото
 					</button>
-					<button class="btn btn-sm btn-dark me-1" onclick={() => (isFirestoreModalShow = true)}>
-						<i class="fa-solid fa-cloud-arrow-down me-1"></i>из хранилища
+					<button
+						class="btn btn-sm btn-primary me-1"
+						onclick={() => (firestore.isModalShow = true)}>
+						<i class="fa-solid fa-cloud-arrow-down me-1"></i>из Firestore
 					</button>
 					<button
-						class="btn btn-sm btn-dark me-1"
+						class="btn btn-sm btn-primary me-1"
 						onclick={() => {
 							vk.isModalShow = true;
 							// Запрашиваем список альбомов VK
@@ -216,7 +230,7 @@
 </div>
 
 <!-- Фотографии из хранилища (модальное окно) -->
-<Modal isModalShow={isFirestoreModalShow} isFullScreen={true}>
+<Modal isModalShow={firestore.isModalShow} isFullScreen={true}>
 	<h5 class="mx-2">Добавить фотографии из Firestore</h5>
 	<div class="d-flex gap-3 p-2 overflow-hidden">
 		<!-- Папки -->
@@ -224,19 +238,22 @@
 			<b>Папки:</b>
 			<div class="overflow-y-scroll pe-1">
 				<div class="d-flex flex-column flex-nowrap gap-1">
-					{#each folders as item, i}
+					{#each firestore.albums as item, i}
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<!-- svelte-ignore a11y_no_static_element_interactions -->
 						<div
-							class="d-flex flex-nowrap align-items-top {selectedFolder == i
+							class="d-flex flex-nowrap align-items-top {firestore.selectedAlbumIndex == i
 								? 'bg-dark text-light'
 								: 'bg-light'} px-2 rounded-1"
 							style="cursor:pointer"
 							onclick={() => {
-								selectedFolder = i;
+								firestore.selectedAlbumIndex = i;
 								getPhotos();
 							}}>
-							<div class="text-wrap p-1 {selectedFolder == i ? 'text-light' : 'text-dark'}">
+							<div
+								class="text-wrap p-1 {firestore.selectedAlbumIndex == i
+									? 'text-light'
+									: 'text-dark'}">
 								{item.name}
 							</div>
 						</div>
@@ -249,9 +266,9 @@
 			<b>Фотографии:</b>
 			<div class="overflow-y-scroll overflow-x-hidden">
 				<div>
-					{#if photos.length > 0}
+					{#if firestore.photos.length > 0}
 						<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-2 justify-content-start">
-							{#each photos as photo, i}
+							{#each firestore.photos as photo, i}
 								<div class="col">
 									<!-- svelte-ignore a11y_click_events_have_key_events -->
 									{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
@@ -286,7 +303,7 @@
 			data-bs-dismiss="modal"
 			onclick={() => {
 				checkedPhotos = [];
-				isFirestoreModalShow = false;
+				firestore.isModalShow = false;
 			}}>Отмена</button>
 		<button
 			class="btn btn-dark text-light"
@@ -297,7 +314,7 @@
 						album.photos = [...album.photos, _Photo('', v)];
 					});
 					checkedPhotos = [];
-					isFirestoreModalShow = false;
+					firestore.isModalShow = false;
 				}
 			}}>Добавить</button>
 	</div>
