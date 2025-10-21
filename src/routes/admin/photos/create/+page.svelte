@@ -130,7 +130,9 @@
 								.then(r => r.json())
 								.then(data => {
 									if (data.response) {
-										vk.albums = data.response.items;
+										vk.albums = [...data.response.items].sort((a, b) =>
+											a.title.localeCompare(b.title)
+										);
 
 										// Запрашиваем фотографии из первого альбома VK
 										if (vk.selectedAlbumId == '') {
@@ -242,8 +244,8 @@
 				</div>
 			</div>
 		</div>
-		<!-- Фотографии из папки -->
-		<div class="flex-grow-1 d-flex flex-column gap-2">
+		<!-- Фотографии -->
+		<div class="flex-grow-1 d-flex flex-column gap-2" style="min-width: 70%;">
 			<b>Фотографии:</b>
 			<div class="overflow-y-scroll overflow-x-hidden">
 				<div>
@@ -257,7 +259,7 @@
 										<!-- svelte-ignore a11y_no_static_element_interactions -->
 										<div
 											class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
-											style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
+											style="background-image: url({s}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7.4em;"
 											onclick={() => {
 												checkedPhotos = !checkedPhotos.includes(s)
 													? [...checkedPhotos, s]
@@ -347,8 +349,8 @@
 				</div>
 			</div>
 		</div>
-		<!-- Фотографии из папки -->
-		<div class="flex-grow-1 d-flex flex-column gap-2">
+		<!-- Фотографии -->
+		<div class="flex-grow-1 d-flex flex-column gap-2" style="min-width: 70%;">
 			<b>Фотографии:</b>
 			<div class="overflow-y-scroll overflow-x-hidden">
 				<div>
@@ -361,7 +363,7 @@
 									<div
 										class="d-flex align-items-start justify-content-end rounded-1 gap-1 p-1"
 										style="background-image: url({item?.orig_photo
-											?.url}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7em;"
+											?.url}); background-repeat: no-repeat; background-position: center; background-size: cover; min-height:7.4em;"
 										onclick={() => {
 											checkedPhotos = !checkedPhotos.includes(item?.orig_photo?.url)
 												? [...checkedPhotos, item?.orig_photo?.url]

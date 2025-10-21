@@ -15,7 +15,7 @@
 </script>
 
 <div class="d-flex flex-column rounded bg-white mx-2">
-	<h2 class="only-print text-center mb-3">Расписание богослужений</h2>
+	<h2 class="only-print text-center mb-3 text-uppercase">Расписание богослужений</h2>
 	{#if Object.keys(schedule).length > 0}
 		<div class="mb-1 no-print" style="display: grid; grid-template-columns: .15fr 1fr;">
 			<div class="text-center py-2 px-2" style="min-width: 8.2em;">
