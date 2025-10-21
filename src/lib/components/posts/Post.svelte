@@ -89,7 +89,6 @@
 					<iframe
 						title=""
 						frameborder="0"
-						allowfullscreen
 						allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
 						class="embed-responsive-item"
 						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
@@ -103,7 +102,6 @@
 					<iframe
 						title=""
 						frameborder="0"
-						allowfullscreen
 						allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
 						class="embed-responsive-item"
 						style={!post.content ? 'border-radius: 0 0 .4rem .4rem' : ''}
