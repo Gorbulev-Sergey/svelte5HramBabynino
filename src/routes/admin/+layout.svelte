@@ -168,21 +168,23 @@
 
 <IsAuth>
 	<div class="d-flex align-items-start">
-		<div class="d-flex flex-column shadow sticky-top bg-light no-print" style="height:100vh">
-			<button
-				class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-4 text-uppercase fw-bold text-nowrap"
-				onclick={() => goto('/admin/posts')}>
-				{#if !$isAdminCompactMode}
+		<div
+			class="d-flex flex-column shadow sticky-top bg-light no-print gap-1"
+			style="height:100vh; z-index:10000">
+			{#if !$isAdminCompactMode}
+				<button
+					class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-2 text-uppercase fw-bold text-nowrap"
+					onclick={() => goto('/admin/posts')}>
 					Панель управления
-				{/if}
-			</button>
-			<div class="d-flex flex-column">
+				</button>
+			{/if}
+			<div class="d-flex flex-column gap-1 m-1">
 				{#each routesLeft as { url, title, icon }}
 					<button
 						{title}
-						class="btn btn-light text-dark rounded-0 text-start px-3 {activeRoute.url == url
-							? 'active'
-							: ''}"
+						class="btn text-start px-3 {activeRoute.url == url
+							? 'btn-dark text-light'
+							: 'btn-light text-dark'}"
 						onclick={() => {
 							activeRoute = { url: url, title: title, icon: icon };
 							goto(url);
@@ -199,9 +201,9 @@
 					{#each routesOnlyForAdmins as { url, title, icon }}
 						<button
 							{title}
-							class="btn btn-light text-dark rounded-0 text-start px-3 {activeRoute.url == url
-								? 'active'
-								: ''}"
+							class="btn text-start px-3 {activeRoute.url == url
+								? 'btn-dark text-light'
+								: 'btn-light text-dark'}"
 							onclick={() => {
 								activeRoute = { url: url, title: title, icon: icon };
 								goto(url);
@@ -216,10 +218,7 @@
 					{/each}
 				{/if}
 				{#each routesRight as { url, title, icon }}
-					<button
-						{title}
-						class="btn btn-light text-dark rounded-0 text-start px-3"
-						onclick={() => goto(url)}>
+					<button {title} class="btn btn-light text-dark text-start px-3" onclick={() => goto(url)}>
 						<b class="text-uppercase">
 							<div class="d-flex align-items-center gap-2">
 								<i
@@ -234,13 +233,13 @@
 				{/each}
 			</div>
 			<div
-				class="flex-grow-1 d-flex {$isAdminCompactMode
+				class="flex-grow-1 d-flex mx-1 {$isAdminCompactMode
 					? 'flex-column-reverse'
-					: 'align-items-end justify-content-between'}  pb-3">
+					: 'align-items-end justify-content-between'} pb-3">
 				<div class="dropdown-center rounded">
 					<!-- svelte-ignore a11y_consider_explicit_label -->
 					<button
-						class="btn btn-light bg-light text-dark bg-transparent border-0 px-3"
+						class="btn btn-light text-dark bg-transparent px-3"
 						data-bs-toggle="dropdown"
 						title="Тема оформления"><i class="fa-regular fa-sun"></i></button>
 					<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
@@ -264,7 +263,7 @@
 				<button
 					aria-label="Развернуть/Свернуть"
 					title={$isAdminCompactMode ? 'Развернуть' : 'Свернуть'}
-					class="btn btn-light text-dark rounded-0 text-start px-3"
+					class="btn btn-light text-dark text-start px-3"
 					onclick={() => {
 						$isAdminCompactMode = !$isAdminCompactMode;
 						localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
@@ -276,7 +275,7 @@
 		<div class="flex-grow-1 d-flex flex-column">
 			{#if SETTINGS.Header}
 				<div class="d-flex flex-column sticky-top">
-					<div class="bg-light">
+					<div class="bg-light px-2">
 						{@render SETTINGS.Header?.()}
 					</div>
 				</div>

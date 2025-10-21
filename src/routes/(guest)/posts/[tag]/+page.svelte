@@ -1,27 +1,27 @@
 <script lang="ts">
 	import Container from '$lib/components/Container.svelte';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import PageTitle from '$lib/components/PageTitle.svelte';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 	import Post from '$lib/components/posts/Post.svelte';
+	import { page } from '$app/state';
 
 	let { data } = $props();
 	let tags = $derived(data.tags);
 	let posts = $derived(data.posts.filter(v => v[1].published));
 	let postsByTag = $derived(
 		posts
-			.filter(([k, v]) => v.tags?.some(t => t.name == $page.params.tag))
+			.filter(([k, v]) => v.tags?.some(t => t.name == page.params.tag))
 			.sort(([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime())
 	);
 	let pinnedPosts = $derived(postsByTag.filter(([k, v]) => v.pinned));
 	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
 	let notPinnedPostsForShow = $derived(
-		notPinnedPosts.slice(0, $showedPostsLength[$page.params.tag])
+		notPinnedPosts.slice(0, $showedPostsLength[page.params.tag])
 	);
-	let description = $derived($page.params.tag[0].toUpperCase() + $page.params.tag.slice(1));
+	let description = $derived(page.params.tag[0].toUpperCase() + page.params.tag.slice(1));
 	let keywords = $derived(`бабынино, храм, храм бабынино, ${description}`);
 </script>
 
@@ -31,7 +31,7 @@
 			<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
 				{#each tags as item, i}
 					<button
-						class="badge text-nowrap border-0 {item.name == $page.params.tag
+						class="badge text-nowrap border-0 {item.name == page.params.tag
 							? 'bg-dark text-bg-dark'
 							: 'bg-light text-bg-light'} "
 						onclick={async () => {
@@ -73,8 +73,7 @@
 		<button
 			class="btn btn-light text-dark mt-3 w-100"
 			onclick={() => {
-				$showedPostsLength[$page.params.tag] =
-					$showedPostsLength[$page.params.tag] + showedPostsStep;
+				$showedPostsLength[page.params.tag] = $showedPostsLength[page.params.tag] + showedPostsStep;
 			}}>Загрузить ещё...</button>
 	{/if}
 </Container>
