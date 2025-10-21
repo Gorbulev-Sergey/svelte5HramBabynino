@@ -11,6 +11,7 @@
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte';
 	import Modal from '$lib/components/Modal.svelte';
+	import type { IVkAlbum, IVkPhoto } from '../vk';
 
 	let album = $state(Album());
 	let checkedPhotos: string[] = $state([]);
@@ -43,17 +44,6 @@
 	});
 
 	// Для работы с фотографиями VK
-	interface IVkAlbum {
-		id: string;
-		title: string;
-	}
-	interface IVkPhoto {
-		text: string;
-		orig_photo: IOrig_photo;
-	}
-	interface IOrig_photo {
-		url: string;
-	}
 	interface IVK {
 		isModalShow: boolean;
 		albums: IVkAlbum[];
