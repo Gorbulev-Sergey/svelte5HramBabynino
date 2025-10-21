@@ -11,7 +11,7 @@ export interface IAlbum {
 export function Album(
 	title = '',
 	description = null,
-	date = '',
+	date = new Date().toISOString().slice(0, 10),
 	photos: IPhoto[] = [],
 	cover = null
 ): IAlbum {

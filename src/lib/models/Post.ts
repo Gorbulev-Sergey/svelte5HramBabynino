@@ -25,7 +25,7 @@ export function Post(
 	description = null,
 	cover = Cover(),
 	content = null,
-	created = '',
+	created = new Date().toISOString().slice(0, 10),
 	published = true,
 	pinned = null,
 	inverted = null,
