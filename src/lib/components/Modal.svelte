@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 
 	interface IProps {
 		children?: Snippet;
@@ -15,20 +15,29 @@
 		_class = '',
 		isFullScreen = false
 	}: IProps = $props();
+
+	$effect(() => {
+		if (isModalShow) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	});
 </script>
 
 <div
 	class="modal {isModalShow ? 'show' : 'fade'} bg-light bg-opacity-75"
-	style="display: {isModalShow ? 'block' : 'none'};">
+	style="display: {isModalShow ? 'block' : 'none'}; z-index: 20000">
 	<div
 		class="modal-dialog modal-dialog-centered {isFullScreen
 			? 'modal-fullscreen'
 			: 'modal-dialog-scrollable'} {_class}"
 		tabindex="-1">
-		<div class="modal-content border-0 shadow-sm bg-light text-dark p-1">
+		<div class="modal-content border-0 shadow-sm bg-light text-dark">
 			<button
 				aria-label=""
-				class="btn btn bg-transparent border-0 text-dark position-absolute z-2 top-0 end-0"
+				class="btn btn-light text-dark border-0 position-absolute z-2"
+				style="top: .5em; right: .5em"
 				onclick={() => {
 					isModalShow = false;
 					onClose();

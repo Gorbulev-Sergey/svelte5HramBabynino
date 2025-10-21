@@ -170,7 +170,7 @@
 	<div class="d-flex align-items-start">
 		<div
 			class="d-flex flex-column shadow sticky-top bg-light no-print gap-1"
-			style="height:100vh; z-index:10000">
+			style="height:100vh; z-index: 10000">
 			{#if !$isAdminCompactMode}
 				<button
 					class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-2 text-uppercase fw-bold text-nowrap"
