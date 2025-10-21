@@ -14,6 +14,7 @@
 
 	let album = $state(Album());
 	let checkedPhotos: string[] = $state([]);
+	let isSecondTabActive = $state(false);
 
 	// Для работы с фотографиями Firestore
 	interface IFirestore {
@@ -22,13 +23,23 @@
 		albums: StorageReference[];
 		photos: StorageReference[];
 		selectedAlbumIndex: number;
+		getPhotos: () => void;
 	}
 	let firestore = $state<IFirestore>({
 		ref: ref(storage, '/Photos'),
 		isModalShow: false,
 		albums: [],
 		photos: [],
-		selectedAlbumIndex: 0
+		selectedAlbumIndex: 0,
+		getPhotos: () => {
+			if (firestore.albums.length > 0) {
+				listAll(
+					ref(storage, firestore.albums[$state.snapshot(firestore.selectedAlbumIndex)].fullPath)
+				).then(s => {
+					firestore.photos = s.items.filter(p => p.name != 'empty');
+				});
+			}
+		}
 	});
 
 	// Для работы с фотографиями VK
@@ -56,25 +67,9 @@
 		selectedAlbumId: ''
 	});
 
-	let getPhotos = () => {
-		if (firestore.albums.length > 0) {
-			listAll(
-				ref(storage, firestore.albums[$state.snapshot(firestore.selectedAlbumIndex)].fullPath)
-			).then(s => {
-				firestore.photos = s.items.filter(p => p.name != 'empty');
-			});
-		}
-	};
-
 	onMount(() => {
 		SETTINGS.Header = header;
-		listAll(firestore.ref).then(result => {
-			firestore.albums = result.prefixes;
-			getPhotos();
-		});
 	});
-
-	let isSecondTabActive = $state(false);
 </script>
 
 {#snippet header()}
@@ -123,7 +118,15 @@
 					</button>
 					<button
 						class="btn btn-sm btn-primary me-1"
-						onclick={() => (firestore.isModalShow = true)}>
+						onclick={() => {
+							firestore.isModalShow = true;
+							listAll(firestore.ref).then(result => {
+								firestore.albums = result.prefixes;
+								if (firestore.photos.length == 0) {
+									firestore.getPhotos();
+								}
+							});
+						}}>
 						<i class="fa-solid fa-cloud-arrow-down me-1"></i>из Firestore
 					</button>
 					<button
@@ -248,7 +251,7 @@
 							style="cursor:pointer"
 							onclick={() => {
 								firestore.selectedAlbumIndex = i;
-								getPhotos();
+								firestore.getPhotos();
 							}}>
 							<div
 								class="text-wrap p-1 {firestore.selectedAlbumIndex == i
