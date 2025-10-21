@@ -5,14 +5,14 @@
 	import { type Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
 
-	interface IProps {
-		uid: string;
-		post: IPost;
+	interface Props {
+		uid?: string;
+		post?: IPost;
 		_class?: string;
+		style?: string;
 		children?: Snippet;
 	}
-
-	let { uid = '', post = Post(), _class, children }: IProps = $props();
+	let { uid = '', post = Post(), style = '', _class = '', children }: Props = $props();
 	let showContent = $state(false);
 </script>
 
@@ -50,7 +50,7 @@
 					</div>
 					<div class="d-flex align-items-center gap-1">
 						{#if post.tags}
-							{#each post.tags.sort((t1, t2) => t1.name.localeCompare(t2.name)) as tag}
+							{#each [...post.tags].sort((t1, t2) => t1.name.localeCompare(t2.name)) as tag}
 								<button
 									class="badge {!post.inverted
 										? 'bg-dark bg-opacity-10 text-dark'

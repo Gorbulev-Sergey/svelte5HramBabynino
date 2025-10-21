@@ -9,20 +9,30 @@
 		uid?: string;
 		post?: IPost;
 		_class?: string;
+		style?: string;
 		children?: Snippet;
+		isTagsShow?: boolean;
 	}
-	let { uid = '', post = Post(), _class = '', children }: Props = $props();
+	let {
+		uid = '',
+		post = Post(),
+		style = '',
+		_class = '',
+		children,
+		isTagsShow = true
+	}: Props = $props();
 	let showContent = $state(false);
 </script>
 
 <div transition:slide class="col" id={uid ? uid : ''}>
 	<div
-		class="d-flex flex-column gap-3 rounded-2 border border-light {!post.inverted
+		class="d-flex flex-column gap-2 rounded-2 border border-light {!post.inverted
 			? 'bg-light bg-opacity-50 text-dark'
 			: 'bg-dark text-light'} {post.isHeightAuto == true || post.isHeightAuto == null
 			? 'h-100'
-			: ''} {_class}">
-		<div class="flex-grow-1 px-3 pt-2">
+			: ''} {_class}"
+		{style}>
+		<div class="flex-grow-1 d-flex flex-column px-3 pt-2">
 			<div class="d-flex justify-content-between align-items-top mb-2 gap-2">
 				<div class="small text-danger text-nowrap">
 					{new Date(post.created).toLocaleDateString('ru-ru', {
@@ -31,19 +41,21 @@
 						year: 'numeric'
 					})}
 				</div>
-				<div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
-					{#if post.tags}
-						{#each post.tags as tag}
-							<button
-								class="badge {!post.inverted
-									? 'bg-dark bg-opacity-10 text-dark'
-									: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1 border-0"
-								onclick={() => {
-									goto(`/posts/${tag.name}`);
-								}}>{tag.name}</button>
-						{/each}
-					{/if}
-				</div>
+				{#if isTagsShow}
+					<div class="d-flex align-items-center justify-content-end gap-1 flex-wrap">
+						{#if post.tags}
+							{#each post.tags as tag}
+								<button
+									class="badge {!post.inverted
+										? 'bg-dark bg-opacity-10 text-dark'
+										: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1 border-0"
+									onclick={() => {
+										goto(`/posts/${tag.name}`);
+									}}>{tag.name}</button>
+							{/each}
+						{/if}
+					</div>
+				{/if}
 			</div>
 			<div class="d-flex justify-content-between">
 				<h5 class="card-title">{@html post.title}</h5>
@@ -52,12 +64,15 @@
 				{/if}
 			</div>
 		</div>
+
 		{#if post.description}
 			<div class="px-3 {!post.cover || post.content == '' ? 'mb-3' : ''}">
 				{@html post.description}
 			</div>
 		{/if}
+
 		{@render children?.()}
+
 		{#if post.cover && post.cover.video}
 			<div class="ratio ratio-21x9" style="min-height:12em;">
 				{#if post.cover.video.includes('https://youtu.be')}

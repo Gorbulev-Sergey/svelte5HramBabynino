@@ -29,22 +29,24 @@
 	});
 </script>
 
-<div class="d-flex justify-content-end text-end align-items-center flex-wrap gap-1 {_class}">
-	<div class={tags.length == 0 ? 'hide' : ''}>
-		<TagSelector
-			{title}
-			{tags}
-			bind:selected={selectedTag}
-			onSelect={() => {
-				if (selectedTag.name != '') {
-					if (!selectedTags) selectedTags = [];
-					selectedTags = [...selectedTags, selectedTag];
-					tags = tags.filter(t => t.name != selectedTag.name);
-					selectedTag = _Tag();
-					onSelect();
-				}
-			}} />
-		{#if selectedTags}
+<div
+	class="d-flex justify-content-center text-center align-items-center flex-wrap gap-1
+	 {tags.length == 0 ? 'hide' : ''} {_class}">
+	<TagSelector
+		{title}
+		{tags}
+		bind:selected={selectedTag}
+		onSelect={() => {
+			if (selectedTag.name != '') {
+				if (!selectedTags) selectedTags = [];
+				selectedTags = [...selectedTags, selectedTag];
+				tags = tags.filter(t => t.name != selectedTag.name);
+				selectedTag = _Tag();
+				onSelect();
+			}
+		}} />
+	{#if selectedTags}
+		<div class="d-flex justify-content-center align-items-center flex-wrap gap-0">
 			{#each selectedTags as item}
 				<Tag
 					{item}
@@ -54,6 +56,6 @@
 						onSelect();
 					}} />
 			{/each}
-		{/if}
-	</div>
+		</div>
+	{/if}
 </div>

@@ -13,6 +13,7 @@
 	import { type IPost, Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte';
+	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 
 	let posts: [string, IPost][] = $state([]);
 	let tags: ITag[] = $state([]);
@@ -144,11 +145,11 @@
 {/snippet}
 
 {#snippet post(uid: string, post: IPost)}
-	<Post {uid} {post}>
+	<Post {uid} {post} _class="border-3 border-light" isTagsShow={false}>
 		<div
-			class="p-3 bg-dark bg-opacity-10"
-			style={post.cover?.image || post.cover?.video ? 'margin-bottom: -1em;' : ''}>
-			<div class="d-flex flex-column align-items-end flex-wrap gap-2">
+			class="p-2 bg-body-secondary bg-opacity-50 text-dark"
+			style={post.cover?.image || post.cover?.video ? 'margin-bottom: -.5em;' : ''}>
+			<div class="d-flex flex-column align-items-center flex-wrap gap-1">
 				<TagManager
 					title="Теги:"
 					tags={tags.filter((t: ITag) => !post.tags?.find(i => i.name == t.name))}
@@ -158,8 +159,7 @@
 						invalidateAll();
 					}}
 					_class={post.inverted ? 'text-dark' : ''} />
-
-				<div class="d-flex justify-content-end flex-wrap">
+				<div class="d-flex justify-content-center flex-wrap">
 					<Pin
 						classFontAwesome="fa-regular fa-eye"
 						text="опубликовать"
