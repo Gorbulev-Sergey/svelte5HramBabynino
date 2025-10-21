@@ -44,19 +44,14 @@
 			icon: 'fa-regular fa-images'
 		},
 		{
-			url: '/admin/storage',
-			title: 'Хранилище',
-			icon: 'fa-solid fa-gift'
-		},
-		{
 			url: '/admin/tags',
 			title: 'Теги',
 			icon: 'fa-solid fa-tags'
 		},
 		{
-			url: '/admin/vkvideo',
-			title: 'ВК видео',
-			icon: 'fa-brands fa-vk'
+			url: '/admin/contacts',
+			title: 'Контакты',
+			icon: 'fa-regular fa-id-card'
 		},
 		{
 			url: '/admin/vkalbums',
@@ -64,9 +59,15 @@
 			icon: 'fa-solid fa-images'
 		},
 		{
-			url: '/admin/contacts',
-			title: 'Контакты',
-			icon: 'fa-regular fa-id-card'
+			url: '/admin/storage',
+			title: 'Хранилище firestore',
+			icon: 'fa-solid fa-gift'
+		},
+
+		{
+			url: '/admin/vkvideo',
+			title: 'ВК видео',
+			icon: 'fa-brands fa-vk'
 		}
 	];
 	let routesOnlyForAdmins: IRoute[] = [
