@@ -49,12 +49,16 @@
 		albums: IVkAlbum[];
 		photos: IVkPhoto[];
 		selectedAlbumId: string;
+		owner_id: string;
+		v: string;
 	}
 	let vk = $state<IVK>({
 		isModalShow: false,
 		albums: [],
 		photos: [],
-		selectedAlbumId: ''
+		selectedAlbumId: '',
+		owner_id: '-164431454',
+		v: '5.131'
 	});
 
 	onMount(() => {
@@ -130,8 +134,8 @@
 									'Content-type': 'application/json; charset=UTF-8'
 								},
 								body: JSON.stringify({
-									owner_id: '-164431454',
-									v: '5.131'
+									owner_id: vk.owner_id,
+									v: vk.v
 								})
 							})
 								.then(r => r.json())
@@ -150,9 +154,9 @@
 													'Content-type': 'application/json; charset=UTF-8'
 												},
 												body: JSON.stringify({
-													owner_id: '-164431454',
+													owner_id: vk.owner_id,
 													album_id: vk.selectedAlbumId,
-													v: '5.131'
+													v: vk.v
 												})
 											})
 												.then(r => r.json())
@@ -338,9 +342,9 @@
 										'Content-type': 'application/json; charset=UTF-8'
 									},
 									body: JSON.stringify({
-										owner_id: '-164431454',
+										owner_id: vk.owner_id,
 										album_id: vk.selectedAlbumId,
-										v: '5.131'
+										v: vk.v
 									})
 								})
 									.then(r => r.json())
