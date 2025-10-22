@@ -1,9 +1,6 @@
 import { Tag } from '$lib/models/Tag';
 import { writable, type Writable } from 'svelte/store';
 
-// Дополнительная панель в макете
-//export let Header: Writable<Snippet> | null = writable();
-
 // Для сохранения темы оформления (светлой или тёмной)
 export let theme = writable('');
 export let isSystemTheme = writable(true);
@@ -22,9 +19,6 @@ export let adminPostsFilters = writable({
 	tag: Tag('главное', 'Главное'),
 	fixedUnfixed: EFixedUnfixed['закреплённые и незакреплённые']
 });
-
-// Для работы расписания богослужений
-//export let scheduleMonth = writable(new Month(new Date().getMonth() + 1, new Date().getFullYear()));
 
 // Для работы публикаций, чтобы публикации показывались порционно
 // по showedPostsStep раз и для каждого тега отдельно

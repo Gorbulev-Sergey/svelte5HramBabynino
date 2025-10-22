@@ -6,8 +6,8 @@
 	import { db } from '$lib/scripts/firebase';
 	import { countAlbumOnAdminPage } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
-	import { onValue, ref, remove } from 'firebase/database';
-	import { onDestroy, onMount } from 'svelte';
+	import { get, onValue, ref, remove } from 'firebase/database';
+	import { onMount } from 'svelte';
 
 	let albums: [string, IAlbum][] = $state([]);
 	onMount(async () => {
@@ -18,6 +18,19 @@
 			}
 		});
 	});
+
+	let downloadImage = async (src: string, i: number) => {
+		fetch(src)
+			.then(r => r.blob())
+			.then(r => {
+				let link = document.createElement('a');
+				link.href = URL.createObjectURL(r);
+				link.download = `photo${i}.jpg`;
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			});
+	};
 </script>
 
 {#snippet header()}
@@ -26,7 +39,7 @@
 			<button
 				class="btn btn-sm btn-dark text-light"
 				onclick={() => {
-					if ($countAlbumOnAdminPage == 5) {
+					if ($countAlbumOnAdminPage == SETTINGS.adminPanel.columns) {
 						$countAlbumOnAdminPage = 1;
 					} else $countAlbumOnAdminPage++;
 					localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
@@ -46,7 +59,7 @@
 		<div class="col">
 			<Album {uid} {album}>
 				<div slot="navigation" class="flex-grow-1">
-					<div class="d-flex align-items-center justify-content-between m-2">
+					<div class="d-flex align-items-center justify-content-between flex-wrap gap-1 m-2">
 						<a
 							href="#"
 							title="Скопировать путь к альбому: /fullscreen/photos/{uid}"
@@ -60,7 +73,24 @@
 						</a>
 						<div class="d-flex justify-content-end align-items-start gap-1">
 							<button
-								aria-label=""
+								aria-label="Скачать фотоальбом"
+								title="Скачать фотоальбом"
+								class="btn btn-sm btn-dark"
+								onclick={e => {
+									e.stopPropagation();
+									get(ref(db, `/photos/${uid}`)).then(s => {
+										if (s.exists()) {
+											(s.val() as IAlbum).photos.forEach((ph, i) => {
+												downloadImage(ph.url, i + 1);
+											});
+										}
+									});
+								}}>
+								<i class="fa-solid fa-cloud-arrow-down"></i>
+							</button>
+							<button
+								aria-label="Редактировать фотоальбом"
+								title="Редактировать фотоальбом"
 								class="btn btn-sm btn-dark"
 								onclick={e => {
 									e.stopPropagation();
@@ -69,7 +99,8 @@
 								<i class="fa-solid fa-pencil"></i>
 							</button>
 							<button
-								aria-label=""
+								aria-label="Удалить фотоальбом"
+								title="Удалить фотоальбом"
 								class="btn btn-sm btn-dark"
 								onclick={async e => {
 									e.stopPropagation();

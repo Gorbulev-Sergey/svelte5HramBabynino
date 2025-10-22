@@ -13,7 +13,6 @@
 	import { type IPost, Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte';
-	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 
 	let posts: [string, IPost][] = $state([]);
 	let tags: ITag[] = $state([]);
@@ -123,7 +122,7 @@
 				<button
 					class="btn btn-sm btn-dark text-light"
 					onclick={() => {
-						if ($countPostOnAdminPage == 5) {
+						if ($countPostOnAdminPage == SETTINGS.adminPanel.columns) {
 							$countPostOnAdminPage = 1;
 						} else $countPostOnAdminPage++;
 						localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));

@@ -65,14 +65,14 @@
 				style="z-index:1000; left:0; top:0">
 				<div class="d-flex gap-2 align-items-center">
 					<button
-						aria-label=""
+						aria-label="Скачать фотографию"
 						class="btn btn-light text-dark bg-light border-0 bg-opacity-75"
 						title="Скачать фотографию"
 						onclick={() => downloadImage(album.photos[sw.activeIndex].url, sw.activeIndex)}>
 						<i class="fa-solid fa-download"></i>
 					</button>
 					<button
-						aria-label=""
+						aria-label="Скопировать url"
 						class="btn btn-light text-dark bg-light border-0 bg-opacity-75"
 						title="Скопировать url"
 						onclick={() => {
