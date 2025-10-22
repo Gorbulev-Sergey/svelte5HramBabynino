@@ -10,6 +10,8 @@
 	import { onMount } from 'svelte';
 
 	let albums: [string, IAlbum][] = $state([]);
+	let isNewAlbumFirst = $state(true);
+
 	onMount(async () => {
 		SETTINGS.Header = header;
 		onValue(ref(db, '/photos'), s => {
@@ -34,8 +36,8 @@
 </script>
 
 {#snippet header()}
-	<PageTitle title="Фотографии">
-		<div class="flex-grow-1 d-flex align-items-center">
+	<PageTitle title="Фотоальбомы">
+		<div class="flex-grow-1 d-flex align-items-center gap-1">
 			<button
 				class="btn btn-sm btn-dark text-light"
 				onclick={() => {
@@ -47,6 +49,14 @@
 				<span>колонки</span>
 				<span class="badge bg-light text-dark ms-1">{$countAlbumOnAdminPage}</span>
 			</button>
+			<button
+				class="btn btn-sm btn-dark text-light"
+				onclick={() => (isNewAlbumFirst = !isNewAlbumFirst)}
+				>сначала {isNewAlbumFirst ? 'новые' : 'старые'}
+			</button>
+		</div>
+		<div class="me-2">
+			Всего <span class="badge bg-white text-dark">{albums.length} альбомов</span>
 		</div>
 		<button class="btn btn-dark text-light" onclick={() => goto(`/admin/photos/create`)}>
 			Создать
@@ -55,7 +65,7 @@
 {/snippet}
 
 <div class="row row-cols-1 row-cols-md-{$countAlbumOnAdminPage} g-3">
-	{#each [...albums].sort(([k1, v1], [k2, v2]) => new Date(v2.date).getTime() - new Date(v1.date).getTime()) as [uid, album]}
+	{#each [...albums].sort( ([k1, v1], [k2, v2]) => (isNewAlbumFirst ? new Date(v2.date).getTime() - new Date(v1.date).getTime() : new Date(v1.date).getTime() - new Date(v2.date).getTime()) ) as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>
 				<div slot="navigation" class="flex-grow-1">

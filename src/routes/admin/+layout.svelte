@@ -161,6 +161,15 @@
 			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
 		else $isAdminCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
 	});
+
+	let isButtonOnTopShow = $state(false);
+	window.addEventListener('scroll', () => {
+		if (window.scrollY > 10) {
+			isButtonOnTopShow = true;
+		} else {
+			isButtonOnTopShow = false;
+		}
+	});
 </script>
 
 {#snippet subpanel()}
@@ -284,6 +293,19 @@
 			<Container>
 				{@render children?.()}
 			</Container>
+
+			<div class="d-flex justify-content-end fixed-bottom">
+				{#if isButtonOnTopShow}
+					<a
+						class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mb-3 mx-2 px-3 py-2"
+						href="#top">
+						<div class="d-flex flex-column">
+							<!-- svelte-ignore element_invalid_self_closing_tag -->
+							<i class="fa-solid fa-chevron-up" />Наверх
+						</div>
+					</a>
+				{/if}
+			</div>
 		</div>
 	</div>
 </IsAuth>
