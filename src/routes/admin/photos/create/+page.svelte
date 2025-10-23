@@ -319,7 +319,16 @@
 
 <!-- Фотографии из VK (модальное окно) -->
 <Modal isModalShow={vk.isModalShow} isFullScreen={true}>
-	<h5 class="mx-2">Добавить фотографии из VK</h5>
+	<div class="d-flex align-items-center justify-content-between gap-2 mx-3">
+		<h5 class="mb-0">Добавить фотографии из VK</h5>
+		<button
+			class="btn btn-sm btn-dark text-light me-5"
+			onclick={() => {
+				vk.photos.forEach(i => {
+					checkedPhotos.push(i.orig_photo.url);
+				});
+			}}>отметить все</button>
+	</div>
 	<div class="d-flex gap-3 p-2 overflow-hidden">
 		<!-- Папки -->
 		<div class="d-flex flex-column flex-nowrap gap-2">

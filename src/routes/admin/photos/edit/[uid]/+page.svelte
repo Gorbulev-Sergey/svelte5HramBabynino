@@ -325,7 +325,16 @@
 
 <!-- Фотографии из VK (модальное окно) -->
 <Modal isModalShow={vk.isModalShow} isFullScreen={true}>
-	<h5 class="mx-2">Добавить фотографии из VK</h5>
+	<div class="d-flex align-items-center justify-content-between gap-2 mx-3">
+		<h5 class="mb-0">Добавить фотографии из VK</h5>
+		<button
+			class="btn btn-sm btn-dark text-light me-5"
+			onclick={() => {
+				vk.photos.forEach(i => {
+					checkedPhotos.push(i.orig_photo.url);
+				});
+			}}>отметить все</button>
+	</div>
 	<div class="d-flex gap-3 p-2 overflow-hidden">
 		<!-- Папки -->
 		<div class="d-flex flex-column flex-nowrap gap-2">
@@ -336,7 +345,7 @@
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<!-- svelte-ignore a11y_no_static_element_interactions -->
 						<div
-							class="d-flex flex-nowrap align-items-top {vk.selectedAlbumId == item.id
+							class="d-flex justify-content-between align-items-start {vk.selectedAlbumId == item.id
 								? 'bg-dark text-light'
 								: 'bg-light text-dark'} px-2 rounded-1"
 							style="cursor:pointer"
@@ -367,6 +376,12 @@
 							<div
 								class="text-wrap p-1 {vk.selectedAlbumId == item.id ? 'text-light' : 'text-dark'}">
 								{item.title}
+							</div>
+							<div
+								class="badge {vk.selectedAlbumId == item.id
+									? 'bg-light text-dark'
+									: 'bg-dark text-light'} mt-2">
+								{item.size}
 							</div>
 						</div>
 					{/each}
