@@ -342,23 +342,27 @@
 							style="cursor:pointer"
 							onclick={() => {
 								vk.selectedAlbumId = item.id;
-								fetch('/api/vkphotos', {
-									method: 'POST',
-									headers: {
-										'Content-type': 'application/json; charset=UTF-8'
-									},
-									body: JSON.stringify({
-										owner_id: vk.owner_id,
-										album_id: vk.selectedAlbumId,
-										v: vk.v
+								vk.photos = [];
+								for (let offset = 0; offset < item.size; offset += 50) {
+									fetch('/api/vkphotos', {
+										method: 'POST',
+										headers: {
+											'Content-type': 'application/json; charset=UTF-8'
+										},
+										body: JSON.stringify({
+											owner_id: vk.owner_id,
+											album_id: vk.selectedAlbumId,
+											v: vk.v,
+											offset: offset
+										})
 									})
-								})
-									.then(r => r.json())
-									.then(data => {
-										if (data.response) {
-											vk.photos = data.response.items;
-										}
-									});
+										.then(r => r.json())
+										.then(data => {
+											if (data.response) {
+												vk.photos = [...vk.photos, ...data.response.items];
+											}
+										});
+								}
 							}}>
 							<div
 								class="text-wrap p-1 {vk.selectedAlbumId == item.id ? 'text-light' : 'text-dark'}">

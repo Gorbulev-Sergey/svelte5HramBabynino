@@ -330,33 +330,43 @@
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<!-- svelte-ignore a11y_no_static_element_interactions -->
 						<div
-							class="d-flex flex-nowrap align-items-top {vk.selectedAlbumId == item.id
+							class="d-flex justify-content-between align-items-start {vk.selectedAlbumId == item.id
 								? 'bg-dark text-light'
 								: 'bg-light text-dark'} px-2 rounded-1"
 							style="cursor:pointer"
 							onclick={() => {
 								vk.selectedAlbumId = item.id;
-								fetch('/api/vkphotos', {
-									method: 'POST',
-									headers: {
-										'Content-type': 'application/json; charset=UTF-8'
-									},
-									body: JSON.stringify({
-										owner_id: vk.owner_id,
-										album_id: vk.selectedAlbumId,
-										v: vk.v
+								vk.photos = [];
+								for (let offset = 0; offset < item.size; offset += 50) {
+									fetch('/api/vkphotos', {
+										method: 'POST',
+										headers: {
+											'Content-type': 'application/json; charset=UTF-8'
+										},
+										body: JSON.stringify({
+											owner_id: vk.owner_id,
+											album_id: vk.selectedAlbumId,
+											v: vk.v,
+											offset: offset
+										})
 									})
-								})
-									.then(r => r.json())
-									.then(data => {
-										if (data.response) {
-											vk.photos = data.response.items;
-										}
-									});
+										.then(r => r.json())
+										.then(data => {
+											if (data.response) {
+												vk.photos = [...vk.photos, ...data.response.items];
+											}
+										});
+								}
 							}}>
 							<div
 								class="text-wrap p-1 {vk.selectedAlbumId == item.id ? 'text-light' : 'text-dark'}">
 								{item.title}
+							</div>
+							<div
+								class="badge {vk.selectedAlbumId == item.id
+									? 'bg-light text-dark'
+									: 'bg-dark text-light'} mt-2">
+								{item.size}
 							</div>
 						</div>
 					{/each}

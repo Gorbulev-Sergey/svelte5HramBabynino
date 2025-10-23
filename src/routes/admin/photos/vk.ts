@@ -1,6 +1,7 @@
 export interface IVkAlbum {
 	id: string;
 	title: string;
+	size: number;
 }
 export interface IVkPhoto {
 	text: string;
