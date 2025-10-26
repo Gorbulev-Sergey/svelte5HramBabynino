@@ -63,8 +63,8 @@
 	</PageTitle>
 {/snippet}
 
-<div class="d-flex flex-column align-items-start gap-2">
-	<h5>Начальные данные для доступа к видео на сайте вк</h5>
+<div class="d-flex flex-column align-items-start gap-2 text-dark">
+	<h5 class="text-dark">Начальные данные для доступа к видео на сайте вк</h5>
 	<div class="d-flex flex-column w-100">
 		<div>
 			<b>Access_token</b> (токен доступа, можно получить
@@ -111,21 +111,21 @@
 </div>
 
 {#if allVideos.length > 0}
-	<div class="mt-5">
+	<div class="mt-5 text-dark">
 		<h5>Строка описания для всех видео</h5>
 		<textarea class="form-control" bind:value={description}></textarea>
 	</div>
 {/if}
 
 {#if allVideos.length > 0}
-	<div class="mt-5">
+	<div class="mt-5 text-dark">
 		<h5>Теги, которые добавляются ко всем видео</h5>
 		<TagManager tags={allTags} selectedTag={_Tag()} bind:selectedTags={tags} />
 	</div>
 {/if}
 
 {#if allVideos.length > 0}
-	<div class="mt-5">
+	<div class="mt-5 text-dark">
 		<h5>Список полученных видео ({allVideos.length} видео)</h5>
 		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2">
 			{#each allVideos as item}
