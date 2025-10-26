@@ -68,35 +68,35 @@
 
 <Modal bind:isModalShow onClose={() => (newRole = Role())}>
 	<h5 class="text-dark">{modalTitle}</h5>
-	<div class="d-flex flex-column gap-2">
+	<div class="d-flex flex-column gap-1">
 		<input class="form-control text-dark" bind:value={newRole.name} placeholder="название" />
-	</div>
-	<div class="d-flex align-items-center justify-content-end gap-1">
-		<button
-			class="btn btn-light text-dark"
-			onclick={() => {
-				newRole = Role();
-				isModalShow = false;
-			}}>Отмена</button>
-		<button
-			class="btn btn-dark text-light"
-			onclick={() => {
-				if (newRole.name.trim() != '') {
-					if (isRoleEdited) {
-						// Перезаписываем тег
-						update(ref(db, `roles/${editedRoleUID}`), newRole);
-					} else {
-						// Создаём новый тег
-						if (!$state.snapshot(roles).find(r => r[1].name == newRole.name)) {
-							push(ref(db, '/roles'), newRole);
+		<div class="d-flex align-items-center justify-content-end gap-1">
+			<button
+				class="btn btn-light text-dark"
+				onclick={() => {
+					newRole = Role();
+					isModalShow = false;
+				}}>Отмена</button>
+			<button
+				class="btn btn-dark text-light"
+				onclick={() => {
+					if (newRole.name.trim() != '') {
+						if (isRoleEdited) {
+							// Перезаписываем тег
+							update(ref(db, `roles/${editedRoleUID}`), newRole);
+						} else {
+							// Создаём новый тег
+							if (!$state.snapshot(roles).find(r => r[1].name == newRole.name)) {
+								push(ref(db, '/roles'), newRole);
+							}
 						}
 					}
-				}
-				editedRoleUID = '';
-				newRole = Role();
-				isRoleEdited = false;
-				isModalShow = false;
-			}}>Сохранить</button>
+					editedRoleUID = '';
+					newRole = Role();
+					isRoleEdited = false;
+					isModalShow = false;
+				}}>Сохранить</button>
+		</div>
 	</div>
 </Modal>
 

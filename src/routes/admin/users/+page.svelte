@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import { User, type IUser } from '$lib/models/admin/User';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/store';
@@ -9,6 +10,7 @@
 
 	let users: [String, IUser][] = $state([]);
 	let newUser = $state<IUser>(User());
+	let isCreateUserModalShow = $state(false);
 
 	onMount(async () => {
 		SETTINGS.Header = header;
@@ -22,18 +24,8 @@
 
 {#snippet header()}
 	<PageTitle title="Пользователи">
-		<div class="input-group">
-			<div class="p-2 bg-light rounded-start border">Новый пользователь:</div>
-			<input class="form-control" bind:value={newUser.uid} placeholder="uid" />
-			<input class="form-control" bind:value={newUser.email} placeholder="email" />
-			<input class="form-control" bind:value={newUser.role.name} placeholder="название роли" />
-			<button
-				class="btn btn-dark text-light"
-				onclick={async () => {
-					set(ref(db, `users/${newUser.uid}`), newUser);
-					newUser = User();
-				}}>Сохранить</button>
-		</div>
+		<button class="btn btn-dark text-light" onclick={() => (isCreateUserModalShow = true)}
+			>Создать</button>
 	</PageTitle>
 {/snippet}
 
@@ -73,6 +65,34 @@
 		</div>
 	{/each}
 </div>
+
+<Modal
+	isModalShow={isCreateUserModalShow}
+	onClose={() => {
+		newUser = User();
+	}}>
+	<h5 class="text-dark">Создать пользователя</h5>
+	<div class="d-flex flex-column gap-1">
+		<input class="form-control" bind:value={newUser.uid} placeholder="uid" />
+		<input class="form-control" bind:value={newUser.email} placeholder="email" />
+		<input class="form-control" bind:value={newUser.role.name} placeholder="название роли" />
+		<div class="d-flex justify-content-end gap-1">
+			<button
+				class="btn btn-light text-dark"
+				onclick={() => {
+					newUser = User();
+					isCreateUserModalShow = false;
+				}}>Отмена</button>
+			<button
+				class="btn btn-dark text-light"
+				onclick={async () => {
+					set(ref(db, `users/${newUser.uid}`), newUser).then(v => {
+						isCreateUserModalShow = false;
+					});
+				}}>Создать</button>
+		</div>
+	</div>
+</Modal>
 
 <style>
 	.hover:hover {
