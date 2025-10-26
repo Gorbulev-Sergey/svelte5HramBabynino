@@ -29,7 +29,7 @@
 	</PageTitle>
 {/snippet}
 
-<div class="d-flex flex-column gap-0">
+<div class="d-flex flex-column gap-0 text-dark">
 	{#each roles as [uid, role], i}
 		<div
 			class="d-flex align-items-center justify-content-between hover px-2 py-1 {i < roles.length - 1
