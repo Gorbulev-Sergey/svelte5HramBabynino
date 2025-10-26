@@ -72,7 +72,7 @@
 								class="btn btn-sm {!post.inverted ? 'btn-dark text-light' : 'btn-light text-dark'}"
 								onclick={() => {
 									if (uid) goto(`/posts/details/${uid}?returnUrl=${$page.url.pathname}`);
-								}}><i class="fa-solid fa-circle-arrow-right me-2"></i>Смотреть подробности</button>
+								}}><i class="fa-solid fa-circle-arrow-right me-2"></i>Подробнее</button>
 						</div>
 					{/if}
 				</div>
