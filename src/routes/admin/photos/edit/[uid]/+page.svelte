@@ -234,7 +234,7 @@
 
 <!-- Фотографии из хранилища (модальное окно) -->
 <Modal isModalShow={firestore.isModalShow} isFullScreen={true}>
-	<h5 class="mx-2">Добавить фотографии из Firestore</h5>
+	<h5 class="mx-2 text-dark">Добавить фотографии из Firestore</h5>
 	<div class="d-flex gap-3 p-2 overflow-hidden">
 		<!-- Папки -->
 		<div class="d-flex flex-column flex-nowrap gap-2">
@@ -326,7 +326,7 @@
 <!-- Фотографии из VK (модальное окно) -->
 <Modal isModalShow={vk.isModalShow} isFullScreen={true}>
 	<div class="d-flex align-items-center justify-content-between gap-2 mx-3">
-		<h5 class="mb-0">Добавить фотографии из VK</h5>
+		<h5 class="mb-0 text-dark">Добавить фотографии из VK</h5>
 		<button
 			class="btn btn-sm btn-dark text-light me-5"
 			onclick={() => {
@@ -338,7 +338,7 @@
 	<div class="d-flex gap-3 p-2 overflow-hidden">
 		<!-- Папки -->
 		<div class="d-flex flex-column flex-nowrap gap-2">
-			<b>Папки:</b>
+			<b class="text-dark">Папки:</b>
 			<div class="overflow-y-scroll pe-1">
 				<div class="d-flex flex-column flex-nowrap gap-1">
 					{#each vk.albums as item, i}
@@ -390,7 +390,7 @@
 		</div>
 		<!-- Фотографии -->
 		<div class="flex-grow-1 d-flex flex-column gap-2" style="min-width: 70%;">
-			<b>Фотографии:</b>
+			<b class="text-dark">Фотографии:</b>
 			<div class="overflow-y-scroll overflow-x-hidden">
 				<div>
 					{#if vk.photos.length > 0}

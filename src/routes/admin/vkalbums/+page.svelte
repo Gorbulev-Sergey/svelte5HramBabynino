@@ -74,7 +74,7 @@
 
 <div class="d-flex gap-3 mb-4">
 	<div class="w-25">
-		<h5>Список фотоальбомов:</h5>
+		<h5 class="text-dark">Список фотоальбомов:</h5>
 		<div class="d-flex flex-column overflow-y-scroll" style="height: 75vh;">
 			{#each albums as item, i}
 				<button
@@ -105,7 +105,7 @@
 		</div>
 	</div>
 	<div class="flex-grow-1" style="width: 70%;">
-		<h5>Фотографии:</h5>
+		<h5 class="text-dark">Фотографии:</h5>
 		<div class="row row-cols-1 row-cols-md-4 g-2 overflow-y-scroll" style="height: 75vh;">
 			{#each photos as item, i}
 				<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -138,7 +138,7 @@
 <!-- Модальное окно с данными для запроса из VK -->
 <Modal bind:isModalShow={isVKDataModalShow}>
 	<div class="d-flex flex-column align-items-start gap-2">
-		<h5>Начальные данные для доступа к вк</h5>
+		<h5 class="text-dark">Начальные данные для доступа к вк</h5>
 		<div class="d-flex flex-column w-100">
 			<div>
 				<b>Access_token</b> (токен доступа, можно получить
@@ -186,7 +186,7 @@
 <!-- Модальное окно для создания альбома VK -->
 <Modal bind:isModalShow={isCreateVKAlbumModalShow}>
 	<div class="d-flex flex-column align-items-start gap-2">
-		<h5>Создать новый фотоальбом VK</h5>
+		<h5 class="text-dark">Создать новый фотоальбом VK</h5>
 		<div class="d-flex flex-column w-100">
 			<input
 				class="form-control bg-light text-dark"
