@@ -12,11 +12,20 @@
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { onMount } from 'svelte';
+	import Selector from '$lib/components/Selector.svelte';
+	import { Colors } from '$lib/models/Colors.js';
+	import SelectorColors from '$lib/components/SelectorColors.svelte';
 
 	let { data } = $props();
 	let tags: ITag[] = $state([]);
 	let post = $state(data.post);
-	let selectedTag = $state(Tag());
+	let background = $derived(
+		post.inverted
+			? 'bg-dark text-light'
+			: post.background
+				? `bg-${post.background} bg-opacity-25 text-dark`
+				: 'bg-white text-dark'
+	);
 
 	onMount(async () => {
 		SETTINGS.Header = header;
@@ -49,26 +58,26 @@
 					>Обложка</a>
 				<a class="btn btn-light border-0" data-bs-toggle="pill" href="#content">Содержимое</a>
 			</div>
-			<div class="d-flex flex-wrap">
+			<div class="d-flex flex-wrap gap-3 me-3">
+				<SelectorColors
+					title="background"
+					list={Object.keys(Colors)}
+					bind:selectedItem={post.background} />
 				<Pin
 					classFontAwesome="fa-regular fa-eye"
 					text="опубликовать"
-					_class="me-4"
 					bind:checked={post.published} />
 				<Pin
 					classFontAwesome="fa-solid fa-thumbtack"
 					text="закрепить наверху"
-					_class="me-4"
 					bind:checked={post.pinned} />
 				<Pin
 					classFontAwesome="fa-solid fa-arrows-up-down"
 					text="ширина публикации 100%"
-					_class="me-4"
 					bind:checked={post.isHeightAuto} />
 				<Pin
 					classFontAwesome="fa-solid fa-brush"
 					text="инвертировать цвета"
-					_class="me-4"
 					bind:checked={post.inverted} />
 				{#if post.pinned}
 					<Pin
@@ -81,7 +90,7 @@
 	</SubTitle>
 {/snippet}
 
-<div class="rounded p-3 {!post.inverted ? 'bg-white text-dark' : 'bg-dark text-light'}">
+<div class="rounded p-3 {background}">
 	<div class="tab-content">
 		<div class="tab-pane active show" id="cover">
 			<div class="row">

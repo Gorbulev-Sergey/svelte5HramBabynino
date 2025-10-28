@@ -38,7 +38,7 @@ export function Post(
 	isHorisontal = null,
 	isImageHeightFull = null,
 	isHeightAuto = null,
-	background = Colors.primary
+	background = null
 ): IPost {
 	return {
 		title,
