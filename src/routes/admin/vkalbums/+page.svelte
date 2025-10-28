@@ -128,7 +128,7 @@
 </div>
 
 <!-- Модальное окно фотографией на весь экран -->
-<Modal bind:isModalShow={isModalPhotoShow} _class="modal-fullscreen bg-dark">
+<Modal bind:isModalShow={isModalPhotoShow} isBackgroundLight={false} _class="modal-fullscreen">
 	<div
 		class="card-img"
 		style="background-image: url({modalPhotoUrl}); background-repeat: no-repeat; background-position: center; background-size: contain; height:100vh; margin:-.8em 0;">
