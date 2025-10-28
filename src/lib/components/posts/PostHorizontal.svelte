@@ -13,15 +13,20 @@
 		children?: Snippet;
 	}
 	let { uid = '', post = Post(), style = '', _class = '', children }: Props = $props();
-	let showContent = $state(false);
+
+	let postColors = $derived(
+		post.inverted
+			? 'bg-dark text-light'
+			: post.background
+				? `bg-${post.background} bg-opacity-25 text-dark`
+				: 'bg-light bg-opacity-50 text-dark'
+	);
 </script>
 
 <div
 	transition:slide
 	id={uid ? uid : ''}
-	class="{_class} card rounded-2 mb-3 p-0 {!post.inverted
-		? 'bg-light bg-opacity-50 text-dark'
-		: 'bg-dark text-light'} border-light">
+	class="{_class} card rounded-2 mb-3 p-0 {postColors} border-light">
 	<div class="row g-0">
 		<div class="{post.cover ? 'col-9' : ''} d-flex flex-column">
 			<div class="card-body flex-grow-1 mb-1">

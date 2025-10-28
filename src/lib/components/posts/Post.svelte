@@ -21,14 +21,20 @@
 		children,
 		isTagsShow = true
 	}: Props = $props();
-	let showContent = $state(false);
+
+	let postColors = $derived(
+		post.inverted
+			? 'bg-dark text-light'
+			: post.background
+				? `bg-${post.background} bg-opacity-25 text-dark`
+				: 'bg-light bg-opacity-50 text-dark'
+	);
 </script>
 
 <div transition:slide class="col" id={uid ? uid : ''}>
 	<div
-		class="d-flex flex-column gap-2 rounded-2 border border-light {!post.inverted
-			? 'bg-light bg-opacity-50 text-dark'
-			: 'bg-dark text-light'} {post.isHeightAuto == true || post.isHeightAuto == null
+		class="d-flex flex-column gap-2 rounded-2 border border-light {postColors} {post.isHeightAuto ==
+			true || post.isHeightAuto == null
 			? 'h-100'
 			: ''} {_class}"
 		{style}>

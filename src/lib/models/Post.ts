@@ -1,6 +1,7 @@
 import { Cover, type ICover } from '$lib/models/Cover';
 import type { ITag } from '$lib/models/Tag';
 import type { IComment } from '$lib/models/Comment';
+import { Colors } from './Colors';
 
 export interface IPost {
 	title: string;
@@ -18,6 +19,7 @@ export interface IPost {
 	isHorisontal: boolean | null;
 	isImageHeightFull: boolean | null;
 	isHeightAuto: boolean | null;
+	background: Colors | null;
 }
 
 export function Post(
@@ -35,7 +37,8 @@ export function Post(
 	userUID = null,
 	isHorisontal = null,
 	isImageHeightFull = null,
-	isHeightAuto = null
+	isHeightAuto = null,
+	background = Colors.primary
 ): IPost {
 	return {
 		title,
@@ -52,6 +55,7 @@ export function Post(
 		userUID,
 		isHorisontal,
 		isImageHeightFull,
-		isHeightAuto
+		isHeightAuto,
+		background
 	};
 }
