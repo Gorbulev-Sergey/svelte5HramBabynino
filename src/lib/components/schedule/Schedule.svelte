@@ -48,17 +48,25 @@
 						})}
 					</i>
 				</div>
-				<div style="display: grid; grid-template-columns: 1fr .1fr .4fr">
+				<div class="py-1" style="display: grid; grid-template-columns: 1fr .1fr .4fr;">
 					{#each item as field, j}
-						<div class={`py-1 px-2 ${getInputColors(date)}`} style="min-width: 13em;">
+						<div class={`px-2 ${getInputColors(date)}`} style="min-width: 13em;">
 							{@html schedule[date][j].event}
 						</div>
 						<div
-							class={`text-center py-1 text-end ${getInputColors(date)} fw-bold`}
+							class="{`text-center text-end ${getInputColors(date)} fw-bold`} {item.length > 1 &&
+							j < item.length - 1
+								? 'border-bottom border-secondary border-opacity-10'
+								: ''}"
 							style="min-width: 5em;">
 							{@html schedule[date][j].time}
 						</div>
-						<i class={`text-wrap py-1 px-2 ${getInputColors(date)}`} style="min-width: 10em;">
+						<i
+							class="{`text-wrap px-2 ${getInputColors(date)}`} {item.length > 1 &&
+							j < item.length - 1
+								? 'border-bottom border-secondary border-opacity-10'
+								: ''}"
+							style="min-width: 10em;">
 							{@html schedule[date][j].pray}
 						</i>
 					{/each}
