@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { slide, scale } from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 	import { browser } from '$app/environment';
-	import { theme } from '$lib/scripts/store';
 	import Large from './Breakpoint/Large.svelte';
 	import Small from './Breakpoint/Small.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	let { children } = $props();
 </script>
 
 {#if browser}
 	<Large>
-		<div transition:scale class="bg-white rounded-3 m-0 p-4 {$theme == 'light' ? 'shadow-sm' : ''}">
+		<div
+			transition:scale
+			class="bg-white rounded-3 m-0 p-4 {SETTINGS.theme.theme == 'light' ? 'shadow-sm' : ''}">
 			{@render children?.()}
 		</div>
 	</Large>

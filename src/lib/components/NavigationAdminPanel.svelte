@@ -1,14 +1,24 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { theme } from '$lib/scripts/store';
+	import { page } from '$app/state';
 	import IsAuth from '$lib/components/IsAuth.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
-	export let routesLeft = new Array();
-	export let routesRight = new Array();
-	$: changeTheme = () => {
-		$theme = $theme == 'light' ? 'dark' : 'light';
-		localStorage.setItem('theme', $theme);
+	interface IRoute {
+		url: string;
+		title: string;
+	}
+
+	interface IProps {
+		routesLeft: IRoute[];
+		routesRight: IRoute[];
+	}
+
+	let { routesLeft = [], routesRight = [] }: IProps = $props();
+
+	let changeTheme = () => {
+		SETTINGS.theme.theme = SETTINGS.theme.theme == 'light' ? 'dark' : 'light';
+		localStorage.setItem('theme', SETTINGS.theme.theme);
 	};
 </script>
 
@@ -18,7 +28,7 @@
 			<div class="bg-light text-dark">
 				<a
 					class="btn btn-light text-dark w-100 text-start rounded-0 ps-3 {decodeURI(
-						$page.url.pathname
+						page.url.pathname
 					).indexOf(item.url) >= 0
 						? 'fw-bold'
 						: ''}"
@@ -32,7 +42,7 @@
 				<div class="bg-light text-dark">
 					<button
 						class="btn btn-light text-dark w-100 text-start rounded-0 ps-3"
-						on:click={async () => {
+						onclick={async () => {
 							goto(item.url);
 						}}>
 						<b class="text-uppercase">
@@ -47,7 +57,7 @@
 		<button
 			aria-label=""
 			class="btn btn-light text-dark border-0"
-			on:click={async () => changeTheme()}>
+			onclick={async () => changeTheme()}>
 			<i class="fa-regular fa-sun"></i>
 		</button>
 	</div>

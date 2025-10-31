@@ -1,10 +1,6 @@
 import { Tag } from '$lib/models/Tag';
 import { writable, type Writable } from 'svelte/store';
 
-// Для сохранения темы оформления (светлой или тёмной)
-export let theme = writable('');
-export let isSystemTheme = writable(true);
-
 export enum EFixedUnfixed {
 	'закреплённые',
 	'незакреплённые',

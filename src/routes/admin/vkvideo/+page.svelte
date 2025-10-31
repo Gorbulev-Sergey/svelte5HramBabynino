@@ -4,7 +4,7 @@
 	import { Post, type IPost } from '$lib/models/Post.js';
 	import { type ITag, Tag as _Tag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
-	import { SETTINGS } from '$lib/store/store.svelte.js';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { child, off, onValue, push, ref, update } from 'firebase/database';
 	import { onMount } from 'svelte';
 
@@ -29,7 +29,7 @@
 	let tags = $state([_Tag('видео', 'Видео')]);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				allTags = Object.values(s.val());

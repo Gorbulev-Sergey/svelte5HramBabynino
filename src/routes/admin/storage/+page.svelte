@@ -3,7 +3,7 @@
 	import ModalPhoto from '$lib/components/ModalPhoto.svelte';
 	import { storage } from '$lib/scripts/firebase';
 	import { countPhotoOnAdminPage } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import {
 		uploadBytes,
 		ref,
@@ -65,7 +65,7 @@
 	};
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		getFolders().then(() => {
 			getPhotos();
 			getDocuments();

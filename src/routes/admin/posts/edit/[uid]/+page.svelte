@@ -10,11 +10,11 @@
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { onMount } from 'svelte';
 	import Selector from '$lib/components/Selector.svelte';
 	import { Colors } from '$lib/models/Colors.js';
 	import SelectorColors from '$lib/components/SelectorColors.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte.js';
 
 	let { data } = $props();
 	let tags: ITag[] = $state([]);
@@ -28,7 +28,7 @@
 	);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				tags = Object.values(s.val());

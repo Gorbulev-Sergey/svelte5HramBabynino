@@ -5,7 +5,7 @@
 	import { type ITag } from '$lib/models/Tag';
 	import { db } from '$lib/scripts/firebase';
 	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount } from 'svelte';
 
@@ -56,7 +56,7 @@
 	});
 
 	onMount(async () => {
-		SETTINGS.Header = null;
+		SETTINGS.ADMIN.Header = null;
 	});
 </script>
 

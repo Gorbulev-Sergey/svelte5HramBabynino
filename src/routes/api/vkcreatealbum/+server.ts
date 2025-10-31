@@ -1,4 +1,4 @@
-import { SETTINGS } from '$lib/store/store.svelte';
+import { SETTINGS } from '$lib/settings/settings.svelte';
 
 export async function POST({ request }) {
 	let { owner_id, title, v } = await request.json();

@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { isSystemTheme, theme } from '$lib/scripts/store';
 	import Large from '$lib/components/Breakpoint/Large.svelte';
 	import Smalle from '$lib/components/Breakpoint/Small.svelte';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { onMount, type Snippet } from 'svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
+	import { page } from '$app/state';
 
 	interface Props {
 		title: String;
@@ -18,39 +17,39 @@
 	let { title = 'Название', routesLeft = [], routesRight = [], children }: Props = $props();
 	let color = $state('rgba(255,50,60,0)');
 
-	let changeTheme = (th: string, isSystemTheme1: boolean) => {
-		if (!isSystemTheme1) {
-			$theme = th;
-			$isSystemTheme = false;
-			localStorage.setItem('theme', $theme);
-			localStorage.setItem('isSystemTheme', 'false');
+	let changeTheme = (th: string, isSystem: boolean) => {
+		if (!isSystem) {
+			SETTINGS.theme.theme = th;
+			isSystem = false;
+			localStorage.setItem('theme', SETTINGS.theme.theme);
+			localStorage.setItem('SETTINGS.theme.isSystem', 'false');
 		} else {
 			// Определяем и переключаем светлую/тёмную тему
 			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				$theme = 'dark';
+				SETTINGS.theme.theme = 'dark';
 			} else {
-				$theme = 'light';
+				SETTINGS.theme.theme = 'light';
 			}
-			$isSystemTheme = true;
-			localStorage.setItem('theme', $theme);
-			localStorage.setItem('isSystemTheme', 'true');
+			isSystem = true;
+			localStorage.setItem('theme', SETTINGS.theme.theme);
+			localStorage.setItem('SETTINGS.theme.isSystem', 'true');
 		}
 	};
 
 	onMount(async () => {
-		if (localStorage.getItem('isSystemTheme') == 'true') {
-			$isSystemTheme = true;
+		if (localStorage.getItem('SETTINGS.theme.isSystem') == 'true') {
+			SETTINGS.theme.isSystem = true;
 			// Устанавливаем прослушиватель на изменение темы в системе
 			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
 				if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					$theme = 'dark';
+					SETTINGS.theme.theme = 'dark';
 				} else {
-					$theme = 'light';
+					SETTINGS.theme.theme = 'light';
 				}
-				localStorage.setItem('theme', $theme);
+				localStorage.setItem('theme', SETTINGS.theme.theme);
 			});
 		} else {
-			$isSystemTheme = false;
+			SETTINGS.theme.isSystem = false;
 		}
 	});
 </script>
@@ -75,17 +74,17 @@
 					<ul
 						class="dropdown-menu dropdown-menu-end border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'light'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'light'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('light', false)}>Светлая тема</button>
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'dark'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'dark'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
 						<button
-							class="btn btn-light {$isSystemTheme
+							class="btn btn-light {SETTINGS.theme.isSystem
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
@@ -102,7 +101,7 @@
 					<div class="bg-light text-dark">
 						<a
 							class="btn btn-light text-dark w-100 text-start rounded-0 ps-3 {decodeURI(
-								$page.url.pathname
+								page.url.pathname
 							).indexOf(item.url) >= 0
 								? 'fw-bold'
 								: ''}"
@@ -140,7 +139,7 @@
 						{#each routesLeft as item}
 							<a
 								class="btn btn-light bg-light text-dark bg-transparent border-0 me-1 {decodeURI(
-									$page.url.pathname
+									page.url.pathname
 								).indexOf(item.url) >= 0
 									? 'fw-bold'
 									: ''}"
@@ -165,17 +164,17 @@
 						title="тема оформления"><i class="fa-regular fa-sun"></i></button>
 					<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'light'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'light'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('light', false)}>Светлая тема</button>
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'dark'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'dark'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
 						<button
-							class="btn btn-light {$isSystemTheme
+							class="btn btn-light {SETTINGS.theme.isSystem
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
@@ -184,7 +183,7 @@
 			</div>
 		</div>
 	</Large>
-	{#if SETTINGS.Header != null}
+	{#if SETTINGS.ADMIN.Header != null}
 		<div class="px-3">
 			<hr />
 			{@render children?.()}

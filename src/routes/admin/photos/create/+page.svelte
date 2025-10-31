@@ -9,9 +9,9 @@
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onMount } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import type { IVkAlbum, IVkPhoto } from '../vk';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	let album = $state(Album());
 	let checkedPhotos: string[] = $state([]);
@@ -62,7 +62,7 @@
 	});
 
 	onMount(() => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 	});
 </script>
 

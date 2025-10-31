@@ -4,8 +4,6 @@
 		countPostOnAdminPage,
 		countAlbumOnAdminPage,
 		isAdminCompactMode,
-		isSystemTheme,
-		theme,
 		countPhotoOnAdminPage
 	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
@@ -15,7 +13,7 @@
 	import { onValue, ref } from 'firebase/database';
 	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	interface IProps {
 		children: Snippet;
@@ -94,27 +92,27 @@
 
 	let { children }: IProps = $props();
 
-	let changeTheme = (th: string, isSystemTheme1: boolean) => {
-		if (!isSystemTheme1) {
-			$theme = th;
-			$isSystemTheme = false;
-			localStorage.setItem('theme', $theme);
-			localStorage.setItem('isSystemTheme', 'false');
+	let changeTheme = (th: string, isSystem: boolean) => {
+		if (!isSystem) {
+			SETTINGS.theme.theme = th;
+			SETTINGS.theme.isSystem = false;
+			localStorage.setItem('theme', SETTINGS.theme.theme);
+			localStorage.setItem('SETTINGS.theme.isSystem', 'false');
 		} else {
 			// Определяем и переключаем светлую/тёмную тему
 			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				$theme = 'dark';
+				SETTINGS.theme.theme = 'dark';
 			} else {
-				$theme = 'light';
+				SETTINGS.theme.theme = 'light';
 			}
-			$isSystemTheme = true;
-			localStorage.setItem('theme', $theme);
-			localStorage.setItem('isSystemTheme', 'true');
+			SETTINGS.theme.isSystem = true;
+			localStorage.setItem('theme', SETTINGS.theme.theme);
+			localStorage.setItem('SETTINGS.theme.isSystem', 'true');
 		}
 	};
 
 	onMount(async () => {
-		SETTINGS.Header = subpanel;
+		SETTINGS.ADMIN.Header = subpanel;
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				onValue(ref(db, '/users'), s => {
@@ -130,19 +128,19 @@
 			}
 		});
 		// Работаем с темой
-		if (localStorage.getItem('isSystemTheme') == 'true') {
-			$isSystemTheme = true;
+		if (localStorage.getItem('SETTINGS.theme.isSystem') == 'true') {
+			SETTINGS.theme.isSystem = true;
 			// Устанавливаем прослушиватель на изменение темы в системе
 			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
 				if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					$theme = 'dark';
+					SETTINGS.theme.theme = 'dark';
 				} else {
-					$theme = 'light';
+					SETTINGS.theme.theme = 'light';
 				}
-				localStorage.setItem('theme', $theme);
+				localStorage.setItem('theme', SETTINGS.theme.theme);
 			});
 		} else {
-			$isSystemTheme = false;
+			SETTINGS.theme.isSystem = false;
 		}
 		// Работаем с количеством колонок постов
 		if (!localStorage.getItem('countPostOnAdminPage'))
@@ -254,17 +252,17 @@
 						title="Тема оформления"><i class="fa-regular fa-sun"></i></button>
 					<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'light'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'light'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('light', false)}>Светлая тема</button>
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'dark'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'dark'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
 						<button
-							class="btn btn-light {$isSystemTheme
+							class="btn btn-light {SETTINGS.theme.isSystem
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
@@ -283,10 +281,10 @@
 			</div>
 		</div>
 		<div class="flex-grow-1 d-flex flex-column">
-			{#if SETTINGS.Header}
+			{#if SETTINGS.ADMIN.Header}
 				<div class="d-flex flex-column sticky-top">
 					<div class="bg-light px-2">
-						{@render SETTINGS.Header?.()}
+						{@render SETTINGS.ADMIN.Header?.()}
 					</div>
 				</div>
 			{/if}

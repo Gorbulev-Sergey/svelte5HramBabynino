@@ -6,12 +6,12 @@
 	import { monthToSring } from '$lib/components/schedule/scheduleAddons';
 	import { type IField } from '$lib/models/schedule/Field';
 	import { db } from '$lib/scripts/firebase';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, ref } from 'firebase/database';
 
 	// Выбранная дата, год, месяц
-	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
-	let month = $derived(SETTINGS.scheduleDate.slice(5, 7));
+	let year = $derived(SETTINGS.ADMIN.schedule.date.slice(0, 4));
+	let month = $derived(SETTINGS.ADMIN.schedule.date.slice(5, 7));
 
 	// Объект для хранения расписания за выбранный месяц
 	let schedule = $state<{ [date: string]: IField[] }>(
@@ -34,7 +34,7 @@
 		title={`Расписание богослужений на ${monthToSring(new Date(Number(year), Number(month) - 1)).toUpperCase()} ${year} года`}
 		_class="mb-4">
 		<div slot="navigation" class="d-flex align-items-center gap-2">
-			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
+			<MonthPicker title="на дату:" bind:date={SETTINGS.ADMIN.schedule.date} bind:month bind:year />
 			<button
 				hidden
 				aria-label="Печать"

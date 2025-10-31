@@ -9,7 +9,7 @@
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onMount } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { page } from '$app/state';
 	import type { IVkAlbum, IVkPhoto } from '../../vk';
@@ -63,7 +63,7 @@
 	});
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(refDb(db, `/photos/${page.params.uid}`), s => {
 			if (s.exists()) {
 				album = s.val();

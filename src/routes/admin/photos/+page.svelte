@@ -5,7 +5,7 @@
 	import type { IAlbum } from '$lib/models/photos/Album.js';
 	import { db } from '$lib/scripts/firebase';
 	import { countAlbumOnAdminPage } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte.js';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, onValue, ref, remove } from 'firebase/database';
 	import { onMount } from 'svelte';
 
@@ -13,7 +13,7 @@
 	let isNewAlbumFirst = $state(true);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/photos'), s => {
 			if (s.exists()) {
 				albums = Object.entries(s.val());

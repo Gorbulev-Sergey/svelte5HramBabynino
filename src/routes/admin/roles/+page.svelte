@@ -4,7 +4,7 @@
 	import { Role, type IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
 	import { alerts } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
 	import { onMount } from 'svelte';
 
@@ -16,7 +16,7 @@
 	let isModalShow = $state(false);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/roles'), s => {
 			if (s.exists()) roles = Object.entries(s.val()) as [string, IRole][];
 		});
