@@ -15,7 +15,7 @@
 
 	let posts: [string, IPost][] = $state([]);
 	let tags: ITag[] = $state([]);
-	let arrayOfFilteredPosts = $derived.by(() => {
+	let filteredPosts = $derived.by(() => {
 		let p: [string, IPost][] = [];
 		switch (SETTINGS.ADMIN.posts.filters.tag.name) {
 			case 'все вместе':
@@ -36,7 +36,7 @@
 				);
 				break;
 		}
-		switch (SETTINGS.ADMIN.posts.filters.newFirst) {
+		switch (SETTINGS.ADMIN.posts.filters.isNewFirst) {
 			case true:
 				p = p.sort(
 					([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime()
@@ -60,9 +60,6 @@
 		}
 		return p;
 	});
-	let sizeArrayOfFilteredPosts = $derived(arrayOfFilteredPosts.length);
-
-	let countPostForShow: { [key: string]: number } = $state({});
 
 	onMount(async () => {
 		SETTINGS.ADMIN.Header = header;
@@ -71,7 +68,9 @@
 				tags = Object.values(s.val());
 				tags.push(Tag('все вместе', 'Все вместе'));
 				tags.push(Tag('без тега', 'Без тега'));
-				tags.forEach(t => (countPostForShow[t.name] = SETTINGS.ADMIN.posts.columns));
+				tags.forEach(
+					t => (SETTINGS.ADMIN.posts.showedPosts[t.name] = SETTINGS.ADMIN.posts.columns.now)
+				);
 			}
 		});
 		onValue(ref(db, '/posts'), s => {
@@ -92,7 +91,7 @@
 				selected={SETTINGS.ADMIN.posts.filters.tag}
 				_class="me-1" />
 			<PinButton
-				bind:pressed={SETTINGS.ADMIN.posts.filters.newFirst}
+				bind:pressed={SETTINGS.ADMIN.posts.filters.isNewFirst}
 				_class="btn-sm"
 				titleNoPressed="сначала старые"
 				titlePressed="сначала новые" />
@@ -123,21 +122,26 @@
 				<button
 					class="btn btn-sm btn-dark text-light"
 					onclick={() => {
-						if (SETTINGS.ADMIN.posts.columns == SETTINGS.ADMIN.posts.columns) {
-							SETTINGS.ADMIN.posts.columns = 1;
-						} else SETTINGS.ADMIN.posts.columns++;
-						localStorage.setItem('countPostOnAdminPage', String(SETTINGS.ADMIN.posts.columns));
-						tags.forEach(t => (countPostForShow[t.name] = SETTINGS.ADMIN.posts.columns));
+						SETTINGS.ADMIN.posts.columns.now == SETTINGS.ADMIN.posts.columns.max
+							? (SETTINGS.ADMIN.posts.columns.now = 1)
+							: SETTINGS.ADMIN.posts.columns.now++;
+						localStorage.setItem(
+							'SETTINGS.ADMIN.posts.columns.now',
+							SETTINGS.ADMIN.posts.columns.now.toString()
+						);
+						tags.forEach(
+							t => (SETTINGS.ADMIN.posts.showedPosts[t.name] = SETTINGS.ADMIN.posts.columns.now)
+						);
 					}}>
 					<span>колонки</span>
-					<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.posts.columns}</span>
+					<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.posts.columns.now}</span>
 				</button>
 			</div>
 			<div class="flex-grow-1 text-center text-dark">
 				Всего публикаций с тегом
 				<span class="badge bg-dark bg-opacity-10 text-dark p-1 border-0"
 					>{SETTINGS.ADMIN.posts.filters.tag.name}</span>
-				- {sizeArrayOfFilteredPosts}
+				- {filteredPosts.length}
 			</div>
 		</div>
 		<button class="btn btn-dark" onclick={() => goto('/admin/posts/create')}>Создать</button>
@@ -211,26 +215,26 @@
 	</Post>
 {/snippet}
 
-<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns} g-3 mb-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns.now} g-3 mb-3">
 	<!-- pinned -->
-	{#each [...arrayOfFilteredPosts].filter(([uid, item]) => item.pinned) as [uid, item]}
+	{#each [...filteredPosts].filter(([uid, item]) => item.pinned) as [uid, item]}
 		{@render post(uid, item)}
 	{/each}
 </div>
 
-<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns} g-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns.now} g-3">
 	<!-- not pinned -->
-	{#each [...arrayOfFilteredPosts]
+	{#each [...filteredPosts]
 		.filter(([uid, item]) => !item.pinned)
-		.slice(0, countPostForShow[SETTINGS.ADMIN.posts.filters.tag.name]) as [uid, item]}
+		.slice(0, SETTINGS.ADMIN.posts.showedPosts[SETTINGS.ADMIN.posts.filters.tag.name]) as [uid, item]}
 		{@render post(uid, item)}
 	{/each}
 </div>
 
-{#if countPostForShow[SETTINGS.ADMIN.posts.filters.tag.name] < sizeArrayOfFilteredPosts}
+{#if SETTINGS.ADMIN.posts.showedPosts[SETTINGS.ADMIN.posts.filters.tag.name] < filteredPosts.length}
 	<button
 		class="btn btn-light text-dark w-100 mt-3"
 		onclick={() =>
-			(countPostForShow[SETTINGS.ADMIN.posts.filters.tag.name] += SETTINGS.ADMIN.posts.columns)}
-		>Загрузить ещё...</button>
+			(SETTINGS.ADMIN.posts.showedPosts[SETTINGS.ADMIN.posts.filters.tag.name] +=
+				SETTINGS.ADMIN.posts.columns.now)}>Загрузить ещё...</button>
 {/if}

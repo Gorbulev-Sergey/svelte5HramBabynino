@@ -40,13 +40,16 @@
 			<button
 				class="btn btn-sm btn-dark text-light"
 				onclick={() => {
-					if (SETTINGS.ADMIN.albums.columns == SETTINGS.ADMIN.albums.columns) {
-						SETTINGS.ADMIN.albums.columns = 1;
-					} else SETTINGS.ADMIN.albums.columns++;
-					localStorage.setItem('countAlbumOnAdminPage', String(SETTINGS.ADMIN.albums.columns));
+					SETTINGS.ADMIN.albums.columns.now == SETTINGS.ADMIN.albums.columns.max
+						? (SETTINGS.ADMIN.albums.columns.now = 1)
+						: SETTINGS.ADMIN.albums.columns.now++;
+					localStorage.setItem(
+						'SETTINGS.ADMIN.albums.columns.now',
+						String(SETTINGS.ADMIN.albums.columns.now)
+					);
 				}}>
 				<span>колонки</span>
-				<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.albums.columns}</span>
+				<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.albums.columns.now}</span>
 			</button>
 			<button
 				class="btn btn-sm btn-dark text-light"
@@ -63,7 +66,7 @@
 	</PageTitle>
 {/snippet}
 
-<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.albums.columns} g-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.albums.columns.now} g-3">
 	{#each [...albums].sort( ([k1, v1], [k2, v2]) => (isNewAlbumFirst ? new Date(v2.date).getTime() - new Date(v1.date).getTime() : new Date(v1.date).getTime() - new Date(v2.date).getTime()) ) as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>

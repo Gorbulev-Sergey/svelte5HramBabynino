@@ -19,7 +19,7 @@
 	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
 	let notPinnedPostsForShow = $derived(
-		notPinnedPosts.slice(0, SETTINGS.posts.showedMap[page.params.tag])
+		notPinnedPosts.slice(0, SETTINGS.posts.showedPosts[page.params.tag])
 	);
 	let description = $derived(page.params.tag[0].toUpperCase() + page.params.tag.slice(1));
 	let keywords = $derived(`бабынино, храм, храм бабынино, ${description}`);
@@ -76,8 +76,8 @@
 		<button
 			class="btn btn-light text-dark mt-3 w-100"
 			onclick={() => {
-				SETTINGS.posts.showedMap[page.params.tag] =
-					SETTINGS.posts.showedMap[page.params.tag] + SETTINGS.posts.step;
+				SETTINGS.posts.showedPosts[page.params.tag] =
+					SETTINGS.posts.showedPosts[page.params.tag] + SETTINGS.posts.step;
 			}}>Загрузить ещё...</button>
 	{/if}
 </Container>

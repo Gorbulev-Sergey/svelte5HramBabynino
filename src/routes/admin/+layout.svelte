@@ -121,6 +121,7 @@
 				});
 			}
 		});
+
 		// Работаем с темой
 		if (localStorage.getItem('SETTINGS.theme.isSystem') == 'true') {
 			SETTINGS.theme.isSystem = true;
@@ -136,22 +137,44 @@
 		} else {
 			SETTINGS.theme.isSystem = false;
 		}
-		// Работаем с количеством колонок постов
-		if (!localStorage.getItem('countPostOnAdminPage'))
-			localStorage.setItem('countPostOnAdminPage', String(SETTINGS.ADMIN.posts.columns));
-		else SETTINGS.ADMIN.posts.columns = Number(localStorage.getItem('countPostOnAdminPage'));
-		// Работаем с количеством колонок альбомов
-		if (!localStorage.getItem('countAlbumOnAdminPage'))
-			localStorage.setItem('countAlbumOnAdminPage', String(SETTINGS.ADMIN.albums.columns));
-		else SETTINGS.ADMIN.albums.columns = Number(localStorage.getItem('countAlbumOnAdminPage'));
-		// Работаем с количеством колонок фотографий на странице хранилища
-		if (!localStorage.getItem('countPhotoOnAdminPage'))
-			localStorage.setItem('countPhotoOnAdminPage', String(SETTINGS.ADMIN.albums.step));
-		else SETTINGS.ADMIN.albums.step = Number(localStorage.getItem('countPhotoOnAdminPage'));
+
 		// Работаем с компактным/полным размером админ-панели
-		if (!localStorage.getItem('isAdminCompactMode'))
-			localStorage.setItem('isAdminCompactMode', String(SETTINGS.ADMIN.isCompactMode));
-		else SETTINGS.ADMIN.isCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
+		if (!localStorage.getItem('SETTINGS.ADMIN.isCompactMode'))
+			localStorage.setItem('SETTINGS.ADMIN.isCompactMode', String(SETTINGS.ADMIN.isCompactMode));
+		else
+			SETTINGS.ADMIN.isCompactMode =
+				localStorage.getItem('SETTINGS.ADMIN.isCompactMode') === 'true';
+
+		// Работаем с количеством колонок постов
+		if (!localStorage.getItem('SETTINGS.ADMIN.posts.columns.now'))
+			localStorage.setItem(
+				'SETTINGS.ADMIN.posts.columns.now',
+				String(SETTINGS.ADMIN.posts.columns.now)
+			);
+		else
+			SETTINGS.ADMIN.posts.columns.now = Number(
+				localStorage.getItem('SETTINGS.ADMIN.posts.columns.now')
+			);
+		// Работаем с количеством колонок альбомов
+		if (!localStorage.getItem('SETTINGS.ADMIN.albums.columns.now'))
+			localStorage.setItem(
+				'SETTINGS.ADMIN.albums.columns.now',
+				String(SETTINGS.ADMIN.albums.columns.now)
+			);
+		else
+			SETTINGS.ADMIN.albums.columns.now = Number(
+				localStorage.getItem('SETTINGS.ADMIN.albums.columns.now')
+			);
+		// Работаем с количеством колонок фотографий на странице хранилища
+		if (!localStorage.getItem('SETTINGS.ADMIN.albums.columns.now'))
+			localStorage.setItem(
+				'SETTINGS.ADMIN.albums.columns.now',
+				String(SETTINGS.ADMIN.albums.columns.now)
+			);
+		else
+			SETTINGS.ADMIN.albums.step = Number(
+				localStorage.getItem('SETTINGS.ADMIN.albums.columns.now')
+			);
 	});
 
 	let isButtonOnTopShow = $state(false);
@@ -268,7 +291,10 @@
 					class="btn btn-light text-dark text-start px-3"
 					onclick={() => {
 						SETTINGS.ADMIN.isCompactMode = !SETTINGS.ADMIN.isCompactMode;
-						localStorage.setItem('isAdminCompactMode', String(SETTINGS.ADMIN.isCompactMode));
+						localStorage.setItem(
+							'SETTINGS.ADMIN.isCompactMode',
+							String(SETTINGS.ADMIN.isCompactMode)
+						);
 					}}>
 					<i
 						class="fa-solid {SETTINGS.ADMIN.isCompactMode

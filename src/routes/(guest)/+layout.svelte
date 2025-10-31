@@ -49,7 +49,7 @@
 
 	$effect.pre(() => {
 		onValue(ref(db, '/tags'), s =>
-			(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedMap[t.name] = SETTINGS.posts.step))
+			(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step))
 		);
 	});
 

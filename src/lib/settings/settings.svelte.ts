@@ -15,19 +15,20 @@ export let SETTINGS = $state({
 		schedule: { date: new Date().toISOString().slice(0, 7) },
 		isCompactMode: false,
 		posts: {
-			columns: 4,
-			step: 8,
+			columns: { now: 4, max: 6 },
+			step: 4,
 			pages: 1,
+			showedPosts: { главное: 4 },
 			filters: {
 				published: true,
 				pinned: false,
-				newFirst: true,
+				isNewFirst: true,
 				tag: Tag('главное', 'Главное'),
 				fixedUnfixed: EFixedUnfixed['закреплённые и незакреплённые']
 			}
 		},
 		albums: {
-			columns: 4,
+			columns: { now: 4, max: 6 },
 			step: 8,
 			pages: 1
 		},
@@ -49,7 +50,7 @@ export let SETTINGS = $state({
 		columns: 3,
 		step: 6,
 		pages: 1,
-		showedMap: { главное: 6 }
+		showedPosts: { главное: 6 }
 	},
 	theme: {
 		theme: 'light',
