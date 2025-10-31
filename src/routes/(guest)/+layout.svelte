@@ -52,10 +52,6 @@
 			(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step))
 		);
 	});
-
-	onMount(async () => {
-		SETTINGS.ADMIN.Header = null;
-	});
 </script>
 
 {#if browser}

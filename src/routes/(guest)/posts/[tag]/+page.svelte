@@ -8,6 +8,7 @@
 	import { SETTINGS } from '$lib/settings/settings.svelte.js';
 
 	let { data } = $props();
+	let tag = $derived(page.params.tag ?? 'главное');
 	let tags = $derived(data.tags);
 	let posts = $derived(data.posts.filter(v => v[1].published));
 	let postsByTag = $derived(
@@ -18,10 +19,8 @@
 	let pinnedPosts = $derived(postsByTag.filter(([k, v]) => v.pinned));
 	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
-	let notPinnedPostsForShow = $derived(
-		notPinnedPosts.slice(0, SETTINGS.posts.showedPosts[page.params.tag])
-	);
-	let description = $derived(page.params.tag[0].toUpperCase() + page.params.tag.slice(1));
+	let notPinnedPostsForShow = $derived(notPinnedPosts.slice(0, SETTINGS.posts.showedPosts[tag]));
+	let description = $derived(tag[0].toUpperCase() + tag.slice(1));
 	let keywords = $derived(`бабынино, храм, храм бабынино, ${description}`);
 </script>
 
@@ -76,8 +75,7 @@
 		<button
 			class="btn btn-light text-dark mt-3 w-100"
 			onclick={() => {
-				SETTINGS.posts.showedPosts[page.params.tag] =
-					SETTINGS.posts.showedPosts[page.params.tag] + SETTINGS.posts.step;
+				SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
 			}}>Загрузить ещё...</button>
 	{/if}
 </Container>

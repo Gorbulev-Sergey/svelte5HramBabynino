@@ -106,7 +106,7 @@
 	};
 
 	onMount(async () => {
-		SETTINGS.ADMIN.Header = subpanel;
+		SETTINGS.ADMIN.Header = header;
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				onValue(ref(db, '/users'), s => {
@@ -187,9 +187,7 @@
 	});
 </script>
 
-{#snippet subpanel()}
-	<div hidden></div>
-{/snippet}
+{#snippet header()}{/snippet}
 
 <IsAuth>
 	<div class="d-flex align-items-start">

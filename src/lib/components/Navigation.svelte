@@ -7,14 +7,14 @@
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { page } from '$app/state';
 
-	interface Props {
+	interface IProps {
 		title: String;
 		routesLeft: { url: string; title: string }[];
 		routesRight: { url: string; title: string }[];
 		children?: Snippet<[]>;
 	}
 
-	let { title = 'Название', routesLeft = [], routesRight = [], children }: Props = $props();
+	let { title = 'Название', routesLeft = [], routesRight = [], children }: IProps = $props();
 	let color = $state('rgba(255,50,60,0)');
 
 	let changeTheme = (th: string, isSystem: boolean) => {
@@ -94,7 +94,7 @@
 			<!-- svelte-ignore a11y_consider_explicit_label -->
 			<button
 				class="btn btn-light text-dark bg-transparent border-0 text-uppercase"
-				data-bs-toggle="dropdown"><i class="fa-solid fa-bars" /></button>
+				data-bs-toggle="dropdown"><i class="fa-solid fa-bars"></i></button>
 
 			<div class="dropdown-menu border-0 rounded-0 w-100 bg-light text-dark shadow-sm">
 				{#each routesLeft as item}
@@ -183,10 +183,4 @@
 			</div>
 		</div>
 	</Large>
-	{#if SETTINGS.ADMIN.Header != null}
-		<div class="px-3">
-			<hr />
-			{@render children?.()}
-		</div>
-	{/if}
 </nav>
