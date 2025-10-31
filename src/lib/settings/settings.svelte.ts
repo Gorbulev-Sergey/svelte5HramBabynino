@@ -30,7 +30,10 @@ export let SETTINGS = $state({
 		albums: {
 			columns: { now: 4, max: 6 },
 			step: 8,
-			pages: 1
+			pages: 2,
+			filters: {
+				isNewFirst: true
+			}
 		},
 		vk: {
 			accessToken:

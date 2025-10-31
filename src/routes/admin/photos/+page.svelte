@@ -9,7 +9,15 @@
 	import { onMount } from 'svelte';
 
 	let albums: [string, IAlbum][] = $state([]);
-	let isNewAlbumFirst = $state(true);
+	let filteredAlbums = $derived.by(() =>
+		[...albums]
+			.sort(([k1, v1], [k2, v2]) =>
+				SETTINGS.ADMIN.albums.filters.isNewFirst
+					? new Date(v2.date).getTime() - new Date(v1.date).getTime()
+					: new Date(v1.date).getTime() - new Date(v2.date).getTime()
+			)
+			.slice(0, SETTINGS.ADMIN.albums.columns.now * SETTINGS.ADMIN.albums.pages)
+	);
 
 	onMount(async () => {
 		SETTINGS.ADMIN.Header = header;
@@ -53,8 +61,9 @@
 			</button>
 			<button
 				class="btn btn-sm btn-dark text-light"
-				onclick={() => (isNewAlbumFirst = !isNewAlbumFirst)}
-				>сначала {isNewAlbumFirst ? 'новые' : 'старые'}
+				onclick={() =>
+					(SETTINGS.ADMIN.albums.filters.isNewFirst = !SETTINGS.ADMIN.albums.filters.isNewFirst)}
+				>сначала {SETTINGS.ADMIN.albums.filters.isNewFirst ? 'новые' : 'старые'}
 			</button>
 		</div>
 		<div class="me-2">
@@ -67,7 +76,7 @@
 {/snippet}
 
 <div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.albums.columns.now} g-3">
-	{#each [...albums].sort( ([k1, v1], [k2, v2]) => (isNewAlbumFirst ? new Date(v2.date).getTime() - new Date(v1.date).getTime() : new Date(v1.date).getTime() - new Date(v2.date).getTime()) ) as [uid, album]}
+	{#each filteredAlbums as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>
 				<div slot="navigation" class="flex-grow-1">
@@ -127,3 +136,9 @@
 		</div>
 	{/each}
 </div>
+
+{#if SETTINGS.ADMIN.albums.pages < albums.length / SETTINGS.ADMIN.albums.columns.now}
+	<button
+		class="btn btn-light text-dark w-100 mt-3"
+		onclick={() => (SETTINGS.ADMIN.albums.pages += 2)}>Загрузить ещё...</button>
+{/if}
