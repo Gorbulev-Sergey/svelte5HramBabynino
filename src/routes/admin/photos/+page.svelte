@@ -3,17 +3,24 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Album from '$lib/components/photos/Album.svelte';
 	import type { IAlbum } from '$lib/models/photos/Album.js';
-	import { db } from '$lib/scripts/firebase';
-	import { countAlbumOnAdminPage } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte.js';
+	import { db } from '$lib/settings/firebase';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, onValue, ref, remove } from 'firebase/database';
 	import { onMount } from 'svelte';
 
 	let albums: [string, IAlbum][] = $state([]);
-	let isNewAlbumFirst = $state(true);
+	let filteredAlbums = $derived.by(() =>
+		[...albums]
+			.sort(([k1, v1], [k2, v2]) =>
+				SETTINGS.ADMIN.albums.filters.isNewFirst
+					? new Date(v2.date).getTime() - new Date(v1.date).getTime()
+					: new Date(v1.date).getTime() - new Date(v2.date).getTime()
+			)
+			.slice(0, SETTINGS.ADMIN.albums.columns.now * SETTINGS.ADMIN.albums.pages)
+	);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/photos'), s => {
 			if (s.exists()) {
 				albums = Object.entries(s.val());
@@ -41,18 +48,22 @@
 			<button
 				class="btn btn-sm btn-dark text-light"
 				onclick={() => {
-					if ($countAlbumOnAdminPage == SETTINGS.adminPanel.columns) {
-						$countAlbumOnAdminPage = 1;
-					} else $countAlbumOnAdminPage++;
-					localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
+					SETTINGS.ADMIN.albums.columns.now == SETTINGS.ADMIN.albums.columns.max
+						? (SETTINGS.ADMIN.albums.columns.now = 1)
+						: SETTINGS.ADMIN.albums.columns.now++;
+					localStorage.setItem(
+						'SETTINGS.ADMIN.albums.columns.now',
+						String(SETTINGS.ADMIN.albums.columns.now)
+					);
 				}}>
 				<span>колонки</span>
-				<span class="badge bg-light text-dark ms-1">{$countAlbumOnAdminPage}</span>
+				<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.albums.columns.now}</span>
 			</button>
 			<button
 				class="btn btn-sm btn-dark text-light"
-				onclick={() => (isNewAlbumFirst = !isNewAlbumFirst)}
-				>сначала {isNewAlbumFirst ? 'новые' : 'старые'}
+				onclick={() =>
+					(SETTINGS.ADMIN.albums.filters.isNewFirst = !SETTINGS.ADMIN.albums.filters.isNewFirst)}
+				>сначала {SETTINGS.ADMIN.albums.filters.isNewFirst ? 'новые' : 'старые'}
 			</button>
 		</div>
 		<div class="me-2">
@@ -64,8 +75,8 @@
 	</PageTitle>
 {/snippet}
 
-<div class="row row-cols-1 row-cols-md-{$countAlbumOnAdminPage} g-3">
-	{#each [...albums].sort( ([k1, v1], [k2, v2]) => (isNewAlbumFirst ? new Date(v2.date).getTime() - new Date(v1.date).getTime() : new Date(v1.date).getTime() - new Date(v2.date).getTime()) ) as [uid, album]}
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.albums.columns.now} g-3">
+	{#each filteredAlbums as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>
 				<div slot="navigation" class="flex-grow-1">
@@ -125,3 +136,9 @@
 		</div>
 	{/each}
 </div>
+
+{#if SETTINGS.ADMIN.albums.pages < albums.length / SETTINGS.ADMIN.albums.columns.now}
+	<button
+		class="btn btn-light text-dark w-100 mt-3"
+		onclick={() => (SETTINGS.ADMIN.albums.pages += 2)}>Загрузить ещё...</button>
+{/if}

@@ -7,7 +7,6 @@
 	let title = 'Контакты';
 	let description = 'Контактная информация: телефоны, whatsapp, адрес храма';
 	let keywords = $derived(`бабынино, храм, ${title}, храм бабынино`);
-	let isCanScroollMap = $state(false);
 </script>
 
 <Container>

@@ -1,16 +1,28 @@
-<script>
-	export let titleNoPressed = 'кнопка';
-	export let titlePressed = 'кнопка';
-	export let pressed = false;
-	export let onPressed = () => {};
-	export let classNoPressed = 'btn-dark';
-	export let classPressed = 'btn-dark';
-	export let _class = '';
+<script lang="ts">
+	interface IProps {
+		titleNoPressed?: string;
+		titlePressed?: string;
+		pressed?: boolean;
+		onPressed?: () => void;
+		classNoPressed?: string;
+		classPressed?: string;
+		_class?: string;
+	}
+
+	let {
+		titleNoPressed = 'кнопка',
+		titlePressed = 'кнопка',
+		pressed = false,
+		onPressed = () => {},
+		classNoPressed = 'btn-dark',
+		classPressed = 'btn-dark',
+		_class = ''
+	}: IProps = $props();
 </script>
 
 <button
 	class="btn {pressed ? classPressed : classNoPressed} {_class}"
-	on:click={() => {
+	onclick={() => {
 		pressed = !pressed;
 		onPressed();
 	}}>

@@ -1,20 +1,19 @@
 <script lang="ts">
-	import { isPostUpdated } from '$lib/scripts/store.js';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Pin from '$lib/components/Pin.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Tag, type ITag } from '$lib/models/Tag';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase.js';
 	import { onValue, ref, update } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { onMount } from 'svelte';
 	import Selector from '$lib/components/Selector.svelte';
 	import { Colors } from '$lib/models/Colors.js';
 	import SelectorColors from '$lib/components/SelectorColors.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte.js';
 
 	let { data } = $props();
 	let tags: ITag[] = $state([]);
@@ -28,7 +27,7 @@
 	);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				tags = Object.values(s.val());
@@ -46,7 +45,6 @@
 			onclick={async () => {
 				if (post.title != '') {
 					update(ref(db, `/posts/${$page.params.uid}`), post);
-					$isPostUpdated = true;
 					goto('/admin/posts');
 				}
 			}}>Сохранить</button>

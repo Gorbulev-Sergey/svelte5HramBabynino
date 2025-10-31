@@ -1,21 +1,13 @@
 <script lang="ts">
 	import Container from '$lib/components/admin/Container.svelte';
-	import {
-		countPostOnAdminPage,
-		countAlbumOnAdminPage,
-		isAdminCompactMode,
-		isSystemTheme,
-		theme,
-		countPhotoOnAdminPage
-	} from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { type IUser } from '$lib/models/admin/User';
-	import { auth, db } from '$lib/scripts/firebase';
+	import { auth, db } from '$lib/settings/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount, type Snippet } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	interface IProps {
 		children: Snippet;
@@ -94,27 +86,27 @@
 
 	let { children }: IProps = $props();
 
-	let changeTheme = (th: string, isSystemTheme1: boolean) => {
-		if (!isSystemTheme1) {
-			$theme = th;
-			$isSystemTheme = false;
-			localStorage.setItem('theme', $theme);
-			localStorage.setItem('isSystemTheme', 'false');
+	let changeTheme = (th: string, isSystem: boolean) => {
+		if (!isSystem) {
+			SETTINGS.theme.theme = th;
+			SETTINGS.theme.isSystem = false;
+			localStorage.setItem('theme', SETTINGS.theme.theme);
+			localStorage.setItem('SETTINGS.theme.isSystem', 'false');
 		} else {
 			// Определяем и переключаем светлую/тёмную тему
 			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				$theme = 'dark';
+				SETTINGS.theme.theme = 'dark';
 			} else {
-				$theme = 'light';
+				SETTINGS.theme.theme = 'light';
 			}
-			$isSystemTheme = true;
-			localStorage.setItem('theme', $theme);
-			localStorage.setItem('isSystemTheme', 'true');
+			SETTINGS.theme.isSystem = true;
+			localStorage.setItem('theme', SETTINGS.theme.theme);
+			localStorage.setItem('SETTINGS.theme.isSystem', 'true');
 		}
 	};
 
 	onMount(async () => {
-		SETTINGS.Header = subpanel;
+		SETTINGS.ADMIN.Header = header;
 		onAuthStateChanged(auth, user => {
 			if (user) {
 				onValue(ref(db, '/users'), s => {
@@ -129,37 +121,60 @@
 				});
 			}
 		});
+
 		// Работаем с темой
-		if (localStorage.getItem('isSystemTheme') == 'true') {
-			$isSystemTheme = true;
+		if (localStorage.getItem('SETTINGS.theme.isSystem') == 'true') {
+			SETTINGS.theme.isSystem = true;
 			// Устанавливаем прослушиватель на изменение темы в системе
 			window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
 				if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					$theme = 'dark';
+					SETTINGS.theme.theme = 'dark';
 				} else {
-					$theme = 'light';
+					SETTINGS.theme.theme = 'light';
 				}
-				localStorage.setItem('theme', $theme);
+				localStorage.setItem('theme', SETTINGS.theme.theme);
 			});
 		} else {
-			$isSystemTheme = false;
+			SETTINGS.theme.isSystem = false;
 		}
-		// Работаем с количеством колонок постов
-		if (!localStorage.getItem('countPostOnAdminPage'))
-			localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
-		else $countPostOnAdminPage = Number(localStorage.getItem('countPostOnAdminPage'));
-		// Работаем с количеством колонок альбомов
-		if (!localStorage.getItem('countAlbumOnAdminPage'))
-			localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
-		else $countAlbumOnAdminPage = Number(localStorage.getItem('countAlbumOnAdminPage'));
-		// Работаем с количеством колонок фотографий на странице хранилища
-		if (!localStorage.getItem('countPhotoOnAdminPage'))
-			localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
-		else $countPhotoOnAdminPage = Number(localStorage.getItem('countPhotoOnAdminPage'));
+
 		// Работаем с компактным/полным размером админ-панели
-		if (!localStorage.getItem('isAdminCompactMode'))
-			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
-		else $isAdminCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
+		if (!localStorage.getItem('SETTINGS.ADMIN.isCompactMode'))
+			localStorage.setItem('SETTINGS.ADMIN.isCompactMode', String(SETTINGS.ADMIN.isCompactMode));
+		else
+			SETTINGS.ADMIN.isCompactMode =
+				localStorage.getItem('SETTINGS.ADMIN.isCompactMode') === 'true';
+
+		// Работаем с количеством колонок постов
+		if (!localStorage.getItem('SETTINGS.ADMIN.posts.columns.now'))
+			localStorage.setItem(
+				'SETTINGS.ADMIN.posts.columns.now',
+				String(SETTINGS.ADMIN.posts.columns.now)
+			);
+		else
+			SETTINGS.ADMIN.posts.columns.now = Number(
+				localStorage.getItem('SETTINGS.ADMIN.posts.columns.now')
+			);
+		// Работаем с количеством колонок альбомов
+		if (!localStorage.getItem('SETTINGS.ADMIN.albums.columns.now'))
+			localStorage.setItem(
+				'SETTINGS.ADMIN.albums.columns.now',
+				String(SETTINGS.ADMIN.albums.columns.now)
+			);
+		else
+			SETTINGS.ADMIN.albums.columns.now = Number(
+				localStorage.getItem('SETTINGS.ADMIN.albums.columns.now')
+			);
+		// Работаем с количеством колонок фотографий на странице хранилища
+		if (!localStorage.getItem('SETTINGS.ADMIN.albums.columns.now'))
+			localStorage.setItem(
+				'SETTINGS.ADMIN.albums.columns.now',
+				String(SETTINGS.ADMIN.albums.columns.now)
+			);
+		else
+			SETTINGS.ADMIN.albums.step = Number(
+				localStorage.getItem('SETTINGS.ADMIN.albums.columns.now')
+			);
 	});
 
 	let isButtonOnTopShow = $state(false);
@@ -172,16 +187,14 @@
 	});
 </script>
 
-{#snippet subpanel()}
-	<div hidden></div>
-{/snippet}
+{#snippet header()}{/snippet}
 
 <IsAuth>
 	<div class="d-flex align-items-start">
 		<div
 			class="d-flex flex-column shadow sticky-top bg-light no-print gap-1"
 			style="height:100vh; z-index: 10000">
-			{#if !$isAdminCompactMode}
+			{#if !SETTINGS.ADMIN.isCompactMode}
 				<button
 					class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-2 text-uppercase fw-bold text-nowrap"
 					onclick={() => goto('/admin/posts')}>
@@ -200,8 +213,8 @@
 							goto(url);
 						}}>
 						<div class="d-flex align-items-center gap-2">
-							<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
-							{#if !$isAdminCompactMode}
+							<i class="{icon} icon-width {SETTINGS.ADMIN.isCompactMode ? 'py-1' : ''}"></i>
+							{#if !SETTINGS.ADMIN.isCompactMode}
 								{title}
 							{/if}
 						</div>
@@ -219,8 +232,8 @@
 								goto(url);
 							}}>
 							<div class="d-flex align-items-center gap-2">
-								<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
-								{#if !$isAdminCompactMode}
+								<i class="{icon} icon-width {SETTINGS.ADMIN.isCompactMode ? 'py-1' : ''}"></i>
+								{#if !SETTINGS.ADMIN.isCompactMode}
 									{title}
 								{/if}
 							</div>
@@ -232,9 +245,9 @@
 						<b class="text-uppercase">
 							<div class="d-flex align-items-center gap-2">
 								<i
-									class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''} "
+									class="{icon} icon-width {SETTINGS.ADMIN.isCompactMode ? 'py-1' : ''} "
 									style="transform: rotate(-180deg);"></i>
-								{#if !$isAdminCompactMode}
+								{#if !SETTINGS.ADMIN.isCompactMode}
 									{title}
 								{/if}
 							</div>
@@ -243,7 +256,7 @@
 				{/each}
 			</div>
 			<div
-				class="flex-grow-1 d-flex mx-1 {$isAdminCompactMode
+				class="flex-grow-1 d-flex mx-1 {SETTINGS.ADMIN.isCompactMode
 					? 'flex-column-reverse'
 					: 'align-items-end justify-content-between'} pb-3">
 				<div class="dropdown-center rounded">
@@ -254,17 +267,17 @@
 						title="Тема оформления"><i class="fa-regular fa-sun"></i></button>
 					<ul class="dropdown-menu border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'light'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'light'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('light', false)}>Светлая тема</button>
 						<button
-							class="btn btn-light {!$isSystemTheme && $theme == 'dark'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'dark'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
 						<button
-							class="btn btn-light {$isSystemTheme
+							class="btn btn-light {SETTINGS.theme.isSystem
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
@@ -272,21 +285,27 @@
 				</div>
 				<button
 					aria-label="Развернуть/Свернуть"
-					title={$isAdminCompactMode ? 'Развернуть' : 'Свернуть'}
+					title={SETTINGS.ADMIN.isCompactMode ? 'Развернуть' : 'Свернуть'}
 					class="btn btn-light text-dark text-start px-3"
 					onclick={() => {
-						$isAdminCompactMode = !$isAdminCompactMode;
-						localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
+						SETTINGS.ADMIN.isCompactMode = !SETTINGS.ADMIN.isCompactMode;
+						localStorage.setItem(
+							'SETTINGS.ADMIN.isCompactMode',
+							String(SETTINGS.ADMIN.isCompactMode)
+						);
 					}}>
-					<i class="fa-solid {$isAdminCompactMode ? 'fa-chevron-right' : 'fa-chevron-left'} "></i>
+					<i
+						class="fa-solid {SETTINGS.ADMIN.isCompactMode
+							? 'fa-chevron-right'
+							: 'fa-chevron-left'} "></i>
 				</button>
 			</div>
 		</div>
 		<div class="flex-grow-1 d-flex flex-column">
-			{#if SETTINGS.Header}
+			{#if SETTINGS.ADMIN.Header}
 				<div class="d-flex flex-column sticky-top">
 					<div class="bg-light px-2">
-						{@render SETTINGS.Header?.()}
+						{@render SETTINGS.ADMIN.Header?.()}
 					</div>
 				</div>
 			{/if}

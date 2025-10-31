@@ -3,14 +3,14 @@
 	import MonthPicker from '$lib/components/schedule/MonthPicker.svelte';
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
 	import { type IField } from '$lib/models/schedule/Field';
-	import { db } from '$lib/scripts/firebase';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { db } from '$lib/settings/firebase';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, ref } from 'firebase/database';
 	import { onMount } from 'svelte';
 
 	// Выбранная дата, год, месяц
-	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
-	let month = $derived(SETTINGS.scheduleDate.slice(5, 7));
+	let year = $derived(SETTINGS.ADMIN.schedule.date.slice(0, 4));
+	let month = $derived(SETTINGS.ADMIN.schedule.date.slice(5, 7));
 
 	// Объект для хранения расписания за выбранный месяц
 	let schedule = $state<{ [date: string]: IField[] }>(
@@ -28,7 +28,7 @@
 	});
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 	});
 </script>
 
@@ -44,7 +44,7 @@
 				onclick={() => window.print()}>
 				<i class="fa-solid fa-print"></i>
 			</button>
-			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
+			<MonthPicker title="на дату:" bind:date={SETTINGS.ADMIN.schedule.date} bind:month bind:year />
 			<a
 				href="/admin/schedule/edit"
 				aria-label="Редактировать"

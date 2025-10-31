@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { SETTINGS } from '$lib/store/store.svelte';
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { onValue, ref } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 	import { Contacts } from '$lib/models/Contacts';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	let contacts = $state(Contacts());
 	onMount(() => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/contacts'), s => {
 			if (s.exists()) {
 				contacts = s.val();

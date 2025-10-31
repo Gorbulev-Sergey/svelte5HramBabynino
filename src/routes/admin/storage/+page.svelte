@@ -1,9 +1,8 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import ModalPhoto from '$lib/components/ModalPhoto.svelte';
-	import { storage } from '$lib/scripts/firebase';
-	import { countPhotoOnAdminPage } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { storage } from '$lib/settings/firebase';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import {
 		uploadBytes,
 		ref,
@@ -65,7 +64,7 @@
 	};
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		getFolders().then(() => {
 			getPhotos();
 			getDocuments();
@@ -165,13 +164,13 @@
 					<button
 						class="btn btn-sm btn-dark text-light"
 						onclick={() => {
-							if ($countPhotoOnAdminPage == 5) {
-								$countPhotoOnAdminPage = 1;
-							} else $countPhotoOnAdminPage++;
-							localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
+							if (SETTINGS.ADMIN.albums.step == 5) {
+								SETTINGS.ADMIN.albums.step = 1;
+							} else SETTINGS.ADMIN.albums.step++;
+							localStorage.setItem('countPhotoOnAdminPage', String(SETTINGS.ADMIN.albums.step));
 						}}>
 						<span>колонки</span>
-						<span class="badge bg-light text-dark ms-1">{$countPhotoOnAdminPage}</span>
+						<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.albums.step}</span>
 					</button>
 					<button
 						class="btn btn-dark text-light"
@@ -212,7 +211,7 @@
 				</div>
 			</PageTitle>
 			{#if photos.length > 0}
-				<div class="row row-cols-1 row-cols-md-{$countPhotoOnAdminPage} g-3">
+				<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.albums.step} g-3">
 					{#each photos as photo}
 						{#await getDownloadURL(ref(storage, photo.fullPath)) then s}
 							<!-- svelte-ignore a11y_click_events_have_key_events -->

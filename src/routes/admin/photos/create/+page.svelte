@@ -4,14 +4,14 @@
 	import { goto } from '$app/navigation';
 	import { Photo as _Photo } from '$lib/models/photos/Photo';
 	import { Album } from '$lib/models/photos/Album';
-	import { db, storage } from '$lib/scripts/firebase';
+	import { db, storage } from '$lib/settings/firebase';
 	import { push, ref as refDb } from 'firebase/database';
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onMount } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import type { IVkAlbum, IVkPhoto } from '../vk';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	let album = $state(Album());
 	let checkedPhotos: string[] = $state([]);
@@ -62,7 +62,7 @@
 	});
 
 	onMount(() => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 	});
 </script>
 

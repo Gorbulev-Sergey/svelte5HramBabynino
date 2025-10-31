@@ -2,12 +2,13 @@
 	import Container from '$lib/components/Container.svelte';
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/PageTitle.svelte';
-	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
 	import PostHorizontal from '$lib/components/posts/PostHorizontal.svelte';
 	import Post from '$lib/components/posts/Post.svelte';
 	import { page } from '$app/state';
+	import { SETTINGS } from '$lib/settings/settings.svelte.js';
 
 	let { data } = $props();
+	let tag = $derived(page.params.tag ?? 'главное');
 	let tags = $derived(data.tags);
 	let posts = $derived(data.posts.filter(v => v[1].published));
 	let postsByTag = $derived(
@@ -18,10 +19,8 @@
 	let pinnedPosts = $derived(postsByTag.filter(([k, v]) => v.pinned));
 	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
-	let notPinnedPostsForShow = $derived(
-		notPinnedPosts.slice(0, $showedPostsLength[page.params.tag])
-	);
-	let description = $derived(page.params.tag[0].toUpperCase() + page.params.tag.slice(1));
+	let notPinnedPostsForShow = $derived(notPinnedPosts.slice(0, SETTINGS.posts.showedPosts[tag]));
+	let description = $derived(tag[0].toUpperCase() + tag.slice(1));
 	let keywords = $derived(`бабынино, храм, храм бабынино, ${description}`);
 </script>
 
@@ -55,7 +54,8 @@
 		</div>
 		<!--Для закреплённых-->
 		<div
-			class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 flex-row-reverse justify-content-center">
+			class="row row-cols-1 row-cols-md-2 row-cols-lg-{SETTINGS.posts
+				.columns} g-4 flex-row-reverse justify-content-center">
 			{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
 				<Post {uid} {post} />
 			{/each}
@@ -63,7 +63,9 @@
 	</div>
 
 	<!--Для не закреплённых-->
-	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+	<div
+		class="row row-cols-1 row-cols-md-2 row-cols-lg-{SETTINGS.posts
+			.columns} g-4 justify-content-center">
 		{#each notPinnedPostsForShow as [uid, post], i}
 			<Post {uid} {post} />
 		{/each}
@@ -73,7 +75,7 @@
 		<button
 			class="btn btn-light text-dark mt-3 w-100"
 			onclick={() => {
-				$showedPostsLength[page.params.tag] = $showedPostsLength[page.params.tag] + showedPostsStep;
+				SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
 			}}>Загрузить ещё...</button>
 	{/if}
 </Container>

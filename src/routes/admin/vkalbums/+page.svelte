@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Photo as _Photo } from '$lib/models/photos/Photo';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onMount } from 'svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import type { IVkAlbum, IVkPhoto } from '../photos/vk';
@@ -19,7 +19,7 @@
 	let newAlbum = $state('');
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		fetch('/api/vkalbums', {
 			method: 'POST',
 			headers: {
@@ -146,7 +146,7 @@
 			</div>
 			<input
 				class="form-control bg-light text-dark"
-				bind:value={SETTINGS.vkAccessToken}
+				bind:value={SETTINGS.ADMIN.vk.accessToken}
 				placeholder="access_token" />
 		</div>
 		<div class="d-flex flex-column w-100">

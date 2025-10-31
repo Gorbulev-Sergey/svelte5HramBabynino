@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { onValue, ref, remove, update } from 'firebase/database';
 	import { onMount } from 'svelte';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { adminPostsFilters, countPostOnAdminPage, EFixedUnfixed } from '$lib/scripts/store.js';
 	import FilterTags from '$lib/components/posts/FilterTags.svelte';
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
@@ -12,31 +11,32 @@
 	import { type ITag, Tag } from '$lib/models/Tag';
 	import { type IPost, Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { EFixedUnfixed, SETTINGS } from '$lib/settings/settings.svelte';
 
 	let posts: [string, IPost][] = $state([]);
 	let tags: ITag[] = $state([]);
-	let arrayOfFilteredPosts = $derived.by(() => {
+	let filteredPosts = $derived.by(() => {
 		let p: [string, IPost][] = [];
-		switch ($adminPostsFilters.tag.name) {
+		switch (SETTINGS.ADMIN.posts.filters.tag.name) {
 			case 'все вместе':
-				p = posts.filter(([k, v]) => v.published == $adminPostsFilters.published);
+				p = posts.filter(([k, v]) => v.published == SETTINGS.ADMIN.posts.filters.published);
 				break;
 			case 'без тега':
 				p = posts.filter(
 					([k, v]) =>
-						v.published == $adminPostsFilters.published && (v.tags == null || v.tags.length == 0)
+						v.published == SETTINGS.ADMIN.posts.filters.published &&
+						(v.tags == null || v.tags.length == 0)
 				);
 				break;
 			default:
 				p = posts.filter(
 					([k, v]) =>
-						v.published == $adminPostsFilters.published &&
-						v.tags?.find(t => t.name == $adminPostsFilters.tag.name)
+						v.published == SETTINGS.ADMIN.posts.filters.published &&
+						v.tags?.find(t => t.name == SETTINGS.ADMIN.posts.filters.tag.name)
 				);
 				break;
 		}
-		switch ($adminPostsFilters.newFirst) {
+		switch (SETTINGS.ADMIN.posts.filters.isNewFirst) {
 			case true:
 				p = p.sort(
 					([k1, v1], [k2, v2]) => new Date(v2.created).getTime() - new Date(v1.created).getTime()
@@ -48,7 +48,7 @@
 				);
 				break;
 		}
-		switch ($adminPostsFilters.fixedUnfixed) {
+		switch (SETTINGS.ADMIN.posts.filters.fixedUnfixed) {
 			case EFixedUnfixed['закреплённые']:
 				p = p.filter(v => v[1].pinned);
 				break;
@@ -60,18 +60,17 @@
 		}
 		return p;
 	});
-	let sizeArrayOfFilteredPosts = $derived(arrayOfFilteredPosts.length);
-
-	let countPostForShow: { [key: string]: number } = $state({});
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				tags = Object.values(s.val());
 				tags.push(Tag('все вместе', 'Все вместе'));
 				tags.push(Tag('без тега', 'Без тега'));
-				tags.forEach(t => (countPostForShow[t.name] = $countPostOnAdminPage));
+				tags.forEach(
+					t => (SETTINGS.ADMIN.posts.showedPosts[t.name] = SETTINGS.ADMIN.posts.columns.now)
+				);
 			}
 		});
 		onValue(ref(db, '/posts'), s => {
@@ -88,16 +87,16 @@
 			<FilterTags
 				title="тег:"
 				{tags}
-				onSelect={v => ($adminPostsFilters.tag = v)}
-				selected={$adminPostsFilters.tag}
+				onSelect={v => (SETTINGS.ADMIN.posts.filters.tag = v)}
+				selected={SETTINGS.ADMIN.posts.filters.tag}
 				_class="me-1" />
 			<PinButton
-				bind:pressed={$adminPostsFilters.newFirst}
+				bind:pressed={SETTINGS.ADMIN.posts.filters.isNewFirst}
 				_class="btn-sm"
 				titleNoPressed="сначала старые"
 				titlePressed="сначала новые" />
 			<PinButton
-				bind:pressed={$adminPostsFilters.published}
+				bind:pressed={SETTINGS.ADMIN.posts.filters.published}
 				_class="btn-sm"
 				titleNoPressed="не опубликованные"
 				titlePressed="опубликованные" />
@@ -105,38 +104,44 @@
 				<button
 					class="btn btn-sm btn-dark text-light"
 					onclick={() => {
-						switch ($adminPostsFilters.fixedUnfixed) {
+						switch (SETTINGS.ADMIN.posts.filters.fixedUnfixed) {
 							case EFixedUnfixed['закреплённые']:
-								$adminPostsFilters.fixedUnfixed = EFixedUnfixed['незакреплённые'];
+								SETTINGS.ADMIN.posts.filters.fixedUnfixed = EFixedUnfixed['незакреплённые'];
 								break;
 							case EFixedUnfixed['незакреплённые']:
-								$adminPostsFilters.fixedUnfixed = EFixedUnfixed['закреплённые и незакреплённые'];
+								SETTINGS.ADMIN.posts.filters.fixedUnfixed =
+									EFixedUnfixed['закреплённые и незакреплённые'];
 								break;
 							case EFixedUnfixed['закреплённые и незакреплённые']:
-								$adminPostsFilters.fixedUnfixed = EFixedUnfixed['закреплённые'];
+								SETTINGS.ADMIN.posts.filters.fixedUnfixed = EFixedUnfixed['закреплённые'];
 								break;
 						}
 					}}>
-					<span>{EFixedUnfixed[$adminPostsFilters.fixedUnfixed]}</span>
+					<span>{EFixedUnfixed[SETTINGS.ADMIN.posts.filters.fixedUnfixed]}</span>
 				</button>
 				<button
 					class="btn btn-sm btn-dark text-light"
 					onclick={() => {
-						if ($countPostOnAdminPage == SETTINGS.adminPanel.columns) {
-							$countPostOnAdminPage = 1;
-						} else $countPostOnAdminPage++;
-						localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
-						tags.forEach(t => (countPostForShow[t.name] = $countPostOnAdminPage));
+						SETTINGS.ADMIN.posts.columns.now == SETTINGS.ADMIN.posts.columns.max
+							? (SETTINGS.ADMIN.posts.columns.now = 1)
+							: SETTINGS.ADMIN.posts.columns.now++;
+						localStorage.setItem(
+							'SETTINGS.ADMIN.posts.columns.now',
+							SETTINGS.ADMIN.posts.columns.now.toString()
+						);
+						tags.forEach(
+							t => (SETTINGS.ADMIN.posts.showedPosts[t.name] = SETTINGS.ADMIN.posts.columns.now)
+						);
 					}}>
 					<span>колонки</span>
-					<span class="badge bg-light text-dark ms-1">{$countPostOnAdminPage}</span>
+					<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.posts.columns.now}</span>
 				</button>
 			</div>
 			<div class="flex-grow-1 text-center text-dark">
 				Всего публикаций с тегом
 				<span class="badge bg-dark bg-opacity-10 text-dark p-1 border-0"
-					>{$adminPostsFilters.tag.name}</span>
-				- {sizeArrayOfFilteredPosts}
+					>{SETTINGS.ADMIN.posts.filters.tag.name}</span>
+				- {filteredPosts.length}
 			</div>
 		</div>
 		<button class="btn btn-dark" onclick={() => goto('/admin/posts/create')}>Создать</button>
@@ -155,7 +160,6 @@
 					bind:selectedTags={post.tags}
 					onSelect={() => {
 						update(ref(db, `/posts/${uid}`), post);
-						invalidateAll();
 					}}
 					_class={post.inverted ? 'text-dark' : ''} />
 				<div class="d-flex justify-content-center flex-wrap">
@@ -166,7 +170,6 @@
 						bind:checked={post.published}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
-							invalidateAll();
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-thumbtack"
@@ -175,7 +178,6 @@
 						bind:checked={post.pinned}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
-							invalidateAll();
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-brush"
@@ -183,7 +185,6 @@
 						bind:checked={post.inverted}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
-							invalidateAll();
 						}} />
 				</div>
 				<div class="d-flex flex-wrap">
@@ -205,7 +206,6 @@
 								data-bs-toggle="dropdown"
 								onclick={() => {
 									remove(ref(db, `/posts/${uid}`));
-									invalidateAll();
 								}}>Удалить</button>
 						</div>
 					</div>
@@ -215,25 +215,26 @@
 	</Post>
 {/snippet}
 
-<div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3 mb-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns.now} g-3 mb-3">
 	<!-- pinned -->
-	{#each [...arrayOfFilteredPosts].filter(([uid, item]) => item.pinned) as [uid, item]}
+	{#each [...filteredPosts].filter(([uid, item]) => item.pinned) as [uid, item]}
 		{@render post(uid, item)}
 	{/each}
 </div>
 
-<div class="row row-cols-1 row-cols-md-{$countPostOnAdminPage} g-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns.now} g-3">
 	<!-- not pinned -->
-	{#each [...arrayOfFilteredPosts]
+	{#each [...filteredPosts]
 		.filter(([uid, item]) => !item.pinned)
-		.slice(0, countPostForShow[$adminPostsFilters.tag.name]) as [uid, item]}
+		.slice(0, SETTINGS.ADMIN.posts.showedPosts[SETTINGS.ADMIN.posts.filters.tag.name]) as [uid, item]}
 		{@render post(uid, item)}
 	{/each}
 </div>
 
-{#if countPostForShow[$adminPostsFilters.tag.name] < sizeArrayOfFilteredPosts}
+{#if SETTINGS.ADMIN.posts.showedPosts[SETTINGS.ADMIN.posts.filters.tag.name] < filteredPosts.length}
 	<button
 		class="btn btn-light text-dark w-100 mt-3"
-		onclick={() => (countPostForShow[$adminPostsFilters.tag.name] += $countPostOnAdminPage)}
-		>Загрузить ещё...</button>
+		onclick={() =>
+			(SETTINGS.ADMIN.posts.showedPosts[SETTINGS.ADMIN.posts.filters.tag.name] +=
+				SETTINGS.ADMIN.posts.columns.now)}>Загрузить ещё...</button>
 {/if}

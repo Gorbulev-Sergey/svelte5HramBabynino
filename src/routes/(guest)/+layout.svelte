@@ -3,9 +3,8 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
 	import { type ITag } from '$lib/models/Tag';
-	import { db } from '$lib/scripts/firebase';
-	import { showedPostsLength, showedPostsStep } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { db } from '$lib/settings/firebase';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount } from 'svelte';
 
@@ -48,15 +47,10 @@
 		}
 	];
 
-	// Заполняем переменную $showedPostsLength в хранилище
 	$effect.pre(() => {
 		onValue(ref(db, '/tags'), s =>
-			(s.val() as ITag[]).forEach(t => ($showedPostsLength[t.name] = showedPostsStep))
+			(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step))
 		);
-	});
-
-	onMount(async () => {
-		SETTINGS.Header = null;
 	});
 </script>
 

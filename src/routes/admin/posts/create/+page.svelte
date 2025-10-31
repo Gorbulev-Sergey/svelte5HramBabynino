@@ -4,16 +4,15 @@
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Post } from '$lib/models/Post';
 	import { Tag, type ITag } from '$lib/models/Tag';
-	import { auth, db } from '$lib/scripts/firebase';
+	import { auth, db } from '$lib/settings/firebase';
 	import { onValue, push, ref } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { onMount } from 'svelte';
 	import { Colors } from '$lib/models/Colors';
-	import Selector from '$lib/components/Selector.svelte';
 	import SelectorColors from '$lib/components/SelectorColors.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	let tags: ITag[] = $state([]);
 	let post = $state(Post());
@@ -26,7 +25,7 @@
 	);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/tags'), s => {
 			if (s.exists()) {
 				tags = Object.values(s.val());

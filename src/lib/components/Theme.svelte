@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { theme } from '$lib/scripts/store';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 
 	$effect.pre(() => {
-		$theme = localStorage.getItem('theme') ?? 'light';
-		$theme ? localStorage.getItem('theme') : localStorage.setItem('theme', 'light');
+		SETTINGS.theme.theme = localStorage.getItem('theme') ?? 'light';
+		SETTINGS.theme.theme ? localStorage.getItem('theme') : localStorage.setItem('theme', 'light');
 
-		document.querySelector('#theme')?.setAttribute('href', `/bootstrap.${$theme}.min.css`);
+		document
+			.querySelector('#theme')
+			?.setAttribute('href', `/bootstrap.${SETTINGS.theme.theme}.min.css`);
 	});
 </script>
 

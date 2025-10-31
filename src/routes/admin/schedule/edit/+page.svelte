@@ -2,8 +2,8 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import MonthPicker from '$lib/components/schedule/MonthPicker.svelte';
 	import { Field, type IField } from '$lib/models/schedule/Field';
-	import { db } from '$lib/scripts/firebase';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { db } from '$lib/settings/firebase';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, ref, set } from 'firebase/database';
 	import { onMount } from 'svelte';
 
@@ -51,7 +51,7 @@
 	}
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 	});
 </script>
 

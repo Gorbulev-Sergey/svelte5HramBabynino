@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { get, ref } from 'firebase/database';
 	import { onMount } from 'svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import type { IField } from '$lib/models/schedule/Field';
 	import WeekPicker from '$lib/components/schedule/WeekPicker.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
 
 	let year = $state(new Date().getFullYear());
@@ -83,7 +83,7 @@
 	}
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		getData();
 	});
 </script>

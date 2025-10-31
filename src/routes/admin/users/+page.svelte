@@ -2,9 +2,8 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { User, type IUser } from '$lib/models/admin/User';
-	import { db } from '$lib/scripts/firebase';
-	import { alerts } from '$lib/scripts/store';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { db } from '$lib/settings/firebase';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref, remove, set } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 
@@ -13,7 +12,7 @@
 	let isCreateUserModalShow = $state(false);
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(ref(db, '/users'), s => {
 			if (s.exists()) {
 				users = Object.entries(s.val()) as [string, IUser][];
@@ -55,9 +54,7 @@
 					class="btn btn-sm btn-light"
 					title="Удалить пользователя"
 					onclick={async () => {
-						remove(ref(db, `/users/${uid}`)).then(
-							r => ($alerts = [...$alerts, `Пользователь с email ${user.email} удалён!`])
-						);
+						remove(ref(db, `/users/${uid}`)).then();
 					}}>
 					<i class="fa-solid fa-trash text-danger"></i>
 				</button>

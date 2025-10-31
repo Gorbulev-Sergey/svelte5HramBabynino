@@ -4,12 +4,12 @@
 	import { goto } from '$app/navigation';
 	import { Photo as _Photo } from '$lib/models/photos/Photo';
 	import { Album } from '$lib/models/photos/Album';
-	import { db, storage } from '$lib/scripts/firebase';
+	import { db, storage } from '$lib/settings/firebase';
 	import { onValue, push, ref as refDb, update } from 'firebase/database';
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onMount } from 'svelte';
 	import SubTitle from '$lib/components/admin/SubTitle.svelte';
-	import { SETTINGS } from '$lib/store/store.svelte';
+	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { page } from '$app/state';
 	import type { IVkAlbum, IVkPhoto } from '../../vk';
@@ -63,7 +63,7 @@
 	});
 
 	onMount(async () => {
-		SETTINGS.Header = header;
+		SETTINGS.ADMIN.Header = header;
 		onValue(refDb(db, `/photos/${page.params.uid}`), s => {
 			if (s.exists()) {
 				album = s.val();
