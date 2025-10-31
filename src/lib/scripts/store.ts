@@ -7,23 +7,10 @@ export enum EFixedUnfixed {
 	'закреплённые и незакреплённые'
 }
 
-// Для работы фильтра публикаций на странице администрирования
-export let adminPostsFilters = writable({
-	published: true,
-	pinned: false,
-	newFirst: true,
-	tag: Tag('главное', 'Главное'),
-	fixedUnfixed: EFixedUnfixed['закреплённые и незакреплённые']
-});
-
-// Для работы публикаций, чтобы публикации показывались порционно
-// по showedPostsStep раз и для каждого тега отдельно
-export let showedPostsStep = 6;
-
-interface IMap {
-	[key: string]: number;
-}
-export let showedPostsLength = writable<IMap>({ главное: showedPostsStep });
+// interface IMap {
+// 	[key: string]: number;
+// }
+// export let showedPostsLength = writable<IMap>({ главное: showedPostsStep });
 
 /**
  * Для работы фотоальбомов *
@@ -38,20 +25,11 @@ export let countAlbumsOnPage = writable(6);
 export let countPagesForShow = writable(1);
 export let isNewAlbumsFirst = writable(true);
 
-// Пользователь, который вошёл в систему
-export let userSigned = writable({});
-
 // Для работы с всплывающими сообщениями
 export let alerts: Writable<String[]> = writable([]);
 
 // Для того, чтобы при обновлении поста в админпанели происходил перерендеринг всех постов
 export let isPostUpdated = writable<boolean>(false);
-
-// Для компактного/полного размера админ-панели
-export let isAdminCompactMode = writable(false);
-
-// Количестов постов на админ странице
-export let countPostOnAdminPage = writable(3);
 
 // Количестов альбомов на админ странице
 export let countAlbumOnAdminPage = writable(3);

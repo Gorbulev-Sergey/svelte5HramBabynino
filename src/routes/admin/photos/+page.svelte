@@ -41,7 +41,7 @@
 			<button
 				class="btn btn-sm btn-dark text-light"
 				onclick={() => {
-					if ($countAlbumOnAdminPage == SETTINGS.adminPanel.columns) {
+					if ($countAlbumOnAdminPage == SETTINGS.ADMIN.albums.columns) {
 						$countAlbumOnAdminPage = 1;
 					} else $countAlbumOnAdminPage++;
 					localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));

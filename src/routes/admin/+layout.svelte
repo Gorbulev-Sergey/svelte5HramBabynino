@@ -1,11 +1,6 @@
 <script lang="ts">
 	import Container from '$lib/components/admin/Container.svelte';
-	import {
-		countPostOnAdminPage,
-		countAlbumOnAdminPage,
-		isAdminCompactMode,
-		countPhotoOnAdminPage
-	} from '$lib/scripts/store';
+	import { countAlbumOnAdminPage, countPhotoOnAdminPage } from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { type IUser } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
@@ -144,8 +139,8 @@
 		}
 		// Работаем с количеством колонок постов
 		if (!localStorage.getItem('countPostOnAdminPage'))
-			localStorage.setItem('countPostOnAdminPage', String($countPostOnAdminPage));
-		else $countPostOnAdminPage = Number(localStorage.getItem('countPostOnAdminPage'));
+			localStorage.setItem('countPostOnAdminPage', String(SETTINGS.ADMIN.posts.columns));
+		else SETTINGS.ADMIN.posts.columns = Number(localStorage.getItem('countPostOnAdminPage'));
 		// Работаем с количеством колонок альбомов
 		if (!localStorage.getItem('countAlbumOnAdminPage'))
 			localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
@@ -156,8 +151,8 @@
 		else $countPhotoOnAdminPage = Number(localStorage.getItem('countPhotoOnAdminPage'));
 		// Работаем с компактным/полным размером админ-панели
 		if (!localStorage.getItem('isAdminCompactMode'))
-			localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
-		else $isAdminCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
+			localStorage.setItem('isAdminCompactMode', String(SETTINGS.ADMIN.isCompactMode));
+		else SETTINGS.ADMIN.isCompactMode = localStorage.getItem('isAdminCompactMode') === 'true';
 	});
 
 	let isButtonOnTopShow = $state(false);
@@ -179,7 +174,7 @@
 		<div
 			class="d-flex flex-column shadow sticky-top bg-light no-print gap-1"
 			style="height:100vh; z-index: 10000">
-			{#if !$isAdminCompactMode}
+			{#if !SETTINGS.ADMIN.isCompactMode}
 				<button
 					class="btn btn-light bg-light border-0 text-dark px-3 pt-4 pb-3 mb-2 text-uppercase fw-bold text-nowrap"
 					onclick={() => goto('/admin/posts')}>
@@ -198,8 +193,8 @@
 							goto(url);
 						}}>
 						<div class="d-flex align-items-center gap-2">
-							<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
-							{#if !$isAdminCompactMode}
+							<i class="{icon} icon-width {SETTINGS.ADMIN.isCompactMode ? 'py-1' : ''}"></i>
+							{#if !SETTINGS.ADMIN.isCompactMode}
 								{title}
 							{/if}
 						</div>
@@ -217,8 +212,8 @@
 								goto(url);
 							}}>
 							<div class="d-flex align-items-center gap-2">
-								<i class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''}"></i>
-								{#if !$isAdminCompactMode}
+								<i class="{icon} icon-width {SETTINGS.ADMIN.isCompactMode ? 'py-1' : ''}"></i>
+								{#if !SETTINGS.ADMIN.isCompactMode}
 									{title}
 								{/if}
 							</div>
@@ -230,9 +225,9 @@
 						<b class="text-uppercase">
 							<div class="d-flex align-items-center gap-2">
 								<i
-									class="{icon} icon-width {$isAdminCompactMode ? 'py-1' : ''} "
+									class="{icon} icon-width {SETTINGS.ADMIN.isCompactMode ? 'py-1' : ''} "
 									style="transform: rotate(-180deg);"></i>
-								{#if !$isAdminCompactMode}
+								{#if !SETTINGS.ADMIN.isCompactMode}
 									{title}
 								{/if}
 							</div>
@@ -241,7 +236,7 @@
 				{/each}
 			</div>
 			<div
-				class="flex-grow-1 d-flex mx-1 {$isAdminCompactMode
+				class="flex-grow-1 d-flex mx-1 {SETTINGS.ADMIN.isCompactMode
 					? 'flex-column-reverse'
 					: 'align-items-end justify-content-between'} pb-3">
 				<div class="dropdown-center rounded">
@@ -270,13 +265,16 @@
 				</div>
 				<button
 					aria-label="Развернуть/Свернуть"
-					title={$isAdminCompactMode ? 'Развернуть' : 'Свернуть'}
+					title={SETTINGS.ADMIN.isCompactMode ? 'Развернуть' : 'Свернуть'}
 					class="btn btn-light text-dark text-start px-3"
 					onclick={() => {
-						$isAdminCompactMode = !$isAdminCompactMode;
-						localStorage.setItem('isAdminCompactMode', String($isAdminCompactMode));
+						SETTINGS.ADMIN.isCompactMode = !SETTINGS.ADMIN.isCompactMode;
+						localStorage.setItem('isAdminCompactMode', String(SETTINGS.ADMIN.isCompactMode));
 					}}>
-					<i class="fa-solid {$isAdminCompactMode ? 'fa-chevron-right' : 'fa-chevron-left'} "></i>
+					<i
+						class="fa-solid {SETTINGS.ADMIN.isCompactMode
+							? 'fa-chevron-right'
+							: 'fa-chevron-left'} "></i>
 				</button>
 			</div>
 		</div>
