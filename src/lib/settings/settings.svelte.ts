@@ -1,24 +1,22 @@
 import { Tag } from '$lib/models/Tag';
+import type { Snippet } from 'svelte';
 
 export enum EFixedUnfixed {
 	'закреплённые',
 	'незакреплённые',
 	'закреплённые и незакреплённые'
 }
-interface IMap {
-	[key: string]: number;
-}
 
 export let SETTINGS = $state({
 	ADMIN: {
-		Header: null,
+		Header: {} as Snippet<[]>,
 		schedule: { date: new Date().toISOString().slice(0, 7) },
 		isCompactMode: false,
 		posts: {
 			columns: { now: 4, max: 6 },
 			step: 4,
 			pages: 1,
-			showedPosts: { главное: 4 },
+			showedPosts: { главное: 4 } as { [key: string]: number },
 			filters: {
 				published: true,
 				pinned: false,
@@ -53,7 +51,7 @@ export let SETTINGS = $state({
 		columns: 3,
 		step: 6,
 		pages: 1,
-		showedPosts: { главное: 6 }
+		showedPosts: { главное: 6 } as { [key: string]: number }
 	},
 	theme: {
 		theme: 'light',
