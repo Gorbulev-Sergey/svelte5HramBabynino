@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Container from '$lib/components/admin/Container.svelte';
-	import { countAlbumOnAdminPage, countPhotoOnAdminPage } from '$lib/scripts/store';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { type IUser } from '$lib/models/admin/User';
 	import { auth, db } from '$lib/scripts/firebase';
@@ -143,12 +142,12 @@
 		else SETTINGS.ADMIN.posts.columns = Number(localStorage.getItem('countPostOnAdminPage'));
 		// Работаем с количеством колонок альбомов
 		if (!localStorage.getItem('countAlbumOnAdminPage'))
-			localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
-		else $countAlbumOnAdminPage = Number(localStorage.getItem('countAlbumOnAdminPage'));
+			localStorage.setItem('countAlbumOnAdminPage', String(SETTINGS.ADMIN.albums.columns));
+		else SETTINGS.ADMIN.albums.columns = Number(localStorage.getItem('countAlbumOnAdminPage'));
 		// Работаем с количеством колонок фотографий на странице хранилища
 		if (!localStorage.getItem('countPhotoOnAdminPage'))
-			localStorage.setItem('countPhotoOnAdminPage', String($countPhotoOnAdminPage));
-		else $countPhotoOnAdminPage = Number(localStorage.getItem('countPhotoOnAdminPage'));
+			localStorage.setItem('countPhotoOnAdminPage', String(SETTINGS.ADMIN.albums.step));
+		else SETTINGS.ADMIN.albums.step = Number(localStorage.getItem('countPhotoOnAdminPage'));
 		// Работаем с компактным/полным размером админ-панели
 		if (!localStorage.getItem('isAdminCompactMode'))
 			localStorage.setItem('isAdminCompactMode', String(SETTINGS.ADMIN.isCompactMode));

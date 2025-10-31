@@ -4,7 +4,6 @@
 	import Album from '$lib/components/photos/Album.svelte';
 	import type { IAlbum } from '$lib/models/photos/Album.js';
 	import { db } from '$lib/scripts/firebase';
-	import { countAlbumOnAdminPage } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, onValue, ref, remove } from 'firebase/database';
 	import { onMount } from 'svelte';
@@ -41,13 +40,13 @@
 			<button
 				class="btn btn-sm btn-dark text-light"
 				onclick={() => {
-					if ($countAlbumOnAdminPage == SETTINGS.ADMIN.albums.columns) {
-						$countAlbumOnAdminPage = 1;
-					} else $countAlbumOnAdminPage++;
-					localStorage.setItem('countAlbumOnAdminPage', String($countAlbumOnAdminPage));
+					if (SETTINGS.ADMIN.albums.columns == SETTINGS.ADMIN.albums.columns) {
+						SETTINGS.ADMIN.albums.columns = 1;
+					} else SETTINGS.ADMIN.albums.columns++;
+					localStorage.setItem('countAlbumOnAdminPage', String(SETTINGS.ADMIN.albums.columns));
 				}}>
 				<span>колонки</span>
-				<span class="badge bg-light text-dark ms-1">{$countAlbumOnAdminPage}</span>
+				<span class="badge bg-light text-dark ms-1">{SETTINGS.ADMIN.albums.columns}</span>
 			</button>
 			<button
 				class="btn btn-sm btn-dark text-light"
@@ -64,7 +63,7 @@
 	</PageTitle>
 {/snippet}
 
-<div class="row row-cols-1 row-cols-md-{$countAlbumOnAdminPage} g-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.albums.columns} g-3">
 	{#each [...albums].sort( ([k1, v1], [k2, v2]) => (isNewAlbumFirst ? new Date(v2.date).getTime() - new Date(v1.date).getTime() : new Date(v1.date).getTime() - new Date(v2.date).getTime()) ) as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>

@@ -29,7 +29,7 @@
 	);
 	/*3-ий фильтр) Вывод альбомов в зависимости от переключателя количества альбомов на странице и количества страниц для отображения*/
 	let albumsByCountOnPage = $derived(
-		albumsByDate().slice(0, SETTINGS.albums.columns * SETTINGS.albums.pages)
+		albumsByDate().slice(0, SETTINGS.albums.step * SETTINGS.albums.pages)
 	);
 	/*Страниц всего*/
 	let getPagesCount = $derived(Math.ceil(searchAlbums.length / SETTINGS.albums.columns));

@@ -2,9 +2,8 @@
 	import { db } from '$lib/scripts/firebase';
 	import { onValue, ref, remove, update } from 'firebase/database';
 	import { onMount } from 'svelte';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
-	import { EFixedUnfixed } from '$lib/scripts/store.js';
 	import FilterTags from '$lib/components/posts/FilterTags.svelte';
 	import PinButton from '$lib/components/PinButton.svelte';
 	import Pin from '$lib/components/Pin.svelte';
@@ -12,7 +11,7 @@
 	import { type ITag, Tag } from '$lib/models/Tag';
 	import { type IPost, Post as _Post } from '$lib/models/Post';
 	import Post from '$lib/components/posts/Post.svelte';
-	import { SETTINGS } from '$lib/settings/settings.svelte';
+	import { EFixedUnfixed, SETTINGS } from '$lib/settings/settings.svelte';
 
 	let posts: [string, IPost][] = $state([]);
 	let tags: ITag[] = $state([]);
@@ -157,7 +156,6 @@
 					bind:selectedTags={post.tags}
 					onSelect={() => {
 						update(ref(db, `/posts/${uid}`), post);
-						invalidateAll();
 					}}
 					_class={post.inverted ? 'text-dark' : ''} />
 				<div class="d-flex justify-content-center flex-wrap">
@@ -168,7 +166,6 @@
 						bind:checked={post.published}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
-							invalidateAll();
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-thumbtack"
@@ -177,7 +174,6 @@
 						bind:checked={post.pinned}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
-							invalidateAll();
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-brush"
@@ -185,7 +181,6 @@
 						bind:checked={post.inverted}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
-							invalidateAll();
 						}} />
 				</div>
 				<div class="d-flex flex-wrap">
@@ -207,7 +202,6 @@
 								data-bs-toggle="dropdown"
 								onclick={() => {
 									remove(ref(db, `/posts/${uid}`));
-									invalidateAll();
 								}}>Удалить</button>
 						</div>
 					</div>

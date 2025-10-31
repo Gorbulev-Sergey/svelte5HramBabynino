@@ -3,7 +3,6 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import { Role, type IRole } from '$lib/models/admin/Role';
 	import { db } from '$lib/scripts/firebase';
-	import { alerts } from '$lib/scripts/store';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
 	import { onMount } from 'svelte';
@@ -55,10 +54,7 @@
 					aria-label="удалить"
 					class="btn btn-sm btn-light"
 					title="Удалить роль {role.name}"
-					onclick={async () =>
-						remove(ref(db, `/roles/${uid}`)).then(
-							v => ($alerts = [...$alerts, `Роль '${role.name}' удалена!`])
-						)}>
+					onclick={async () => {}}>
 					<i class="fa-solid fa-trash text-danger"></i>
 				</button>
 			</div>

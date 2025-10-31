@@ -40,7 +40,7 @@ export let SETTINGS = $state({
 	albums: {
 		columns: 3,
 		step: 6,
-		pages: 2,
+		pages: 1,
 		filters: {
 			search: '',
 			isNewFirst: true
@@ -49,7 +49,7 @@ export let SETTINGS = $state({
 	posts: {
 		columns: 3,
 		step: 6,
-
 		showedMap: { главное: 6 }
-	}
+	},
+	alerts: []
 });

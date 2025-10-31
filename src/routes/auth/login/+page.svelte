@@ -4,8 +4,9 @@
 	import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 
-	let credential = { email: '', password: '' };
-	let errorMessage = '';
+	let credential = $state({ email: '', password: '' });
+	let errorMessage = $state('');
+
 	function login() {
 		checkEmailAndPassword();
 		if (
@@ -25,6 +26,7 @@
 			});
 		}
 	}
+
 	function checkEmailAndPassword() {
 		if (credential.email.trim() == '') errorMessage += `отсутствует email<br/>`;
 		if (!credential.email.includes('@') || !credential.email.includes('.'))
@@ -53,9 +55,9 @@
 					bind:value={credential.password} />
 			</div>
 			<div class="d-flex gap-1 justify-content-between align-items-center">
-				<button class="btn btn-dark text-light" on:click={() => login()}>Войти</button>
+				<button class="btn btn-dark text-light" onclick={() => login()}>Войти</button>
 
-				<button class="btn btn-light text-dark" on:click={() => goto('/')}>Отмена</button>
+				<button class="btn btn-light text-dark" onclick={() => goto('/')}>Отмена</button>
 			</div>
 		</div>
 		<div class="d-flex align-items-center gap-2 my-1">
@@ -66,7 +68,7 @@
 		<div class="d-flex justify-content-evenly">
 			<button
 				class="btn btn-dark text-light w-100"
-				on:click={() => {
+				onclick={() => {
 					signInWithPopup(auth, new GoogleAuthProvider())
 						.then(result => {
 							const credential = GoogleAuthProvider.credentialFromResult(result);
