@@ -1,4 +1,4 @@
-import { db } from '$lib/scripts/firebase';
+import { db } from '$lib/settings/firebase';
 import { get, ref } from 'firebase/database';
 
 async function getPosts() {

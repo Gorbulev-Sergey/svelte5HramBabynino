@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type IUser, User as _User } from '$lib/models/admin/User';
-	import { auth, db } from '$lib/scripts/firebase';
+	import { auth, db } from '$lib/settings/firebase';
 	import { onAuthStateChanged, type User } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount, type Snippet } from 'svelte';

@@ -4,7 +4,7 @@
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Post } from '$lib/models/Post';
 	import { Tag, type ITag } from '$lib/models/Tag';
-	import { auth, db } from '$lib/scripts/firebase';
+	import { auth, db } from '$lib/settings/firebase';
 	import { onValue, push, ref } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';

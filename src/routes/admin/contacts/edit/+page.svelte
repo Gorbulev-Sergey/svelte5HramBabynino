@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Contacts, type IContacts } from '$lib/models/Contacts';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref, set } from 'firebase/database';
 	import { onMount } from 'svelte';

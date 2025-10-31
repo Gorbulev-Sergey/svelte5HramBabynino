@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import ModalPhoto from '$lib/components/ModalPhoto.svelte';
-	import { storage } from '$lib/scripts/firebase';
+	import { storage } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import {
 		uploadBytes,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import IsAuth from '$lib/components/IsAuth.svelte';
-	import { auth } from '$lib/scripts/firebase';
+	import { auth } from '$lib/settings/firebase';
 </script>
 
 <footer class="no-print bg-white text-dark p-3 p-md-4">

@@ -3,7 +3,7 @@
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import MonthPicker from '$lib/components/schedule/MonthPicker.svelte';
 	import { type IField } from '$lib/models/schedule/Field';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, ref } from 'firebase/database';
 

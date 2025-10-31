@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { auth } from '$lib/scripts/firebase';
+	import { auth } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 </script>

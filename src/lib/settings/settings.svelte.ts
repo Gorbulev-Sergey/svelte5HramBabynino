@@ -17,6 +17,7 @@ export let SETTINGS = $state({
 		posts: {
 			columns: 4,
 			step: 8,
+			pages: 1,
 			filters: {
 				published: true,
 				pinned: false,
@@ -27,16 +28,14 @@ export let SETTINGS = $state({
 		},
 		albums: {
 			columns: 4,
-			step: 8
+			step: 8,
+			pages: 1
+		},
+		vk: {
+			accessToken:
+				'vk1.a.xm0YSBut11g_tmJiIuGCV635mkYyBT_zGWun5haYma6SXcO92Npisia5FqCCl6FH4tFwvFRp0XLfU7a1YxKeZBQ02fk-cF4ej2GG0MUyY0DXOjc7OSZOzoBQ3mARjnzGa7-XKrSVg22c-JoBiGtaVuyphGEM6JcggO7B1sRLnEDKisNdVhkQRnBMYe8bg707VO2ujGHwyqGqhVLORupnkA'
 		}
 	},
-	theme: {
-		theme: 'light',
-		isSystem: true
-	},
-	vkAccessToken:
-		'vk1.a.xm0YSBut11g_tmJiIuGCV635mkYyBT_zGWun5haYma6SXcO92Npisia5FqCCl6FH4tFwvFRp0XLfU7a1YxKeZBQ02fk-cF4ej2GG0MUyY0DXOjc7OSZOzoBQ3mARjnzGa7-XKrSVg22c-JoBiGtaVuyphGEM6JcggO7B1sRLnEDKisNdVhkQRnBMYe8bg707VO2ujGHwyqGqhVLORupnkA',
-	userSigned: {},
 	albums: {
 		columns: 3,
 		step: 6,
@@ -49,7 +48,13 @@ export let SETTINGS = $state({
 	posts: {
 		columns: 3,
 		step: 6,
+		pages: 1,
 		showedMap: { главное: 6 }
 	},
+	theme: {
+		theme: 'light',
+		isSystem: true
+	},
+	userSigned: {},
 	alerts: []
 });

@@ -5,7 +5,7 @@
 	import Schedule from '$lib/components/schedule/Schedule.svelte';
 	import { monthToSring } from '$lib/components/schedule/scheduleAddons';
 	import { type IField } from '$lib/models/schedule/Field';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, ref } from 'firebase/database';
 
@@ -25,7 +25,6 @@
 				schedule = r.val();
 			}
 		});
-		console.log(1);
 	});
 </script>
 

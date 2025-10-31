@@ -146,7 +146,7 @@
 			</div>
 			<input
 				class="form-control bg-light text-dark"
-				bind:value={SETTINGS.vkAccessToken}
+				bind:value={SETTINGS.ADMIN.vk.accessToken}
 				placeholder="access_token" />
 		</div>
 		<div class="d-flex flex-column w-100">

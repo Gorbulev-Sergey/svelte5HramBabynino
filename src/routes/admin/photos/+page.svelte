@@ -3,7 +3,7 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Album from '$lib/components/photos/Album.svelte';
 	import type { IAlbum } from '$lib/models/photos/Album.js';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { get, onValue, ref, remove } from 'firebase/database';
 	import { onMount } from 'svelte';

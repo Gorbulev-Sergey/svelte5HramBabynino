@@ -2,7 +2,7 @@ import { SETTINGS } from '$lib/settings/settings.svelte';
 
 export async function POST({ request }) {
 	let { owner_id, v } = await request.json();
-	let link = `https://api.vk.com/method/photos.getAlbums?owner_id=${owner_id}&access_token=${SETTINGS.vkAccessToken}&v=${v}`;
+	let link = `https://api.vk.com/method/photos.getAlbums?owner_id=${owner_id}&access_token=${SETTINGS.ADMIN.vk.accessToken}&v=${v}`;
 	let result = await fetch(link, {
 		method: 'GET',
 		headers: {

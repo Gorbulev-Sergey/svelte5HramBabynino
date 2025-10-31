@@ -4,7 +4,7 @@
 	import Pin from '$lib/components/Pin.svelte';
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Tag, type ITag } from '$lib/models/Tag';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase.js';
 	import { onValue, ref, update } from 'firebase/database';
 	import Editor from '$lib/components/posts/Editor.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';

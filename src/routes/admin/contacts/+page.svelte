@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { onValue, ref } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';
 	import { Contacts } from '$lib/models/Contacts';

@@ -3,13 +3,13 @@
 	import TagManager from '$lib/components/tags/TagManager.svelte';
 	import { Post, type IPost } from '$lib/models/Post.js';
 	import { type ITag, Tag as _Tag } from '$lib/models/Tag';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { child, off, onValue, push, ref, update } from 'firebase/database';
 	import { onMount } from 'svelte';
 
 	// Access toket
-	let access_token = $state(SETTINGS.vkAccessToken);
+	let access_token = $state(SETTINGS.ADMIN.vk.accessToken);
 	// id группы, из которой берутся видео
 	let owner_id = $state('');
 	// id плейлиста

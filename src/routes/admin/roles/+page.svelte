@@ -2,7 +2,7 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { Role, type IRole } from '$lib/models/admin/Role';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, push, ref, remove, set, update } from 'firebase/database';
 	import { onMount } from 'svelte';

@@ -2,7 +2,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import { Tag, type ITag } from '$lib/models/Tag';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/store/store.svelte.js';
 	import { onValue, ref, set, update } from 'firebase/database';
 	import { onMount } from 'svelte';

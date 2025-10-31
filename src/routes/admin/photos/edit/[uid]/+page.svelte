@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { Photo as _Photo } from '$lib/models/photos/Photo';
 	import { Album } from '$lib/models/photos/Album';
-	import { db, storage } from '$lib/scripts/firebase';
+	import { db, storage } from '$lib/settings/firebase';
 	import { onValue, push, ref as refDb, update } from 'firebase/database';
 	import { ref, getDownloadURL, listAll, type StorageReference } from 'firebase/storage';
 	import { onMount } from 'svelte';

@@ -2,7 +2,7 @@
 	import PageTitle from '$lib/components/admin/PageTitle.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import { User, type IUser } from '$lib/models/admin/User';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref, remove, set } from 'firebase/database';
 	import { onDestroy, onMount } from 'svelte';

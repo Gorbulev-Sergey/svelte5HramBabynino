@@ -3,7 +3,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
 	import { type ITag } from '$lib/models/Tag';
-	import { db } from '$lib/scripts/firebase';
+	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount } from 'svelte';

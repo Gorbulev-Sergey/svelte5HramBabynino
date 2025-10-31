@@ -2,7 +2,7 @@
 	import Container from '$lib/components/admin/Container.svelte';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { type IUser } from '$lib/models/admin/User';
-	import { auth, db } from '$lib/scripts/firebase';
+	import { auth, db } from '$lib/settings/firebase';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { onValue, ref } from 'firebase/database';
 	import { onMount, type Snippet } from 'svelte';
