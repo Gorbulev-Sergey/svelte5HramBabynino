@@ -1,14 +1,31 @@
-<script>
-	export let titleSpecial = '';
-	export let title = 'Публикации';
-	export let description =
-		'Официальный сайт храма Вознесения Господня пос. Бабынино Калужской обл.';
-	export let author = 'Горбулёв Сергей';
-	export let copyright = 'Храм Вознесения Господня';
-	export let address = '249210, Калужская обл., пос. Бабынино, Базарная пл., 1';
-	export let keywords =
-		'Бабынино храм Вознесения Господня, Бабынино церковь Вознесения Господня, Бабынино храм Вознесения Господня Калуга, Бабынино церковь Вознесения Господня Калуга';
-	export let _class = '';
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	interface IProps {
+		titleSpecial?: string;
+		title?: string;
+		description?: string;
+		author?: string;
+		copyright?: string;
+		address?: string;
+		keywords?: string;
+		_class?: string;
+		children?: Snippet;
+		center?: Snippet;
+	}
+
+	let {
+		titleSpecial = '',
+		title = 'Публикации',
+		description = 'Официальный сайт храма Вознесения Господня пос. Бабынино Калужской обл.',
+		author = 'Горбулёв Сергей',
+		copyright = 'Храм Вознесения Господня',
+		address = '249210, Калужская обл., пос. Бабынино, Базарная пл., 1',
+		keywords = 'Бабынино храм Вознесения Господня, Бабынино церковь Вознесения Господня, Бабынино храм Вознесения Господня Калуга, Бабынино церковь Вознесения Господня Калуга',
+		_class = '',
+		children,
+		center
+	}: IProps = $props();
 </script>
 
 <svelte:head>
@@ -26,7 +43,7 @@
 		<h4 class="text-dark ms-1 mb-0 me-3 text-nowrap fw-bold" style="font-size:1.5em">
 			{@html title}
 		</h4>
-		<slot name="center" />
+		{@render center?.()}
 	</div>
-	<slot name="navigation" />
+	{@render children?.()}
 </div>

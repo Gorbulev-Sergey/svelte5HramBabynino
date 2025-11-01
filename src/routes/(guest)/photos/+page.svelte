@@ -38,7 +38,6 @@
 <Container>
 	<PageTitle {title} {description} {keywords} _class="mb-4">
 		<div
-			slot="navigation"
 			class="d-flex flex-wrap flex-sm-nowrap align-items-center justify-content-end gap-lg-3 gap-2">
 			<!-- Строка поиска -->
 			<div class="input-group input-group-sm border-0 rounded flex-nowrap">

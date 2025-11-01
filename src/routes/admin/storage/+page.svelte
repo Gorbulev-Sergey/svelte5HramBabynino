@@ -12,7 +12,7 @@
 		deleteObject,
 		type StorageReference
 	} from 'firebase/storage';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	let tabs = $state({ selectedTab: 0, tab: ['Хранилище фотографий', 'Хранилище документов'] });
 	let folders: StorageReference[] = $state([]);
