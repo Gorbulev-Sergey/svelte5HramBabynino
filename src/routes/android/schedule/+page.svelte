@@ -8,11 +8,11 @@
 	import { get, ref } from 'firebase/database';
 
 	// Выбранная дата, год, месяц
-	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
-	let month = $derived(SETTINGS.scheduleDate.slice(5, 7));
+	let year = $derived(SETTINGS.ADMIN.schedule.date.slice(0, 4));
+	let month = $derived(SETTINGS.ADMIN.schedule.date.slice(5, 7));
 	// Названия месяцев в именительном падеже
 	let monthToSring = $derived(
-		new Date(SETTINGS.scheduleDate).toLocaleString('Ru-ru', { month: 'long' })
+		new Date(SETTINGS.ADMIN.schedule.date).toLocaleString('Ru-ru', { month: 'long' })
 	);
 	// Названия месяцев с буквой "я" или "а" на конце (в родительном падеже)
 	let monthToStringWithEnd = $derived(
@@ -46,8 +46,8 @@
 
 <Container>
 	<PageTitleWrap title="Расписание богослужений" _class="mb-4">
-		<div slot="navigation" class="d-flex align-items-center gap-2">
-			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
+		<div class="d-flex align-items-center gap-2">
+			<MonthPicker title="на дату:" bind:date={SETTINGS.ADMIN.schedule.date} bind:month bind:year />
 		</div>
 	</PageTitleWrap>
 

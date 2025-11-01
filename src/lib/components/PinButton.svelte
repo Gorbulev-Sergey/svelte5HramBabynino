@@ -12,7 +12,7 @@
 	let {
 		titleNoPressed = 'кнопка',
 		titlePressed = 'кнопка',
-		pressed = false,
+		pressed = $bindable(false),
 		onPressed = () => {},
 		classNoPressed = 'btn-dark',
 		classPressed = 'btn-dark',

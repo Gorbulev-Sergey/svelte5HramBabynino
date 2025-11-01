@@ -8,13 +8,13 @@
 	import { onMount } from 'svelte';
 
 	// Выбранная дата, год, месяц
-	let year = $derived(SETTINGS.scheduleDate.slice(0, 4));
-	let month = $derived(SETTINGS.scheduleDate.slice(5, 7));
-	//Количество дне в выбранном месяце
+	let year = $derived(SETTINGS.ADMIN.schedule.date.slice(0, 4));
+	let month = $derived(SETTINGS.ADMIN.schedule.date.slice(5, 7));
+	//Количество дней в выбранном месяце
 	let daysInMonth = $derived(new Date(Number(year), Number(month), 0).getDate());
 	// Названия месяцев в именительном падеже
 	let monthToSring = $derived(
-		new Date(SETTINGS.scheduleDate).toLocaleString('Ru-ru', { month: 'long' })
+		new Date(SETTINGS.ADMIN.schedule.date).toLocaleString('Ru-ru', { month: 'long' })
 	);
 	// Названия месяцев с буквой "я" или "а" на конце (в родительном падеже)
 	let monthToStringWithEnd = $derived(
@@ -58,7 +58,7 @@
 {#snippet header()}
 	<PageTitle title="Редактировать расписание богослужений">
 		<div class="d-flex align-items-center gap-2">
-			<MonthPicker title="на дату:" bind:date={SETTINGS.scheduleDate} bind:month bind:year />
+			<MonthPicker title="на дату:" bind:date={SETTINGS.ADMIN.schedule.date} bind:month bind:year />
 			<a href="/admin/schedule" aria-label="Отмена" class="btn btn-light text-dark text-nowrap"
 				>Отмена</a>
 			<a

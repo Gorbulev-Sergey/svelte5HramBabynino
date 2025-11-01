@@ -2,11 +2,11 @@
 	import type { Snippet } from 'svelte';
 
 	interface IProps {
-		children?: Snippet;
 		title: String;
 		_class?: String;
+		children?: Snippet;
 	}
-	let { children, title, _class = 'px-4' }: IProps = $props();
+	let { title, _class = 'px-4', children }: IProps = $props();
 </script>
 
 <div class="d-flex flex-wrap align-items-center no-print pt-3 pb-2 {_class}">
