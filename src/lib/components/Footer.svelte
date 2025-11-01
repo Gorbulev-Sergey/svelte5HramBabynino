@@ -82,9 +82,9 @@
 		<a
 			class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mt-3 mb-1 px-3 py-2"
 			href="#top">
-			<div class="d-flex flex-column">
-				<!-- svelte-ignore element_invalid_self_closing_tag -->
-				<i class="fa-solid fa-chevron-up" />Наверх
+			<div class="d-flex flex-column align-items-center justify-content-center text-center">
+				<i class="fa-solid fa-chevron-up"></i>
+				<div>Наверх</div>
 			</div>
 		</a>
 	</div>
