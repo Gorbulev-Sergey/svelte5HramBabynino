@@ -26,19 +26,18 @@
 
 <Container>
 	<PageTitle title={description} {description} {keywords} _class="mb-4 position-relative">
-		<div slot="navigation" class="">
-			<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
-				{#each tags as item, i}
-					<button
-						class="badge text-nowrap border-0 {item.name == page.params.tag
-							? 'bg-dark text-bg-dark'
-							: 'bg-light text-bg-light'} "
-						onclick={async () => {
-							goto(`/posts/${item.name}`);
-						}}>{item.name}</button>
-				{/each}
-			</div>
-		</div></PageTitle>
+		<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
+			{#each tags as item, i}
+				<button
+					class="badge text-nowrap border-0 {item.name == page.params.tag
+						? 'bg-dark text-bg-dark'
+						: 'bg-light text-bg-light'} "
+					onclick={async () => {
+						goto(`/posts/${item.name}`);
+					}}>{item.name}</button>
+			{/each}
+		</div>
+	</PageTitle>
 
 	<!-- <div class="alert alert-info border-0 text-center">
 		Дорогие посетители! В связи с ограничениями, наложенными на Youtube в нашей стране, некоторые

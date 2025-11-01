@@ -6,9 +6,9 @@
 	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref } from 'firebase/database';
-	import { onMount } from 'svelte';
 
 	let { children } = $props();
+
 	let routesLeft = [
 		{
 			url: '/posts',
