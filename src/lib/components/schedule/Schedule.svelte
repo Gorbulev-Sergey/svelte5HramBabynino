@@ -77,6 +77,6 @@
 			{/if}
 		{/each}
 	{:else}
-		<div class="text-center m-2">На указанную дату расписание отсутствует!</div>
+		<div class="text-center text-dark m-2">Пока ничего нет!</div>
 	{/if}
 </div>
