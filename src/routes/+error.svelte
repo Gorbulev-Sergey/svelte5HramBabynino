@@ -1,6 +1,14 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	// onMount(() => {
+	// 	page.status == 500
+	// 		? goto('/auth/login')
+	// 		: setTimeout(() => {
+	// 				goto('/');
+	// 			}, 3000);
+	// });
 	onMount(() => {
 		setTimeout(() => {
 			goto('/');

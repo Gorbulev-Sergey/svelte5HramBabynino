@@ -20,12 +20,14 @@
 	let notPinnedPosts = $derived(postsByTag.filter(([k, v]) => !v.pinned));
 
 	let notPinnedPostsForShow = $derived(notPinnedPosts.slice(0, SETTINGS.posts.showedPosts[tag]));
-	let description = $derived(tag[0].toUpperCase() + tag.slice(1));
-	let keywords = $derived(`бабынино, храм, храм бабынино, ${description}`);
+	let title = $derived(
+		data.tags.find(t => t.name.toLocaleLowerCase() == page.params.tag)?.description
+	);
+	let keywords = $derived(`бабынино, храм, храм бабынино, ${title}`);
 </script>
 
 <Container>
-	<PageTitle title={description} {description} {keywords} _class="mb-4 position-relative">
+	<PageTitle {title} description={title} {keywords} _class="mb-4 position-relative">
 		<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
 			{#each tags as item, i}
 				<button
