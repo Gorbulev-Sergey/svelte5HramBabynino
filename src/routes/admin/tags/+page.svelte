@@ -92,41 +92,42 @@
 
 <Modal bind:isModalShow onClose={() => (tag = Tag())}>
 	<h5 class="text-dark">{modalTitle}</h5>
-	<div class="d-flex flex-column gap-2">
+	<div class="d-flex flex-column gap-1">
 		<input class="form-control text-dark" bind:value={tag.name} placeholder="название" />
 		<input class="form-control text-dark" bind:value={tag.description} placeholder="описание" />
-	</div>
-	<div class="d-flex align-items-center justify-content-end gap-1">
-		<button
-			class="btn btn-light text-dark"
-			onclick={() => {
-				tag = Tag();
-				indexEditedTag = -1;
-				isModalShow = false;
-			}}>Отмена</button>
-		<button
-			class="btn btn-dark text-light"
-			onclick={() => {
-				if (tag.name.trim() != '') {
-					{
-						tag.name = tag.name.toLocaleLowerCase();
-						if (!tag.description)
-							tag.description = tag?.name[0].toLocaleUpperCase() + tag?.name.slice(1);
-						else
-							tag.description = tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
+		<div class="d-flex align-items-center justify-content-end gap-1">
+			<button
+				class="btn btn-light text-dark"
+				onclick={() => {
+					tag = Tag();
+					indexEditedTag = -1;
+					isModalShow = false;
+				}}>Отмена</button>
+			<button
+				class="btn btn-dark text-light"
+				onclick={() => {
+					if (tag.name.trim() != '') {
+						{
+							tag.name = tag.name.toLocaleLowerCase();
+							if (!tag.description)
+								tag.description = tag?.name[0].toLocaleUpperCase() + tag?.name.slice(1);
+							else
+								tag.description =
+									tag?.description[0].toLocaleUpperCase() + tag?.description.slice(1);
+						}
+						if (isTagEdited) {
+							// Перезаписываем тег
+							update(ref(db, `tags/${indexEditedTag}`), tag);
+						} else {
+							// Создаём новый тег
+							saveOneToDb(tag);
+						}
 					}
-					if (isTagEdited) {
-						// Перезаписываем тег
-						update(ref(db, `tags/${indexEditedTag}`), tag);
-					} else {
-						// Создаём новый тег
-						saveOneToDb(tag);
-					}
-				}
-				tag = Tag();
-				indexEditedTag = -1;
-				isTagEdited = false;
-				isModalShow = false;
-			}}>Сохранить</button>
+					tag = Tag();
+					indexEditedTag = -1;
+					isTagEdited = false;
+					isModalShow = false;
+				}}>Сохранить</button>
+		</div>
 	</div>
 </Modal>
