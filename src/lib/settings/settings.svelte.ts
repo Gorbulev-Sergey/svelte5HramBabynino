@@ -35,7 +35,7 @@ export let SETTINGS = $state({
 		},
 		vk: {
 			accessToken:
-				'vk1.a.xm0YSBut11g_tmJiIuGCV635mkYyBT_zGWun5haYma6SXcO92Npisia5FqCCl6FH4tFwvFRp0XLfU7a1YxKeZBQ02fk-cF4ej2GG0MUyY0DXOjc7OSZOzoBQ3mARjnzGa7-XKrSVg22c-JoBiGtaVuyphGEM6JcggO7B1sRLnEDKisNdVhkQRnBMYe8bg707VO2ujGHwyqGqhVLORupnkA'
+				'vk1.a.Qm1LwHfDS-mkBajEJj6ZAUnzeuQqVsiSZjH6u4ZlwrxLOJQ1Yifo814Eauhj--io47OlLWEqUVACDxvemHVeYvasnxJtTNN1hVOM98_09Ji7BUcQ4EE5VFfbnQnbQhb-kfkAim-KIrz4VOUNY_Sdhg4UTnkmZngU_ESKBTDuZWvkeouG17PjnwYfCTy8p2v4ts2I8ECfxSM8iY2Hc86Dpg'
 		}
 	},
 	albums: {
