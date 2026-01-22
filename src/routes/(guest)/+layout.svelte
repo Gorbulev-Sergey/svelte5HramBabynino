@@ -6,6 +6,7 @@
 	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
 	import { onValue, ref } from 'firebase/database';
+	import { onMount } from 'svelte';
 
 	let { children } = $props();
 
@@ -47,7 +48,12 @@
 		}
 	];
 
-	$effect.pre(() => {
+	// $effect.pre(() => {
+	// 	onValue(ref(db, '/tags'), s =>
+	// 		(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step))
+	// 	);
+	// });
+	onMount(async () => {
 		onValue(ref(db, '/tags'), s =>
 			(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step))
 		);
