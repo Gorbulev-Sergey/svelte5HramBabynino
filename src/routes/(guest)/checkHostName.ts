@@ -2,7 +2,8 @@ export let isHostEnabled = (request: Request) => {
 	let hostname = new URL(request.url).hostname;
 	return hostname == 'localhost' ||
 		hostname == 'hram-babynino.ru' ||
-		hostname == 'hram-babynino.netlify.app'
+		hostname == 'hram-babynino.netlify.app' ||
+		hostname == "hram-babynino.versel.app'"
 		? true
 		: false;
 };
