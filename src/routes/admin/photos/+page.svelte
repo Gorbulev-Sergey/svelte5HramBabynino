@@ -79,7 +79,7 @@
 	{#each filteredAlbums as [uid, album]}
 		<div class="col">
 			<Album {uid} {album}>
-				<div slot="navigation" class="flex-grow-1">
+				<div class="flex-grow-1">
 					<div class="d-flex align-items-center justify-content-between flex-wrap gap-1 m-2">
 						<a
 							href="#"

@@ -1,9 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { Album, type IAlbum } from '$lib/models/photos/Album';
+	import type { Snippet } from 'svelte';
 
-	let { uid = '', album = Album() }: { uid: string; album: IAlbum } = $props();
+	interface IProps {
+		uid: string;
+		album: IAlbum;
+		children: Snippet;
+	}
+
+	let { uid = '', album = Album(), children }: IProps = $props();
 	let hoverEffect = $state('bg-opacity-25');
 </script>
 
@@ -16,7 +23,7 @@
 				background-repeat: no-repeat; background-position: center; background-size: cover; min-height:16em; cursor:pointer;"
 	onclick={() => {
 		if (uid != '' && album.photos.length > 0) {
-			goto(`/fullscreen/photos/${uid}?returnTo=${$page.url}#${uid}`);
+			goto(`/fullscreen/photos/${uid}?returnTo=${page.url}#${uid}`);
 		}
 	}}
 	onmousemove={() => (hoverEffect = 'bg-opacity-75')}
@@ -47,5 +54,5 @@
 			{/if}
 		</div>
 	</div>
-	<!-- <slot name="navigation" /> -->
+	{@render children?.()}
 </div>
