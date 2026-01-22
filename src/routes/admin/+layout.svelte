@@ -313,12 +313,12 @@
 				{@render children?.()}
 			</Container>
 
-			<div class="d-flex justify-content-end fixed-bottom">
+			<div class="d-flex justify-content-center fixed-bottom">
 				{#if isButtonOnTopShow}
 					<a
-						class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mb-3 mx-2 px-3 py-2"
+						class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mb-2 mx-2 px-3 py-2"
 						href="#top">
-						<div class="d-flex flex-column">
+						<div class="d-flex flex-column align-items-center">
 							<!-- svelte-ignore element_invalid_self_closing_tag -->
 							<i class="fa-solid fa-chevron-up" />Наверх
 						</div>
