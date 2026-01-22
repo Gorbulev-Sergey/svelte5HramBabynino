@@ -47,5 +47,5 @@
 			{/if}
 		</div>
 	</div>
-	<slot name="navigation" />
+	<!-- <slot name="navigation" /> -->
 </div>
