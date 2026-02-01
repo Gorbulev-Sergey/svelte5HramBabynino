@@ -34,15 +34,13 @@
 								{#if item.title != 'храм'}
 									<!-- svelte-ignore a11y_consider_explicit_label -->
 									<a
-										class="text-success"
+										class="text-primary"
 										style="text-decoration: none;"
-										href="https://api.whatsapp.com/send?phone={item.phone
-											.replaceAll('-', '')
-											.replace('89', '79')}"
+										href="https://t.me/{item.phone}"
 										target="_blank"
-										title="Написать в Whatsapp"
+										title="Телеграм"
 										rel="noopener noreferrer">
-										<i class="fa-brands fa-whatsapp"></i>
+										<i class="fa-brands fa-telegram"></i>
 									</a>
 								{/if}
 								<a

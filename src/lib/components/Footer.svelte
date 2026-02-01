@@ -14,7 +14,7 @@
 					<a
 						class="badge bg-dark text-light text-decoration-none"
 						href="tel:89029346362"
-						target="_blank">89029346362</a
+						target="_blank">+79029346362</a
 					>,
 				</div>
 			</div>
