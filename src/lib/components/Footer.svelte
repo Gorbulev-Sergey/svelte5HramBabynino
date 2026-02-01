@@ -23,13 +23,14 @@
 				<i>иерей Алексий (настоятель):</i>
 				<div class="d-flex flex-wrap text-nowrap justify-content-center align-items-center gap-1">
 					<a
-						class="badge bg-success text-decoration-none"
-						href="https://api.whatsapp.com/send?phone=79208768928"
-						target="_blank">Whatsapp</a>
+						class="badge bg-primary text-decoration-none p-1"
+						href="https://t.me/+79208768928"
+						target="_blank"
+						title="Телеграм"><i class="fa-brands fa-telegram"></i></a>
 					<a
 						class="badge bg-dark text-light text-decoration-none"
 						href="tel:89208768928"
-						target="_blank">89208768928</a
+						target="_blank">+79208768928</a
 					>,
 				</div>
 			</div>
@@ -38,13 +39,14 @@
 				<i>иерей Сергий:</i>
 				<div class="d-flex flex-wrap text-nowrap justify-content-center align-items-center gap-1">
 					<a
-						class="badge bg-success text-decoration-none"
-						href="https://api.whatsapp.com/send?phone=79105163686"
-						target="_blank">Whatsapp</a>
+						class="badge bg-primary text-decoration-none p-1"
+						href="https://t.me/+79105163686"
+						target="_blank"
+						title="Телеграм"><i class="fa-brands fa-telegram"></i></a>
 					<a
 						class="badge bg-dark text-light text-decoration-none"
 						href="tel:89105163686"
-						target="_blank">89105163686</a>
+						target="_blank">+79105163686</a>
 				</div>
 			</div>
 		</div>
