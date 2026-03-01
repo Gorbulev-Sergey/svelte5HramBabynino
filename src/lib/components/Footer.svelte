@@ -80,6 +80,10 @@
 				Калужская область, посёлок Бабынино, храм "Вознесения Господня", {new Date().getFullYear()} год
 			</div>
 		</b>
+		<div>
+			<a href="https://tips.tips/000469265" class="btn btn-primary text-light" target="_blank"
+				>Поддержать наш храм</a>
+		</div>
 
 		<a
 			class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mt-3 mb-1 px-3 py-2"
