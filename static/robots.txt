@@ -11,5 +11,5 @@ Disallow: /auth
 Disallow: /android
 Disallow: /fullscreen
 
-Host: https://www.hram-babynino.ru
-Sitemap: https://www.hram-babynino.ru/sitemap.xml
+Host: https://www.hram-babynino.vercel.app
+Sitemap: https://www.hram-babynino.vercel.app/sitemap.xml
