@@ -9,13 +9,13 @@
 	<div class="d-flex align-items-center justify-content-between">
 		<button
 			class="btn btn-dark text-light"
-			onclick={() => {
-				signInWithPopup(auth, new GoogleAuthProvider())
+			onclick={async () => {
+				await signInWithPopup(auth, new GoogleAuthProvider())
 					.then(result => {
 						const credential = GoogleAuthProvider.credentialFromResult(result);
 						const token = credential?.accessToken;
 						const user = result.user;
-						SETTINGS.userSigned = user;
+						//SETTINGS.userSigned = user;
 						goto('/');
 					})
 					.catch(error => {
@@ -23,6 +23,7 @@
 						const errorMessage = error.message;
 						const email = error.customData.email;
 						const credential = GoogleAuthProvider.credentialFromError(error);
+						console.log(error);
 					});
 			}}>Войти с помощью Google</button>
 		<button

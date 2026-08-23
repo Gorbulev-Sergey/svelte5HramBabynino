@@ -49,8 +49,8 @@
 			<div class="d-flex justify-content-evenly">
 				<button
 					class="btn btn-dark text-light w-100"
-					onclick={() => {
-						signInWithPopup(auth, new GoogleAuthProvider())
+					onclick={async () => {
+						await signInWithPopup(auth, new GoogleAuthProvider())
 							.then(result => {
 								const credential = GoogleAuthProvider.credentialFromResult(result);
 								const token = credential?.accessToken;
