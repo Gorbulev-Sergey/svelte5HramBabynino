@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import IsAuth from '$lib/components/IsAuth.svelte';
 	import { auth } from '$lib/settings/firebase';
+	//import max from '$lib/assets/max.svg';
 </script>
 
 <footer class="no-print bg-white text-dark p-3 p-md-4">
@@ -18,15 +19,15 @@
 					>,
 				</div>
 			</div>
-
 			<div class="d-inline-flex flex-wrap align-items-center justify-content-center gap-1">
 				<i>иерей Алексий (настоятель):</i>
 				<div class="d-flex flex-wrap text-nowrap justify-content-center align-items-center gap-1">
 					<a
-						class="badge bg-primary text-decoration-none p-1"
-						href="https://t.me/+79208768928"
+						class="badge bg-primary text-decoration-none p-0"
+						href="https://max.ru/101623517"
 						target="_blank"
-						title="Телеграм"><i class="fa-brands fa-telegram"></i></a>
+						style="width: 1.7em; height: 1.7em;"
+						title="Max"><img src={'/max.svg'} alt="" /></a>
 					<a
 						class="badge bg-dark text-light text-decoration-none"
 						href="tel:89208768928"
@@ -39,10 +40,11 @@
 				<i>иерей Сергий:</i>
 				<div class="d-flex flex-wrap text-nowrap justify-content-center align-items-center gap-1">
 					<a
-						class="badge bg-primary text-decoration-none p-1"
-						href="https://t.me/+79105163686"
+						class="badge bg-primary text-decoration-none p-0"
+						href="https://max.ru/44254244"
 						target="_blank"
-						title="Телеграм"><i class="fa-brands fa-telegram"></i></a>
+						style="width: 1.7em; height: 1.7em;"
+						title="Max"><img src={'/max.svg'} alt="" /></a>
 					<a
 						class="badge bg-dark text-light text-decoration-none"
 						href="tel:89105163686"
@@ -81,8 +83,10 @@
 			</div>
 		</b>
 		<div>
-			<a href="https://tips.tips/000469265" class="btn btn-primary text-light" target="_blank"
-				>Поддержать наш храм</a>
+			<a
+				href="https://tips.tips/000469265"
+				class="btn btn-dark border-0 text-light mt-2"
+				target="_blank">Поддержать наш храм</a>
 		</div>
 
 		<a
