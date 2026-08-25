@@ -26,8 +26,8 @@ export let SETTINGS = $state({
 			}
 		},
 		albums: {
-			columns: { now: 4, max: 6 },
-			step: 8,
+			columns: { now: 3, max: 6 },
+			step: 6,
 			pages: 2,
 			filters: {
 				isNewFirst: true
@@ -48,10 +48,10 @@ export let SETTINGS = $state({
 		}
 	},
 	posts: {
-		columns: 3,
-		step: 6,
+		columns: 4,
+		step: 8,
 		pages: 1,
-		showedPosts: { главное: 6 } as { [key: string]: number }
+		showedPosts: { главное: 8 } as { [key: string]: number }
 	},
 	theme: {
 		theme: 'light',

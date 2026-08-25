@@ -60,10 +60,10 @@
 		<div class="container-fluid d-flex justify-content-between align-items-center dropdown">
 			<div class="flex-grow-1 d-flex justify-content-between align-items-center">
 				<button
-					class="btn btn-light text-dark border-0 text-uppercase me-1"
+					class="btn btn-light text-dark border-0 me-1"
 					style="background-color: {color}; font-size:.8em"
 					onclick={() => goto(routesLeft[0].url)}>
-					<b>{@html title}</b>
+					{@html title}
 				</button>
 				<div class="dropdown rounded">
 					<!-- svelte-ignore a11y_consider_explicit_label -->
@@ -131,10 +131,10 @@
 			<div class="container-fluid d-flex justify-content-between align-items-center">
 				<div class="flex-grow-1 d-flex flex-wrap justify-content-between align-items-center">
 					<button
-						class="btn btn-light text-dark border-0 text-uppercase text-start me-3 rounded-1"
+						class="btn btn-light text-dark border-0 text-start me-3 rounded-1"
 						style="background-color: {color}"
 						onclick={() => goto(routesLeft[0].url)}
-						><b class="text-nowrap">{@html title}</b></button>
+						><div class="text-nowrap">{@html title}</div></button>
 					<div>
 						{#each routesLeft as item}
 							<a

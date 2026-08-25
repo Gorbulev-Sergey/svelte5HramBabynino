@@ -40,9 +40,9 @@
 <div
 	class="d-flex justify-content-between flex-lg-nowrap flex-wrap align-items-start mb-3 no-print mx-1 {_class}">
 	<div class="d-flex justify-content-between align-items-baseline">
-		<h4 class="text-dark ms-1 mb-0 me-3 text-nowrap fw-bold" style="font-size:1.5em">
+		<b class="text-dark py-1 text-nowrap fw-bold text-uppercase" style="font-size: 1.1em;">
 			{@html title}
-		</h4>
+		</b>
 		{@render center?.()}
 	</div>
 	{@render children?.()}

@@ -27,24 +27,19 @@
 </script>
 
 <Container>
-	<PageTitle {title} description={title} {keywords} _class="mb-4 position-relative">
+	<PageTitle {title} description={title} {keywords} _class="mb-5 position-relative">
 		<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
 			{#each tags as item, i}
 				<button
 					class="badge text-nowrap border-0 {item.name == page.params.tag
 						? 'bg-dark text-bg-dark'
-						: 'bg-light text-bg-light'} "
+						: 'bg-secondary bg-opacity-10 text-bg-light'} "
 					onclick={async () => {
 						goto(`/posts/${item.name}`);
 					}}>{item.name}</button>
 			{/each}
 		</div>
 	</PageTitle>
-
-	<!-- <div class="alert alert-info border-0 text-center">
-		Дорогие посетители! В связи с ограничениями, наложенными на Youtube в нашей стране, некоторые
-		видео на нашем сайте будут работать неккоректно! Приносим свои извинения!
-	</div> -->
 
 	<div class="mb-4">
 		<!--Для закреплённых-->
@@ -55,8 +50,8 @@
 		</div>
 		<!--Для закреплённых-->
 		<div
-			class="row row-cols-1 row-cols-md-2 row-cols-lg-{SETTINGS.posts
-				.columns} g-4 flex-row-reverse justify-content-center">
+			class="row row-cols-1 row-cols-md-2 row-cols-lg-{SETTINGS.posts.columns -
+				1} gx-3 gy-5 flex-row-reverse justify-content-center">
 			{#each pinnedPosts.filter(p => !p[1].isHorisontal) as [uid, post], i}
 				<Post {uid} {post} />
 			{/each}
@@ -66,7 +61,7 @@
 	<!--Для не закреплённых-->
 	<div
 		class="row row-cols-1 row-cols-md-2 row-cols-lg-{SETTINGS.posts
-			.columns} g-4 justify-content-center">
+			.columns} gx-2 gy-4 justify-content-center">
 		{#each notPinnedPostsForShow as [uid, post], i}
 			<Post {uid} {post} />
 		{/each}
