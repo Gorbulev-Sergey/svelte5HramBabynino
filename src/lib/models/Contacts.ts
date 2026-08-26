@@ -30,6 +30,7 @@ export interface IDayTime {
 export interface IPhone {
 	phone: string;
 	title: string;
+	max: string;
 }
 
 export interface ISocial {

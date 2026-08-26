@@ -40,7 +40,7 @@
 <div
 	class="d-flex justify-content-between flex-wrap align-items-center mb-3 no-print mx-1 {_class}">
 	<div class="d-flex justify-content-between align-items-center flex-wrap">
-		<b class="text-dark py-1 text-nowrap text-uppercase" style="font-size: 1.1em;">
+		<b class="text-dark py-1 text-uppercase" style="font-size: 1.1em;">
 			{@html title}
 		</b>
 		<div class="mt-2 my-md-0">

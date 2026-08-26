@@ -5,7 +5,7 @@
 	//import max from '$lib/assets/max.svg';
 </script>
 
-<footer class="no-print bg-white text-dark p-3 p-md-4">
+<footer class="no-print bg-white text-dark p-3 pt-4">
 	<div class="container flex-grow-1 d-flex flex-column align-items-center flex-wrap row-gap-1">
 		<div class="flex-grow-1 d-flex flex-wrap align-items-center justify-content-center gap-1">
 			<b class="mb-0">Контакты для связи:</b>
@@ -85,12 +85,12 @@
 		<div>
 			<a
 				href="https://tips.tips/000469265"
-				class="btn btn-dark border-0 text-light mt-2"
+				class="btn btn-dark border-0 text-light mt-1"
 				target="_blank">Поддержать наш храм</a>
 		</div>
 
 		<a
-			class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mt-3 mb-1 px-3 py-2"
+			class="btn btn-sm btn-dark bg-dark bg-opacity-10 text-dark border-0 mt-2 mb-1 px-3 py-2"
 			href="#top">
 			<div class="d-flex flex-column align-items-center justify-content-center text-center">
 				<i class="fa-solid fa-chevron-up"></i>

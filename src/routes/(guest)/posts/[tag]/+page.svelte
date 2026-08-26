@@ -6,6 +6,8 @@
 	import Post from '$lib/components/posts/Post.svelte';
 	import { page } from '$app/state';
 	import { SETTINGS } from '$lib/settings/settings.svelte.js';
+	import Large from '$lib/components/Breakpoint/Large.svelte';
+	import Small from '$lib/components/Breakpoint/Small.svelte';
 
 	let { data } = $props();
 	let tag = $derived(page.params.tag ?? 'главное');
@@ -27,7 +29,7 @@
 </script>
 
 <Container>
-	<PageTitle {title} description={title} {keywords} _class="mb-5 position-relative">
+	<PageTitle {title} description={title} {keywords} _class="mb-4 position-relative">
 		<div class="d-flex flex-wrap justify-content-start justify-content-lg-end gap-1 mt-2">
 			{#each tags as item, i}
 				<button
@@ -41,7 +43,7 @@
 		</div>
 	</PageTitle>
 
-	<div class="mb-4">
+	<div class="mb-5">
 		<!--Для закреплённых-->
 		<div>
 			{#each pinnedPosts.filter(p => p[1].isHorisontal) as [uid, post], i}
@@ -68,12 +70,21 @@
 	</div>
 
 	{#if notPinnedPosts.length > notPinnedPostsForShow.length}
-		<div class="d-flex justify-content-center w-100 mt-5">
-			<button
-				class="btn bg-secondary bg-opacity-10 text-bg-light border-0 px-3"
-				onclick={() => {
-					SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
-				}}>Загрузить ещё...</button>
+		<div class="d-flex justify-content-center w-100 mt-4">
+			<Large>
+				<button
+					class="btn bg-secondary bg-opacity-10 text-bg-light border-0 px-3"
+					onclick={() => {
+						SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
+					}}>Загрузить ещё...</button>
+			</Large>
+			<Small>
+				<button
+					class="btn bg-secondary bg-opacity-10 text-bg-light border-0 w-100"
+					onclick={() => {
+						SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
+					}}>Загрузить ещё...</button>
+			</Small>
 		</div>
 	{/if}
 </Container>

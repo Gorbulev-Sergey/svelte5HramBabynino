@@ -31,7 +31,7 @@
 <Container>
 	<PageTitleWrap
 		title={`Расписание богослужений на ${monthToSring(new Date(Number(year), Number(month) - 1)).toUpperCase()} ${year} года`}
-		_class="mb-4">
+		_class="mb-3">
 		<div class="d-flex align-items-center gap-2">
 			<MonthPicker title="на дату:" bind:date={SETTINGS.ADMIN.schedule.date} bind:month bind:year />
 			<button

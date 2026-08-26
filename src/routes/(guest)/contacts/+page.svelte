@@ -1,16 +1,17 @@
 <script lang="ts">
 	import Container from '$lib/components/Container.svelte';
 	import PageTitle from '$lib/components/PageTitle.svelte';
+	import type { IContacts } from '$lib/models/Contacts.js';
 
 	let { data } = $props();
-	let contacts = $derived(data.contacts);
+	let contacts = $derived<IContacts>(data.contacts);
 	let title = 'Контакты';
 	let description = 'Контактная информация: телефоны, whatsapp, адрес храма';
 	let keywords = $derived(`бабынино, храм, ${title}, храм бабынино`);
 </script>
 
 <Container>
-	<PageTitle {title} {description} {keywords} _class="mb-4 mx-2" />
+	<PageTitle {title} {description} {keywords} _class="mb-3 mx-2" />
 	{#if contacts}
 		<div class="row row-cols-1 row-cols-md-4 g-4">
 			<div class="col-md-5">
@@ -26,14 +27,15 @@
 			</div>
 			<div class="col-md-5">
 				<div class="bg-white text-dark rounded p-3 w-100 h-100">
-					<h5>Контактные телефоны + whatsapp:</h5>
+					<h5>Контактные телефоны:</h5>
 					{#each contacts.phones as item}
 						<div class="d-flex justify-content-between align-items-center mb-1">
 							{item.title}
 							<div class="d-flex align-items-center gap-1">
-								{#if item.title != 'храм'}
+								{#if item.max && item.max != ''}
 									<!-- svelte-ignore a11y_consider_explicit_label -->
-									<a
+									<!-- <a
+										hidden
 										class="text-primary"
 										style="text-decoration: none;"
 										href="https://t.me/{item.phone}"
@@ -41,7 +43,13 @@
 										title="Телеграм"
 										rel="noopener noreferrer">
 										<i class="fa-brands fa-telegram"></i>
-									</a>
+									</a> -->
+									<a
+										class="badge bg-primary text-decoration-none p-0"
+										href="https://max.ru/{item.max}"
+										target="_blank"
+										style="width: 1.7em; height: 1.7em;"
+										title="Max"><img src={'/max.svg'} alt="" /></a>
 								{/if}
 								<a
 									class="badge bg-dark text-light"
