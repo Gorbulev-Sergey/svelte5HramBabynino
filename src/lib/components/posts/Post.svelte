@@ -64,6 +64,11 @@
 									}}>{tag.name}</button>
 							{/each}
 						{/if}
+						{#if post.pinned}
+							<small class="overflow-hidden">
+								<i class="fa-solid fa-thumbtack" style="transform: rotate(45deg);"></i>
+							</small>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -126,11 +131,6 @@
 			<div class="d-flex flex-column gap-0 px-1 pt-1">
 				<div class="d-flex align-self-center justify-content-between w-100">
 					<b class="text-uppercase">{@html post.title}</b>
-					{#if post.pinned}
-						<small>
-							<i class="fa-solid fa-thumbtack"></i>
-						</small>
-					{/if}
 				</div>
 
 				{#if post.description}

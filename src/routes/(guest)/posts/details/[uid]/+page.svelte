@@ -18,7 +18,7 @@
 		<button
 			class="btn btn-dark text-light text-nowrap"
 			onclick={() => goto(`${page.url.searchParams.get('returnUrl')}/#${page.params.uid}`)}
-			><i class="fa-solid fa-circle-arrow-left me-2"></i>Вернуться назад</button>
+			><i class="fa-solid fa-chevron-left me-2"></i>Вернуться назад</button>
 
 		<div class="bg-white text-dark rounded mt-3">
 			<div
@@ -50,8 +50,8 @@
 		</div>
 
 		<button
-			class="btn btn-dark text-light"
+			class="btn btn-dark text-light mt-3"
 			onclick={() => goto(`${page.url.searchParams.get('returnUrl')}/#${page.params.uid}`)}
-			><i class="fa-solid fa-circle-arrow-left me-2"></i>Вернуться назад</button>
+			><i class="fa-solid fa-chevron-left me-2"></i>Вернуться назад</button>
 	{/if}
 </Container>

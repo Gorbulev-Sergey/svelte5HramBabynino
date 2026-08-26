@@ -38,7 +38,7 @@
 </svelte:head>
 
 <div
-	class="d-flex justify-content-between flex-lg-nowrap flex-wrap align-items-start mb-3 no-print mx-1 {_class}">
+	class="d-flex justify-content-between flex-lg-nowrap flex-wrap align-items-start mb-3 no-print gap-3 mx-1 {_class}">
 	<div class="d-flex justify-content-between align-items-baseline">
 		<b class="text-dark py-1 text-nowrap fw-bold text-uppercase" style="font-size: 1.1em;">
 			{@html title}

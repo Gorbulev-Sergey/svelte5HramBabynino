@@ -41,20 +41,22 @@
 			class="d-flex flex-wrap flex-sm-nowrap align-items-center justify-content-end gap-lg-3 gap-2">
 			<!-- Строка поиска -->
 			<div class="input-group input-group-sm border-0 rounded flex-nowrap">
+				<div class="p-2 rounded-start bg-white text-dark text-opacity-50">
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</div>
 				<input
-					class="form-control bg-light text-dark border-0"
+					class="form-control bg-white text-dark border-0"
 					bind:value={SETTINGS.albums.filters.search}
 					placeholder="Поиск фотоальбомов" />
 				<button
-					aria-label=""
-					class="btn btn-light border-0"
+					title="Очистить"
+					class="btn btn-light bg-white border-0"
 					onclick={() => (SETTINGS.albums.filters.search = '')}
 					><i class="fa-solid fa-xmark"></i></button>
 			</div>
 			<div class="d-flex align-items-center gap-1">
 				<div class="small text-dark">сначала:</div>
 				<button
-					aria-label=""
 					class="btn btn-sm btn-dark"
 					onclick={() => (SETTINGS.albums.filters.isNewFirst = !SETTINGS.albums.filters.isNewFirst)}
 					>{SETTINGS.albums.filters.isNewFirst ? 'новые' : 'старые'}</button>

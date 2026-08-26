@@ -38,7 +38,7 @@
 						: 'bg-secondary bg-opacity-10 text-bg-light'} "
 					onclick={async () => {
 						goto(`/posts/${item.name}`);
-					}}>{item.name}</button>
+					}}>#{item.name}</button>
 			{/each}
 		</div>
 	</PageTitle>

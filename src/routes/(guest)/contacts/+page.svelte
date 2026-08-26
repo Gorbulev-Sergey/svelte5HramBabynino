@@ -13,7 +13,7 @@
 <Container>
 	<PageTitle {title} {description} {keywords} _class="mb-3 mx-2" />
 	{#if contacts}
-		<div class="row row-cols-1 row-cols-md-4 g-4">
+		<div class="row row-cols-1 row-cols-md-4 g-3">
 			<div class="col-md-5">
 				<div class="bg-white text-dark rounded p-3 w-100 h-100">
 					<h5>Расписание работы храма:</h5>
@@ -74,7 +74,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row mt-4">
+		<div class="row mt-3">
 			<div class="col">
 				<div class="bg-white text-dark rounded p-3">
 					<h5>Адрес храма:</h5>
