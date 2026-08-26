@@ -15,7 +15,7 @@
 		</div>
 	</Large>
 	<Small>
-		<div transition:scale class="" style="margin:0 -.45em">
+		<div transition:scale class="" style="margin:0 -.25em">
 			{@render children?.()}
 		</div>
 	</Small>

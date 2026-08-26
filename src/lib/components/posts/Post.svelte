@@ -42,7 +42,7 @@
 
 		<div class="flex-grow-1 d-flex flex-column">
 			<div class="d-flex justify-content-between align-items-top mb-1 gap-2 px-1">
-				<div class="small {!post.inverted ? 'text-dark' : 'text-light'}  text-nowrap">
+				<div class="small text-danger text-nowrap">
 					{new Date(post.created).toLocaleDateString('ru-ru', {
 						day: 'numeric',
 						month: 'long',

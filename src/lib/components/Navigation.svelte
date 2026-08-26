@@ -61,32 +61,30 @@
 			<div class="flex-grow-1 d-flex justify-content-between align-items-center">
 				<button
 					class="btn btn-light text-dark border-0"
-					style="background-color: {color}; font-size:.8em"
+					style="background-color: {color}; font-size:.9em"
 					onclick={() => goto(routesLeft[0].url)}>
 					{@html title}
 				</button>
 				<div class="dropdown rounded">
 					<!-- svelte-ignore a11y_consider_explicit_label -->
 					<button
-						class="btn btn-sm btn-light bg-light text-dark bg-transparent border-0"
+						class="btn btn-light bg-light text-dark bg-transparent border-0"
 						data-bs-toggle="dropdown"
 						title="тема оформления"><i class="fa-regular fa-sun" /></button>
 					<ul
 						class="dropdown-menu dropdown-menu-end border-0 rounded w-100 bg-light text-dark shadow-sm py-1">
 						<button
-							class="btn btn-sm btn-light {!SETTINGS.theme.isSystem &&
-							SETTINGS.theme.theme == 'light'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'light'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('light', false)}>Светлая тема</button>
 						<button
-							class="btn btn-sm btn-light {!SETTINGS.theme.isSystem &&
-							SETTINGS.theme.theme == 'dark'
+							class="btn btn-light {!SETTINGS.theme.isSystem && SETTINGS.theme.theme == 'dark'
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('dark', false)}>Тёмная тема</button>
 						<button
-							class="btn btn-sm btn-light {SETTINGS.theme.isSystem
+							class="btn btn-light {SETTINGS.theme.isSystem
 								? 'text-danger'
 								: ' text-dark'} w-100 text-start rounded-0 ps-3"
 							onclick={async () => changeTheme('', true)}>Как в системе</button>
@@ -95,7 +93,7 @@
 			</div>
 			<!-- svelte-ignore a11y_consider_explicit_label -->
 			<button
-				class="btn btn-sm btn-light text-dark bg-transparent border-0 text-uppercase"
+				class="btn btn-light text-dark bg-transparent border-0 text-uppercase"
 				data-bs-toggle="dropdown"><i class="fa-solid fa-bars"></i></button>
 
 			<div
@@ -104,7 +102,7 @@
 				{#each routesLeft as item}
 					<div class="bg-light text-dark">
 						<a
-							class="btn btn-sm btn-light text-dark w-100 text-start rounded-0 ps-3 {decodeURI(
+							class="btn btn-light text-dark w-100 text-start rounded-0 ps-3 {decodeURI(
 								page.url.pathname
 							).indexOf(item.url) >= 0
 								? 'fw-bold'
@@ -116,7 +114,7 @@
 					{#each routesRight as item}
 						<div class="bg-light text-dark">
 							<button
-								class="btn btn-sm btn-light bg-transparent text-dark w-100 text-start rounded-0 ps-3"
+								class="btn btn-light bg-transparent text-dark w-100 text-start rounded-0 ps-3"
 								onclick={async () => {
 									goto(item.url);
 								}}>
