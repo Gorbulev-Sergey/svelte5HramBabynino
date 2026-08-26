@@ -29,6 +29,8 @@
 				? `bg-${post.background} bg-opacity-25 text-dark p-2`
 				: 'bg-light bg-opacity-50 text-dark'
 	);
+
+	let isTagMenuShow = $state(false);
 </script>
 
 <div transition:slide class="col" id={uid ? uid : ''}>
@@ -41,36 +43,66 @@
 		{@render children?.()}
 
 		<div class="flex-grow-1 d-flex flex-column">
-			<div class="d-flex justify-content-between align-items-top mb-1 gap-2 px-1">
-				<div class="small text-danger text-nowrap">
-					{new Date(post.created).toLocaleDateString('ru-ru', {
-						day: 'numeric',
-						month: 'long',
-						year: 'numeric'
-					})}
-				</div>
-				{#if isTagsShow}
-					<div
-						class="d-flex align-items-center overflow-x-auto justify-content-end gap-1 flex-wrap">
-						{#if post.tags}
-							{#each post.tags as tag}
-								<button
-									style="font-size: .7em;"
-									class="badge p-1 collapse {!post.inverted
-										? 'bg-dark bg-opacity-10 text-dark'
-										: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1 border-0"
-									onclick={() => {
-										goto(`/posts/${tag.name}`);
-									}}>{tag.name}</button>
-							{/each}
-						{/if}
-						{#if post.pinned}
-							<small class="overflow-hidden">
-								<i class="fa-solid fa-thumbtack" style="transform: rotate(45deg);"></i>
-							</small>
-						{/if}
+			<div class="d-flex justify-content-between align-items-top mb-1 gap-2 ps-1">
+				<div class="d-flex align-items-center gap-1">
+					{#if post.pinned}
+						<small class="overflow-hidden">
+							<i class="fa-solid fa-thumbtack" style="transform: rotate(45deg);"></i>
+						</small>
+					{/if}
+					<div class="small text-danger text-nowrap">
+						{new Date(post.created).toLocaleDateString('ru-ru', {
+							day: 'numeric',
+							month: 'long',
+							year: 'numeric'
+						})}
 					</div>
-				{/if}
+				</div>
+
+				<div class="my-dropdown z-1 text-nowrap">
+					<div class="my-dropdown-main-btn">
+						<div class="align-items-center gap-1" title="Хэштеги">
+							{#each new Array(3) as _, i}
+								<button
+									style="font-size: .7em; right:{i / 8}rem; z-index: {-i}"
+									class="badge p-1 me-1 position-absolute border {!post.inverted
+										? 'bg-light text-dark'
+										: 'bg-dark text-light'} text-decoration-none p-1"
+									onclick={() => {}}>#{post.tags.length}</button>
+							{/each}
+						</div>
+					</div>
+					<div class="my-dropdown-content py-2 me-1 rounded border bg-light top-100">
+						{#each post.tags as tag, i}
+							<button
+								class="btn btn-sm btn-light text-dark rounded-0 border-0 text-start"
+								onclick={() => {
+									goto(`/posts/${tag.name}`);
+								}}>#{tag.name}</button>
+						{/each}
+					</div>
+				</div>
+				<!-- {#each new Array(3) as _, i}
+								<button
+									style="font-size: .7em; right:{i / 8}rem; z-index: {-i}"
+									class="badge p-1 me-1 position-absolute border {!post.inverted
+										? 'bg-light text-dark'
+										: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1"
+									onclick={() => {}}>#</button>
+							{/each}
+							{#if isTagMenuShow}
+								{#each post.tags as tag, i}
+									<button
+										style="font-size: .7em; right:{(i + 1) / 8}rem"
+										class="badge p-1 border {!post.inverted
+											? 'bg-light text-dark'
+											: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1"
+										onmouseover={() => (isTagMenuShow = true)}
+										onclick={() => {
+											goto(`/posts/${tag.name}`);
+										}}>#{tag.name}</button>
+								{/each}
+							{/if} -->
 			</div>
 
 			{#if post.cover && post.cover.video}
@@ -152,3 +184,29 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.my-dropdown {
+		position: relative;
+		display: inline-block;
+	}
+
+	.my-dropdown-main-btn {
+		position: absolute;
+	}
+
+	/* Скрытое меню */
+	.my-dropdown-content {
+		display: none; /* скрыто по умолчанию */
+		position: absolute;
+		right: 0;
+		z-index: 10;
+		margin-top: 0; /* небольшой отступ от кнопки */
+	}
+
+	/* Показать меню при наведении на контейнер */
+	.my-dropdown:hover .my-dropdown-content {
+		display: flex;
+		flex-direction: column;
+	}
+</style>
