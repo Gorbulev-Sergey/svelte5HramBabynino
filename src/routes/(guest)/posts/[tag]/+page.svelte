@@ -68,11 +68,13 @@
 	</div>
 
 	{#if notPinnedPosts.length > notPinnedPostsForShow.length}
-		<button
-			class="btn btn-light text-dark mt-3 w-100"
-			onclick={() => {
-				SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
-			}}>Загрузить ещё...</button>
+		<div class="d-flex justify-content-center w-100 mt-5">
+			<button
+				class="btn bg-secondary bg-opacity-10 text-bg-light border-0 px-3"
+				onclick={() => {
+					SETTINGS.posts.showedPosts[tag] = SETTINGS.posts.showedPosts[tag] + SETTINGS.posts.step;
+				}}>Загрузить ещё...</button>
+		</div>
 	{/if}
 </Container>
 

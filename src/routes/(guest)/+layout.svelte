@@ -65,7 +65,7 @@
 		title="<div class='text-uppercase'><b>Храм</b> <b class='text-danger'>Вознесения Господня</b></div>"
 		{routesLeft}
 		{routesRight} />
-	<div class="container-lg mt-0 py-3 overflow-hidden" style="min-height:90vh; margin-bottom:2.7em">
+	<div class="container-lg mt-0 py-1 overflow-hidden" style="min-height:90vh; margin-bottom:2.7em">
 		{@render children?.()}
 	</div>
 

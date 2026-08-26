@@ -73,8 +73,11 @@
 			{/each}
 		</div>
 		{#if SETTINGS.albums.pages < getPagesCount}
-			<button class="btn btn-light" onclick={() => SETTINGS.albums.pages++}
-				>Загрузить ещё...</button>
+			<div class="d-flex justify-content-center w-100 mt-3">
+				<button
+					class="btn bg-secondary bg-opacity-10 text-bg-light border-0 px-3"
+					onclick={() => SETTINGS.albums.pages++}>Загрузить ещё...</button>
+			</div>
 		{/if}
 	</div>
 </Container>
