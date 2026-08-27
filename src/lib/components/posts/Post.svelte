@@ -45,7 +45,7 @@
 		<div class="flex-grow-1 d-flex flex-column gap-1">
 			<div class="d-flex flex-column justify-content-between gap-2 ps-1">
 				<div class="d-flex align-items-center justify-content-between">
-					<div class="d-flex flex-grow-1 align-items-center gap-1">
+					<div class="d-flex flex-grow-1 align-items-center gap-2">
 						{#if post.pinned}
 							<small class="overflow-hidden">
 								<i class="fa-solid fa-thumbtack" style="transform: rotate(45deg);"></i>
