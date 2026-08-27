@@ -29,8 +29,8 @@
 	onmousemove={() => (hoverEffect = 'bg-opacity-75')}
 	onmouseleave={() => (hoverEffect = 'bg-opacity-50')}>
 	<div
-		class="d-flex justify-content-between bg-white text-dark {hoverEffect} p-3 rounded-bottom"
-		style="transition: background-color 0.7s ease; backdrop-filter: blur(.6em);">
+		class="d-flex justify-content-between bg-white text-dark {hoverEffect} px-3 py-2 rounded-bottom"
+		style="transition: background-color 0.7s ease;">
 		<div>
 			<h5 class="mb-0">
 				{album.title}
