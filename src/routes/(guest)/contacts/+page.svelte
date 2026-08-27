@@ -65,8 +65,8 @@
 					<h5>Соцсети:</h5>
 					{#each contacts.socialNetworks as item}
 						<a
-							class="btn btn-dark rounded-circle me-1 px-1"
-							style="width: 2.5em; height:2.5em"
+							class="btn btn-dark rounded-4 me-1 p-1"
+							style="width: 2.3em; height:2.3em"
 							href={item.url}
 							target="_blank"
 							title={item.title}>{@html item.icon}</a>
