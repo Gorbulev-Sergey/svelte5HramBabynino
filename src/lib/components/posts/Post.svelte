@@ -73,7 +73,9 @@
 								{/each}
 							</div>
 						</div>
-						<div class="my-dropdown-content py-1 me-1 rounded rounded-1 border bg-light top-100">
+						<div
+							class="my-dropdown-content py-1 me-1 rounded rounded-1 border bg-light"
+							style="margin-top: 1.3rem;">
 							{#each post.tags as tag, i}
 								<button
 									class="btn btn-sm btn-light text-dark rounded-0 border-0 text-start"
