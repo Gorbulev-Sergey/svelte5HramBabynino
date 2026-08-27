@@ -148,40 +148,58 @@
 	</PageTitle>
 {/snippet}
 
+{#snippet subtitle1(r: number, d: string)}
+	<div>dghfgh</div>
+{/snippet}
+
+{#snippet subtitle(p: IPost, uid: string)}
+	<TagManager
+		isTagsListShow={false}
+		title="Теги:"
+		tags={tags.filter((t: ITag) => !p.tags?.find(i => i.name == t.name))}
+		bind:selectedTags={p.tags}
+		onSelect={() => {
+			update(ref(db, `/posts/${uid}`), post);
+		}}
+		_class={p.inverted ? 'text-dark' : ''} />
+{/snippet}
+
 {#snippet post(uid: string, post: IPost)}
-	<Post {uid} {post} _class="border-3 border-light" isTagsShow={false}>
+	<Post {uid} {post} _class="" isTagsShow={false}>
 		<div
-			class="p-2 bg-body-secondary bg-opacity-50 text-dark"
+			class="p-2 bg-body-secondary bg-opacity-50 text-dark w-100 rounded-1"
 			style={post.cover?.image || post.cover?.video ? 'margin-bottom: -.5em;' : ''}>
-			<div class="d-flex flex-column align-items-center flex-wrap gap-1">
-				<TagManager
-					title="Теги:"
-					tags={tags.filter((t: ITag) => !post.tags?.find(i => i.name == t.name))}
-					bind:selectedTags={post.tags}
-					onSelect={() => {
-						update(ref(db, `/posts/${uid}`), post);
-					}}
-					_class={post.inverted ? 'text-dark' : ''} />
-				<div class="d-flex justify-content-center flex-wrap">
+			<div class="d-flex align-self-center justify-content-between">
+				<div class="d-flex justify-content-center flex-wrap gap-1">
+					<TagManager
+						isTagsListShow={false}
+						title="Теги:"
+						tags={tags.filter((t: ITag) => !post.tags?.find(i => i.name == t.name))}
+						bind:selectedTags={post.tags}
+						onSelect={() => {
+							update(ref(db, `/posts/${uid}`), post);
+						}}
+						_class={post.inverted ? 'text-dark' : ''} />
 					<Pin
 						classFontAwesome="fa-regular fa-eye"
-						text="опубликовать"
-						_class="me-2"
+						title="опубликовать"
+						_class="btn btn-sm btn-light text-dark p-2 text-center"
 						bind:checked={post.published}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-thumbtack"
-						text="закрепить"
-						_class="me-2"
+						title="закрепить"
+						_class="btn btn-sm btn-light text-dark p-2 text-center"
 						bind:checked={post.pinned}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
 						}} />
 					<Pin
 						classFontAwesome="fa-solid fa-brush"
-						text="инвертировать"
+						_class="btn btn-sm btn-light text-dark p-2 text-center"
+						title="инвертировать"
 						bind:checked={post.inverted}
 						onChange={() => {
 							update(ref(db, `/posts/${uid}`), post);
@@ -189,13 +207,13 @@
 				</div>
 				<div class="d-flex flex-wrap">
 					<button
-						aria-label=""
+						title=""
 						class="btn btn-sm btn-light me-1"
 						onclick={() => goto(`/admin/posts/edit/${uid}`)}>
 						<i class="fa-solid fa-pencil"></i>
 					</button>
 					<div class="dropdown dropend">
-						<button aria-label="" class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+						<button title="" class="btn btn-sm btn-light" data-bs-toggle="dropdown">
 							<i class="fa-solid fa-trash text-danger"></i>
 						</button>
 						<div class="dropdown-menu p-2 text-center">
@@ -222,7 +240,7 @@
 	{/each}
 </div>
 
-<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns.now} g-3">
+<div class="row row-cols-1 row-cols-md-{SETTINGS.ADMIN.posts.columns.now} g-2">
 	<!-- not pinned -->
 	{#each [...filteredPosts]
 		.filter(([uid, item]) => !item.pinned)

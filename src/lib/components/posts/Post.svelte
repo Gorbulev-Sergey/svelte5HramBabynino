@@ -12,6 +12,7 @@
 		style?: string;
 		children?: Snippet;
 		isTagsShow?: boolean;
+		subtitle?: Snippet;
 	}
 	let {
 		uid = '',
@@ -19,7 +20,8 @@
 		style = '',
 		_class = '',
 		children,
-		isTagsShow = true
+		isTagsShow = true,
+		subtitle
 	}: Props = $props();
 
 	let postColors = $derived(
@@ -40,70 +42,56 @@
 			? 'h-100'
 			: ''} {_class}"
 		{style}>
-		{@render children?.()}
-
-		<div class="flex-grow-1 d-flex flex-column">
-			<div class="d-flex justify-content-between align-items-top mb-1 gap-2 ps-1">
-				<div class="d-flex align-items-center gap-1">
-					{#if post.pinned}
-						<small class="overflow-hidden">
-							<i class="fa-solid fa-thumbtack" style="transform: rotate(45deg);"></i>
-						</small>
-					{/if}
-					<div class="small text-danger text-nowrap">
-						{new Date(post.created).toLocaleDateString('ru-ru', {
-							day: 'numeric',
-							month: 'long',
-							year: 'numeric'
-						})}
+		<div class="flex-grow-1 d-flex flex-column gap-1">
+			<div class="d-flex flex-column justify-content-between gap-2 ps-1">
+				<div class="d-flex align-items-center justify-content-between">
+					<div class="d-flex flex-grow-1 align-items-center gap-1">
+						{#if post.pinned}
+							<small class="overflow-hidden">
+								<i class="fa-solid fa-thumbtack" style="transform: rotate(45deg);"></i>
+							</small>
+						{/if}
+						<div class="small text-danger text-nowrap">
+							{new Date(post.created).toLocaleDateString('ru-ru', {
+								day: 'numeric',
+								month: 'long',
+								year: 'numeric'
+							})}
+						</div>
+						<div>{@render subtitle?.()}</div>
 					</div>
-				</div>
-
-				<div class="my-dropdown z-1 text-nowrap">
-					<div class="my-dropdown-main-btn">
-						<div class="align-items-center gap-1" title="Хэштеги">
-							{#each new Array(3) as _, i}
+					<div class="my-dropdown z-1 text-nowrap">
+						<div class="my-dropdown-main-btn bottom-100">
+							<div class="align-items-center gap-1" title="Хэштеги">
+								{#each new Array(3) as _, i}
+									<button
+										style="font-size: .7em; right:{i / 8}rem; z-index: {-i}"
+										class="badge p-1 me-1 position-absolute border {!post.inverted
+											? 'bg-light text-dark'
+											: 'bg-dark text-light'} text-decoration-none p-1"
+										onclick={() => {}}>#{post.tags.length}</button>
+								{/each}
+							</div>
+						</div>
+						<div class="my-dropdown-content py-1 me-1 rounded rounded-1 border bg-light top-100">
+							{#each post.tags as tag, i}
 								<button
-									style="font-size: .7em; right:{i / 8}rem; z-index: {-i}"
-									class="badge p-1 me-1 position-absolute border {!post.inverted
-										? 'bg-light text-dark'
-										: 'bg-dark text-light'} text-decoration-none p-1"
-									onclick={() => {}}>#{post.tags.length}</button>
+									class="btn btn-sm btn-light text-dark rounded-0 border-0 text-start"
+									onclick={() => {
+										goto(`/posts/${tag.name}`);
+									}}>#{tag.name}</button>
 							{/each}
 						</div>
 					</div>
-					<div class="my-dropdown-content py-2 me-1 rounded border bg-light top-100">
-						{#each post.tags as tag, i}
-							<button
-								class="btn btn-sm btn-light text-dark rounded-0 border-0 text-start"
-								onclick={() => {
-									goto(`/posts/${tag.name}`);
-								}}>#{tag.name}</button>
-						{/each}
-					</div>
 				</div>
-				<!-- {#each new Array(3) as _, i}
-								<button
-									style="font-size: .7em; right:{i / 8}rem; z-index: {-i}"
-									class="badge p-1 me-1 position-absolute border {!post.inverted
-										? 'bg-light text-dark'
-										: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1"
-									onclick={() => {}}>#</button>
-							{/each}
-							{#if isTagMenuShow}
-								{#each post.tags as tag, i}
-									<button
-										style="font-size: .7em; right:{(i + 1) / 8}rem"
-										class="badge p-1 border {!post.inverted
-											? 'bg-light text-dark'
-											: 'bg-light bg-opacity-10 text-light'} text-decoration-none p-1"
-										onmouseover={() => (isTagMenuShow = true)}
-										onclick={() => {
-											goto(`/posts/${tag.name}`);
-										}}>#{tag.name}</button>
-								{/each}
-							{/if} -->
 			</div>
+
+			{#if children}
+				<div class="mb-2">
+					<!--style="margin-left: -.25em; margin-right:-.5em" -->
+					{@render children?.()}
+				</div>
+			{/if}
 
 			{#if post.cover && post.cover.video}
 				<div class="ratio ratio-21x9" style="min-height:12em;">
@@ -188,7 +176,8 @@
 <style>
 	.my-dropdown {
 		position: relative;
-		display: inline-block;
+		display: inline-flex;
+		top: -50%;
 	}
 
 	.my-dropdown-main-btn {
@@ -201,7 +190,6 @@
 		position: absolute;
 		right: 0;
 		z-index: 10;
-		margin-top: 0; /* небольшой отступ от кнопки */
 	}
 
 	/* Показать меню при наведении на контейнер */

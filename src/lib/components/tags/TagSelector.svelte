@@ -10,7 +10,7 @@
 	}
 
 	let {
-		title = 'Добавить тег:',
+		title = '#:',
 		tags = [],
 		selected = $bindable(Tag()),
 		_class = '',
@@ -19,9 +19,13 @@
 </script>
 
 <div class="btn-group btn-group-sm small {_class}">
-	<div class="bg-dark text-light px-2 py-1 rounded-start" style="cursor:default;">{title}</div>
+	<div
+		class="bg-dark text-light px-2 py-0 rounded-start align-content-center"
+		style="cursor:default;">
+		{title}
+	</div>
 	<button
-		aria-label=""
+		title=""
 		class="btn btn-sm btn-secondary text-light rounded-end"
 		data-bs-toggle="dropdown">
 		<i class="fa-solid fa-circle-plus"></i>

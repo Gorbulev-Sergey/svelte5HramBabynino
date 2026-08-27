@@ -10,6 +10,7 @@
 		selectedTag?: ITag;
 		selectedTags: ITag[];
 		_class?: string;
+		isTagsListShow: boolean;
 		onSelect?: () => void;
 	}
 
@@ -19,6 +20,7 @@
 		selectedTag = _Tag(),
 		selectedTags = $bindable([]),
 		_class = '',
+		isTagsListShow = true,
 		onSelect = () => {
 			tags = tags.filter(t => !selectedTags.includes(t));
 		}
@@ -45,7 +47,7 @@
 				onSelect();
 			}
 		}} />
-	{#if selectedTags}
+	{#if selectedTags && isTagsListShow}
 		<div class="d-flex justify-content-center align-items-center flex-wrap gap-0">
 			{#each selectedTags as item}
 				<Tag
