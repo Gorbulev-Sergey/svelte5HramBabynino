@@ -3,9 +3,7 @@
 	import PageTitleWrap from '$lib/components/PageTitleWrap.svelte';
 	import MonthPicker from '$lib/components/schedule/MonthPicker.svelte';
 	import { type IField } from '$lib/models/schedule/Field';
-	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
-	import { get, ref } from 'firebase/database';
 
 	// Выбранная дата, год, месяц
 	let year = $derived(SETTINGS.ADMIN.schedule.date.slice(0, 4));
@@ -30,11 +28,16 @@
 
 	$effect(() => {
 		dataMonth = {};
-		get(ref(db, `/schedule/${year}/${Number(month)}`)).then(r => {
-			if (r.exists()) {
-				dataMonth = r.val();
-			}
-		});
+		// Запрос идёт через сервер сайта, т.к. Firebase может быть недоступен из браузера в некоторых регионах
+		fetch('/api/schedule', {
+			method: 'POST',
+			body: JSON.stringify({ month: { year, name: Number(month) } })
+		})
+			.then(r => r.json())
+			.then(data => {
+				if (data) dataMonth = data;
+			})
+			.catch(e => console.error(e));
 		console.log(1);
 	});
 

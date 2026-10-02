@@ -3,9 +3,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
 	import { type ITag } from '$lib/models/Tag';
-	import { db } from '$lib/settings/firebase';
 	import { SETTINGS } from '$lib/settings/settings.svelte';
-	import { onValue, ref } from 'firebase/database';
 	import { onMount } from 'svelte';
 
 	let { children } = $props();
@@ -54,9 +52,12 @@
 	// 	);
 	// });
 	onMount(async () => {
-		onValue(ref(db, '/tags'), s =>
-			(s.val() as ITag[]).forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step))
-		);
+		// Теги запрашиваются через сервер сайта, т.к. Firebase может быть недоступен из браузера
+		let tags: ITag[] = await fetch('/api/tags')
+			.then(r => r.json())
+			.catch(() => []);
+		if (Array.isArray(tags))
+			tags.forEach(t => (SETTINGS.posts.showedPosts[t.name] = SETTINGS.posts.step));
 	});
 </script>
 

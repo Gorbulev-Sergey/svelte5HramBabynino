@@ -16,11 +16,14 @@
 
 	onMount(async () => {
 		onAuthStateChanged(auth, user => {
-			if (user) currentUser = user;
-		});
-		onValue(ref(db, '/users'), s => {
-			if (s.exists()) {
-				users = Object.values(s.val());
+			if (user) {
+				currentUser = user;
+				// Список пользователей нужен только авторизованным, гости не обращаются к Firebase
+				onValue(ref(db, '/users'), s => {
+					if (s.exists()) {
+						users = Object.values(s.val());
+					}
+				});
 			}
 		});
 	});
