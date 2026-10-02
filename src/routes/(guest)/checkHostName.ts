@@ -3,7 +3,8 @@ export let isHostEnabled = (request: Request) => {
 	return hostname == 'localhost' ||
 		hostname == 'hram-babynino.ru' ||
 		hostname == 'hram-babynino.netlify.app' ||
-		hostname == 'hram-babynino.vercel.app'
+		hostname == 'hram-babynino.vercel.app' ||
+		hostname.endsWith('--hram-babynino.netlify.app')
 		? true
 		: false;
 };
