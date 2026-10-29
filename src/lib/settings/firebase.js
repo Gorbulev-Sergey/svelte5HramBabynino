@@ -2,16 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 import { getStorage } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
-import {
-	PUBLIC_apiKey,
-	PUBLIC_appId,
-	PUBLIC_authDomain,
-	PUBLIC_databaseURL,
-	PUBLIC_measurementId,
-	PUBLIC_messagingSenderId,
-	PUBLIC_projectId,
-	PUBLIC_storageBucket
-} from '$env/static/public';
 
 const firebaseConfig = {
 	apiKey: 'AIzaSyDRQunJt2Hsc3_qjaayFV3xEWA5GSMMs5M',
